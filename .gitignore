@@ -1,0 +1,9 @@
+# JetBrains
+.idea/
+
+# CMake build
+build/
+
+# Redscript dependencies
+scripts/Codeware/
+scripts/Logs.reds
