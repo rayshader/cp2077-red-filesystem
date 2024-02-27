@@ -82,7 +82,7 @@ if Equals(status, FileSystemStatus.Failure) {
 ```
 
 ### GetFile
-> GetFile(path: String, opt prefix: FileSystemPrefix = None) -> ref<File>
+> GetFile(path: String, opt prefix: FileSystemPrefix = None) -> ref&lt;File&gt;
 
 You can get a file to get stats (e.g. Redscript mod directory):
 ```swift
@@ -107,7 +107,7 @@ LogChannel(n"Info", s"Size: \(file.GetSize()) bytes");
 
 ### Read text
 > ReadAsText() -> String
-> ReadAsLines() -> array<String>
+> ReadAsLines() -> array&lt;String&gt;
 
 You can read all text content of a `File` using:
 
@@ -138,7 +138,7 @@ while i < linesSize {
 
 ### Write text
 > WriteText(text: String, opt mode: FileSystemWriteMode = Truncate) -> Bool
-> WriteLines(lines: array<String>, opt mode: FileSystemWriteMode = Truncate) -> Bool 
+> WriteLines(lines: array&lt;String&gt;, opt mode: FileSystemWriteMode = Truncate) -> Bool 
 
 You can write text in a `File` which already exists or create the file in the 
 same time. When writing, you can truncate the file or append text to the end 
@@ -191,7 +191,7 @@ After running the two code snippets above, file should contain:
 > Beware of flatlines...
 
 ### Read Json
-> ReadAsJson() -> ref<JsonVariant>
+> ReadAsJson() -> ref&lt;JsonVariant&gt;
 
 e.g. with Json file:
 ```json
@@ -237,11 +237,11 @@ if !json.IsObject() {
 > IsObject() -> Bool
 
 #### JsonObject
-> GetKeys() -> array<String>
-> GetValues() -> array<ref<JsonVariant>>
+> GetKeys() -> array&lt;String&gt;
+> GetValues() -> array&lt;ref&lt;JsonVariant&gt;&gt;
 >
 > HasKey(key: String) -> Bool
-> GetKey(key: String) -> ref<JsonVariant>
+> GetKey(key: String) -> ref&lt;JsonVariant&gt;
 >
 > GetKeyBool(key: String) -> Bool
 > GetKeyInt64(key: String) -> Int64
@@ -296,7 +296,7 @@ let hasUnknown: Bool = obj.HasKey("unknown");
 
 #### JsonArray
 > GetSize() -> Uint32
-> GetItem(index: Uint32) -> ref<JsonVariant>
+> GetItem(index: Uint32) -> ref&lt;JsonVariant&gt;
 > 
 > GetItemBool(index: Uint32) -> Bool
 > GetItemInt64(index: Uint32) -> Int64
