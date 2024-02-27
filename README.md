@@ -106,7 +106,7 @@ LogChannel(n"Info", s"Size: \(file.GetSize()) bytes");
 ```
 
 ### Read text
-> ReadAsText() -> String
+> ReadAsText() -> String  
 > ReadAsLines() -> array&lt;String&gt;
 
 You can read all text content of a `File` using:
@@ -137,8 +137,8 @@ while i < linesSize {
 ```
 
 ### Write text
-> WriteText(text: String, opt mode: FileSystemWriteMode = Truncate) -> Bool
-> WriteLines(lines: array&lt;String&gt;, opt mode: FileSystemWriteMode = Truncate) -> Bool 
+> WriteText(text: String, opt mode: FileSystemWriteMode = Truncate) -> Bool  
+> WriteLines(lines: array&lt;String&gt;, opt mode: FileSystemWriteMode = Truncate) -> Bool
 
 You can write text in a `File` which already exists or create the file in the 
 same time. When writing, you can truncate the file or append text to the end 
@@ -185,7 +185,7 @@ if !status {
 ```
 
 After running the two code snippets above, file should contain:
-> Welcome Night City!
+> Welcome Night City!  
 > Lets do this choom ;)
 > 
 > Beware of flatlines...
@@ -225,27 +225,27 @@ if !json.IsObject() {
 ```
 
 #### JsonVariant
-> IsUndefined() -> Bool
+> IsUndefined() -> Bool  
 > IsNull() -> Bool
 >
-> IsBool() -> Bool
-> IsInt64() -> Bool
-> IsDouble() -> Bool
+> IsBool() -> Bool  
+> IsInt64() -> Bool  
+> IsDouble() -> Bool  
 > IsString() -> Bool
 >
-> IsArray() -> Bool
+> IsArray() -> Bool  
 > IsObject() -> Bool
 
 #### JsonObject
-> GetKeys() -> array&lt;String&gt;
+> GetKeys() -> array&lt;String&gt;  
 > GetValues() -> array&lt;ref&lt;JsonVariant&gt;&gt;
 >
-> HasKey(key: String) -> Bool
+> HasKey(key: String) -> Bool  
 > GetKey(key: String) -> ref&lt;JsonVariant&gt;
 >
-> GetKeyBool(key: String) -> Bool
-> GetKeyInt64(key: String) -> Int64
-> GetKeyDouble(key: String) -> Double
+> GetKeyBool(key: String) -> Bool  
+> GetKeyInt64(key: String) -> Int64  
+> GetKeyDouble(key: String) -> Double  
 > GetKeyString(key: String) -> String
 
 Get values:
@@ -295,12 +295,12 @@ let hasUnknown: Bool = obj.HasKey("unknown");
 ```
 
 #### JsonArray
-> GetSize() -> Uint32
+> GetSize() -> Uint32  
 > GetItem(index: Uint32) -> ref&lt;JsonVariant&gt;
 > 
-> GetItemBool(index: Uint32) -> Bool
-> GetItemInt64(index: Uint32) -> Int64
-> GetItemDouble(index: Uint32) -> Double
+> GetItemBool(index: Uint32) -> Bool  
+> GetItemInt64(index: Uint32) -> Int64  
+> GetItemDouble(index: Uint32) -> Double  
 > GetItemString(index: Uint32) -> String
 
 Get items:
