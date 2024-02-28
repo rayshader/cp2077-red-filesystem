@@ -254,6 +254,9 @@ class FileSystemTest extends ScriptableSystem {
       this.m_totalCount += 1;
       return;
     }
+    LogChannel(n"Info", "");
+    LogChannel(n"Info", json.ToString());
+    LogChannel(n"Info", "");
     let root = json as JsonObject;
 
     this.ExpectJsonKeyString(root, "name", "FileSystemTest");
@@ -277,6 +280,9 @@ class FileSystemTest extends ScriptableSystem {
     this.ExpectJsonKeyString(pangrams, "Latin", "Sic fugiens, dux, zelotypos, quam Karus haberis.");
     let random = root.GetKey("random") as JsonArray;
 
+    LogChannel(n"Info", "");
+    LogChannel(n"Info", random.ToString());
+    LogChannel(n"Info", "");
     if !random.IsArray() {
       this.LogFail("obj['random']", "?", "[...]");
     } else if random.GetSize() != 6u {
