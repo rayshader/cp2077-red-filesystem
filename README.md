@@ -196,7 +196,7 @@ After running the two code snippets above, file should contain:
 e.g. with Json file:
 ```json
 {
-  "name": "RedFS",
+  "name": "RedFileSystem",
   "version": 1,
   "isEnabled": true,
   "pi": 3.14159265358979323846,
@@ -288,7 +288,7 @@ Get a list of values:
 // ...
 let values: array<ref<JsonVariant>> = obj.GetValues();
 
-// values[0].GetString() == "RedFS"
+// values[0].GetString() == "RedFileSystem"
 // values[1].GetInt64() == 1
 // values[2].GetBool() == true
 // values[3].GetDouble() == 3.14159265358979323846

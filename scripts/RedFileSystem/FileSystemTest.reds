@@ -35,7 +35,7 @@ class FileSystemTest extends ScriptableSystem {
       return;
     }
     LogChannel(n"Info", s"== RedFS - Tests ==");
-    let scriptPath = "RedFS\\";
+    let scriptPath = "RedFileSystem\\";
 
     this.Test_RootPathDenied();
     this.Test_RootRelativePathDenied();

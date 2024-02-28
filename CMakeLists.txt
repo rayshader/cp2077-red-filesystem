@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.27)
-project(RedFS VERSION 0.1.0)
+project(RedFileSystem VERSION 0.1.0)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
@@ -45,13 +45,13 @@ set(SRC_FILES
 source_group(include FILES INC_FILES)
 source_group(source FILES SRC_FILES)
 
-add_library(RedFS SHARED
+add_library(RedFileSystem SHARED
         ${INC_FILES}
         ${SRC_FILES}
 )
 
-target_include_directories(RedFS PRIVATE src/)
-target_include_directories(RedFS PRIVATE src/json/)
+target_include_directories(RedFileSystem PRIVATE src/)
+target_include_directories(RedFileSystem PRIVATE src/json/)
 
 # Exclude unused Windows headers
 add_compile_definitions(WIN32_LEAN_AND_MEAN)
@@ -81,7 +81,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(simdjson)
 ##
 
-target_link_libraries(RedFS PRIVATE
+target_link_libraries(RedFileSystem PRIVATE
         RED4ext::SDK
         RedLib
         simdjson
