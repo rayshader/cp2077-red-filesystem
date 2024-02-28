@@ -15,6 +15,9 @@ class JsonArray : public JsonVariant {
  public:
   JsonArray();
 
+  static std::string to_json(const JsonArray* p_array,
+                             const std::string& p_indent = "");
+
   [[nodiscard]] uint32_t get_size() const;
   [[nodiscard]] Red::Handle<JsonVariant> get_item(uint32_t p_index) const;
 
@@ -22,6 +25,8 @@ class JsonArray : public JsonVariant {
   [[nodiscard]] int64_t get_item_int64(uint32_t p_index) const;
   [[nodiscard]] double get_item_double(uint32_t p_index) const;
   [[nodiscard]] Red::CString get_item_string(uint32_t p_index) const;
+
+  [[nodiscard]] Red::CString to_string() const override;
 
   void push_back(const Red::Handle<JsonVariant>& p_item);
 
@@ -41,6 +46,8 @@ RTTI_DEFINE_CLASS(RedFS::JsonArray, {
   RTTI_METHOD(get_item_int64, "GetItemInt64");
   RTTI_METHOD(get_item_double, "GetItemDouble");
   RTTI_METHOD(get_item_string, "GetItemString");
+
+  RTTI_METHOD(to_string, "ToString");
 });
 
 #endif  //REDFS_JSONARRAY_H

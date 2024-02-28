@@ -14,4 +14,8 @@ int64_t JsonInt64::get_int64() const {
   return value;
 }
 
+Red::CString JsonInt64::to_string() const {
+  return std::to_string(value);
+}
+
 }  // namespace RedFS

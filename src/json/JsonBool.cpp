@@ -14,4 +14,8 @@ bool JsonBool::get_bool() const {
   return value;
 }
 
+Red::CString JsonBool::to_string() const {
+  return value ? "true" : "false";
+}
+
 }  // namespace RedFS

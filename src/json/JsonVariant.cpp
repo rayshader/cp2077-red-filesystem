@@ -1,9 +1,24 @@
 #include "JsonVariant.h"
+#include "JsonArray.h"
+#include "JsonObject.h"
 
 namespace RedFS {
 
-JsonVariant::JsonVariant() : type(JsonType::Undefined) {
+JsonVariant::JsonVariant() : type(JsonType::Undefined) {}
 
+std::string JsonVariant::to_json(const JsonVariant* p_json,
+                                 const std::string& p_indent) {
+  if (p_json == nullptr) {
+    return "";
+  }
+  if (p_json->is_object()) {
+    return JsonObject::to_json(dynamic_cast<const JsonObject*>(p_json),
+                               p_indent);
+  } else if (p_json->is_array()) {
+    return JsonArray::to_json(dynamic_cast<const JsonArray*>(p_json), p_indent);
+  } else {
+    return p_json->to_string().c_str();
+  }
 }
 
 bool JsonVariant::is_undefined() const {
@@ -54,4 +69,11 @@ Red::CString JsonVariant::get_string() const {
   return {};
 }
 
+Red::CString JsonVariant::to_string() const {
+  if (type == JsonType::Null) {
+    return "null";
+  }
+  return "<undefined>";
 }
+
+}  // namespace RedFS

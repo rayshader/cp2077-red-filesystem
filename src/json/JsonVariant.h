@@ -15,6 +15,9 @@ class JsonVariant : public Red::IScriptable {
  public:
   JsonVariant();
 
+  static std::string to_json(const JsonVariant* p_json,
+                             const std::string& p_indent);
+
   [[nodiscard]] bool is_undefined() const;
   [[nodiscard]] bool is_null() const;
   [[nodiscard]] bool is_bool() const;
@@ -28,6 +31,8 @@ class JsonVariant : public Red::IScriptable {
   [[nodiscard]] virtual int64_t get_int64() const;
   [[nodiscard]] virtual double get_double() const;
   [[nodiscard]] virtual Red::CString get_string() const;
+
+  [[nodiscard]] virtual Red::CString to_string() const;
 
   RTTI_IMPL_TYPEINFO(RedFS::JsonVariant);
   RTTI_IMPL_ALLOCATOR();
@@ -53,6 +58,8 @@ RTTI_DEFINE_CLASS(RedFS::JsonVariant, {
   RTTI_METHOD(get_int64, "GetInt64");
   RTTI_METHOD(get_double, "GetDouble");
   RTTI_METHOD(get_string, "GetString");
+
+  RTTI_METHOD(to_string, "ToString");
 });
 
 #endif  //REDFS_JSONVARIANT_H

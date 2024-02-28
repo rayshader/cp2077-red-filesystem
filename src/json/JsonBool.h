@@ -18,6 +18,8 @@ class JsonBool : public JsonVariant {
 
   [[nodiscard]] bool get_bool() const override;
 
+  [[nodiscard]] Red::CString to_string() const override;
+
   RTTI_IMPL_TYPEINFO(RedFS::JsonBool);
   RTTI_IMPL_ALLOCATOR();
 };
@@ -28,6 +30,8 @@ RTTI_DEFINE_CLASS(RedFS::JsonBool, {
   RTTI_PARENT(RedFS::JsonVariant);
 
   RTTI_METHOD(get_bool, "GetBool");
+
+  RTTI_METHOD(to_string, "ToString");
 });
 
 #endif  //REDFS_JSONBOOL_H

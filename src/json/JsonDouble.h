@@ -20,6 +20,8 @@ class JsonDouble : public JsonVariant {
 
   [[nodiscard]] double get_double() const override;
 
+  [[nodiscard]] Red::CString to_string() const override;
+
   RTTI_IMPL_TYPEINFO(RedFS::JsonDouble);
   RTTI_IMPL_ALLOCATOR();
 };
@@ -30,6 +32,8 @@ RTTI_DEFINE_CLASS(RedFS::JsonDouble, {
   RTTI_PARENT(RedFS::JsonVariant);
 
   RTTI_METHOD(get_double, "GetDouble");
+
+  RTTI_METHOD(to_string, "ToString");
 });
 
 #endif  //REDFS_JSONDOUBLE_H

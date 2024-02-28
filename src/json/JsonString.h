@@ -20,6 +20,8 @@ class JsonString : public JsonVariant {
 
   [[nodiscard]] Red::CString get_string() const override;
 
+  [[nodiscard]] Red::CString to_string() const override;
+
   RTTI_IMPL_TYPEINFO(RedFS::JsonString);
   RTTI_IMPL_ALLOCATOR();
 };
@@ -30,6 +32,8 @@ RTTI_DEFINE_CLASS(RedFS::JsonString, {
   RTTI_PARENT(RedFS::JsonVariant);
 
   RTTI_METHOD(get_string, "GetString");
+
+  RTTI_METHOD(to_string, "ToString");
 });
 
 #endif  //REDFS_JSONSTRING_H

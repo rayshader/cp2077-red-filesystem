@@ -16,4 +16,8 @@ Red::CString JsonString::get_string() const {
   return value;
 }
 
+Red::CString JsonString::to_string() const {
+  return "\"" + value + "\"";
+}
+
 }  // namespace RedFS
