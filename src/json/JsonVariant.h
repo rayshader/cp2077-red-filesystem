@@ -15,14 +15,14 @@ class JsonVariant : public Red::IScriptable {
  public:
   JsonVariant();
 
-  [[nodiscard]] virtual bool is_undefined() const;
-  [[nodiscard]] virtual bool is_null() const;
-  [[nodiscard]] virtual bool is_bool() const;
-  [[nodiscard]] virtual bool is_int64() const;
-  [[nodiscard]] virtual bool is_double() const;
-  [[nodiscard]] virtual bool is_string() const;
-  [[nodiscard]] virtual bool is_array() const;
-  [[nodiscard]] virtual bool is_object() const;
+  [[nodiscard]] bool is_undefined() const;
+  [[nodiscard]] bool is_null() const;
+  [[nodiscard]] bool is_bool() const;
+  [[nodiscard]] bool is_int64() const;
+  [[nodiscard]] bool is_double() const;
+  [[nodiscard]] bool is_string() const;
+  [[nodiscard]] bool is_array() const;
+  [[nodiscard]] bool is_object() const;
 
   [[nodiscard]] virtual bool get_bool() const;
   [[nodiscard]] virtual int64_t get_int64() const;
