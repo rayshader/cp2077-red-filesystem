@@ -31,7 +31,7 @@ try {
 // Copy license.
 fs.cpSync(PLUGIN_LICENSE, `${BUNDLE_SCRIPT_PATH}/${PLUGIN_LICENSE}`);
 
-// Create modules.
+// Prepare modules.
 const files = fs.readdirSync(PLUGIN_SCRIPT_PATH, {withFileTypes: true});
 const scripts = files.filter(filterRedscript);
 const modules = files.filter(filterDirectory);
@@ -58,6 +58,7 @@ modules.forEach((module) => {
     });
 });
 
+// Create modules.
 createModule(graph.root, BUNDLE_SCRIPT_PATH);
 for (const dependency of graph.modules) {
     createModule(dependency, BUNDLE_SCRIPT_PATH);
@@ -72,15 +73,13 @@ function createModule(module, path) {
         moduleName = `${PLUGIN_NAME}`;
     }
     path = `${path}${moduleName}.reds`;
-    let data = `module ${moduleName}`;
+    let data = '';
 
-    for (const dep of module.imports) {
-        data += `\nimport ${PLUGIN_NAME}.${dep}.*`;
-    }
     for (const script of module.scripts) {
-        data += '\n\n';
         data += fs.readFileSync(`${module.path}${script.name}`, {encoding: 'utf8'}).trim();
+        data += '\n\n';
     }
+    data = data.trimEnd();
     fs.writeFileSync(path, data);
     console.log(`Module "${moduleName}": "${path}"`);
 }
