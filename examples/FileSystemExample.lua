@@ -1,7 +1,7 @@
 -- Rename file to 'init.lua'
 -- Copy file into bin\x64\plugins\cyber_engine_tweaks\mods\FileSystemExample\
 
-local function exampleText()
+local function ExampleText()
   print()
   print("== Text ==")
   local path = "engine\\config\\base\\multiplayer.ini"
@@ -25,7 +25,7 @@ local function exampleText()
   end
 end
 
-local function exampleJson()
+local function ExampleJson()
   print()
   print("== Json ==")
   local path = "r6\\config\\settings\\platform\\pc\\options.json"
@@ -56,7 +56,6 @@ local function exampleJson()
   local options = root:GetKey("options") -- as JsonArray
   local size = options:GetSize() - 1 -- Unlike arrays in Lua, you must iterate from 0 to N - 1.
   local names = {}
-  local i = 0
 
   for i = 0, size do
     local option = options:GetItem(i) -- as JsonObject
@@ -72,7 +71,7 @@ end
 
 registerForEvent('onInit', function()
   print("== RedFS - Examples ==")
-  exampleText()
-  exampleJson()
+  ExampleText()
+  ExampleJson()
   print("== RedFS - Examples ==")
 end)
