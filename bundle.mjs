@@ -1,9 +1,15 @@
 #!/usr/bin/env -S node
 
 // Script to bundle RedFileSystem to dist/ and release it as an archive.
-// Usage: node --experimental-modules bundle.mjs
+//
+// Requirements:
+//  - npm install --save-dev archiver
+//
+// Usage: node bundle.mjs
 import * as fs from 'fs';
+import archiver from 'archiver';
 
+const PLUGIN_VERSION = '0.1.0';
 const PLUGIN_NAME = 'RedFileSystem';
 const PLUGIN_LICENSE = 'LICENSE';
 const PLUGIN_LIBRARY_PATH = `build/Release/${PLUGIN_NAME}.dll`;
@@ -12,6 +18,11 @@ const PLUGIN_SCRIPT_PATH = `scripts/${PLUGIN_NAME}/`;
 const BUNDLE_PATH = 'dist/';
 const BUNDLE_LIBRARY_PATH = `${BUNDLE_PATH}red4ext/plugins/${PLUGIN_NAME}/`;
 const BUNDLE_SCRIPT_PATH = `${BUNDLE_PATH}r6/scripts/${PLUGIN_NAME}/`;
+
+/// Entry-point ///
+
+console.log(`${PLUGIN_NAME} · v${PLUGIN_VERSION}`);
+console.log('Bundling...');
 
 // Create bundle structure.
 fs.rmSync(BUNDLE_PATH, {recursive: true, force: true});
@@ -24,7 +35,6 @@ try {
 } catch (error) {
     console.log('Plugin not found in "build/Release/RedFileSystem.dll".');
     console.log('Build library in release mode.');
-    console.log(error);
     process.exit(1);
 }
 
@@ -59,10 +69,33 @@ modules.forEach((module) => {
 });
 
 // Create modules.
-createModule(graph.root, BUNDLE_SCRIPT_PATH);
+let totalSize = createModule(graph.root, BUNDLE_SCRIPT_PATH);
+
 for (const dependency of graph.modules) {
-    createModule(dependency, BUNDLE_SCRIPT_PATH);
+    totalSize += createModule(dependency, BUNDLE_SCRIPT_PATH);
 }
+console.log(`Total modules size: ${totalSize} bytes`);
+console.log('');
+console.log('Archiving...');
+
+// Create an archive to release.
+const archivePath = `RedFileSystem-v${PLUGIN_VERSION}.zip`;
+const archiveStream = fs.createWriteStream(archivePath);
+const archive = archiver('zip', {zlib: {level: 9}});
+
+archive.pipe(archiveStream);
+archive.directory('dist/', false);
+archive.on('error', (error) => {
+    console.log('Failed to build archive :(');
+    console.error(error);
+});
+archive.on('end', () => {
+    console.log(`Archive ready ${archivePath} (${getSize(archivePath)} bytes)`);
+});
+archive.finalize();
+
+
+/// Helpers ///
 
 function createModule(module, path) {
     let moduleName;
@@ -73,7 +106,7 @@ function createModule(module, path) {
         moduleName = `${PLUGIN_NAME}`;
     }
     path = `${path}${moduleName}.reds`;
-    let data = '';
+    let data = `// RedFileSystem v${PLUGIN_VERSION}\n\n`;
 
     for (const script of module.scripts) {
         data += fs.readFileSync(`${module.path}${script.name}`, {encoding: 'utf8'}).trim();
@@ -81,7 +114,10 @@ function createModule(module, path) {
     }
     data = data.trimEnd();
     fs.writeFileSync(path, data);
-    console.log(`Module "${moduleName}": "${path}"`);
+    let size = getSize(path);
+
+    console.log(` · module ${moduleName} (${size} bytes)`);
+    return size;
 }
 
 function filterRedscript(file) {
@@ -90,6 +126,10 @@ function filterRedscript(file) {
 
 function filterDirectory(file) {
     return file.isDirectory();
+}
+
+function getSize(path) {
+    return fs.lstatSync(path).size;
 }
 
 function scriptRule(name) {
