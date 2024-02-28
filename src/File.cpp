@@ -125,6 +125,18 @@ bool File::write_lines(const Red::DynArray<Red::CString>& p_lines,
   return true;
 }
 
+bool File::write_json(const Red::Handle<JsonVariant>& p_json) {
+  std::ofstream stream;
+
+  stream.open(absolute_path, std::ios_base::trunc);
+  if (!stream.is_open()) {
+    return false;
+  }
+  stream << p_json->to_string().c_str();
+  stream.close();
+  return true;
+}
+
 void File::parse_object(const simdjson::dom::object& p_object,
                         Red::Handle<JsonObject>& p_root) {
   for (const auto& key_value : p_object) {

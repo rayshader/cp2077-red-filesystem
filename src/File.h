@@ -44,6 +44,7 @@ class File : public Red::IScriptable {
                   const Red::Optional<FileSystemWriteMode>& p_mode);
   bool write_lines(const Red::DynArray<Red::CString>& p_lines,
                    const Red::Optional<FileSystemWriteMode>& p_mode);
+  bool write_json(const Red::Handle<JsonVariant>& p_json);
 
   RTTI_IMPL_TYPEINFO(RedFS::File);
   RTTI_IMPL_ALLOCATOR();
@@ -64,6 +65,7 @@ RTTI_DEFINE_CLASS(RedFS::File, {
 
   RTTI_METHOD(write_text, "WriteText");
   RTTI_METHOD(write_lines, "WriteLines");
+  RTTI_METHOD(write_json, "WriteJson");
 });
 
 #endif  //REDFS_FILE_H

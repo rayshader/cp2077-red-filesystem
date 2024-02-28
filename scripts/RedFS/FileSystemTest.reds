@@ -54,6 +54,7 @@ class FileSystemTest extends ScriptableSystem {
     this.Test_WriteTextAppend(scriptPath, "test-write.txt");
     this.Test_WriteLinesTruncate(scriptPath, "test-write-lines.txt");
     this.Test_WriteLinesAppend(scriptPath, "test-write-lines.txt");
+    this.Test_WriteJson(scriptPath, "test.json", "test-write.json");
     LogChannel(n"Info", "");
     LogChannel(n"Info", s"Tests: \(this.m_failCount) failed, \(this.m_passCount) passed, \(this.m_totalCount) total");
     LogChannel(n"Info", s"Time:  ? s");
@@ -425,6 +426,35 @@ class FileSystemTest extends ScriptableSystem {
       this.LogFail("write lines (append mode)", s"\(status)", "true");
     } else {
       this.LogPass("write lines (append mode)");
+    }
+  }
+
+  private func Test_WriteJson(scriptPath: String, jsonFileName: String, fileName: String) {
+    LogChannel(n"Info", "");
+    LogChannel(n"Info", s"== WriteJson ==");
+    let path = s"\(scriptPath)\(jsonFileName)";
+    let file = FileSystem.GetFile(path, FileSystemPrefix.Redscript);
+    let status = FileSystem.Exists(path, FileSystemPrefix.Redscript);
+
+    if !Equals(status, FileSystemStatus.True) {
+      this.LogFail("setup unit test with Json file", s"\(status)", "True");
+      return;
+    }
+    let json = file.ReadAsJson();
+
+    path = s"\(scriptPath)\(fileName)";
+    file = FileSystem.GetFile(path, FileSystemPrefix.Redscript);
+    status = FileSystem.Exists(path, FileSystemPrefix.Redscript);
+
+    if Equals(status, FileSystemStatus.True) {
+      this.ExpectFileStat(file, fileName, ".json", 1102ul);
+    }
+    let status = file.WriteJson(json);
+
+    if !status {
+      this.LogFail("write Json", s"\(status)", "true");
+    } else {
+      this.LogPass("write Json");
     }
   }
 

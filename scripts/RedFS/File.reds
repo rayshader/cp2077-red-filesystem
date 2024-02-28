@@ -12,5 +12,6 @@ public native class File {
 
   public native func WriteText(text: String, opt mode: FileSystemWriteMode) -> Bool;
   public native func WriteLines(lines: array<String>, opt mode: FileSystemWriteMode) -> Bool;
+  public native func WriteJson(json: ref<JsonVariant>) -> Bool;
 
 }
