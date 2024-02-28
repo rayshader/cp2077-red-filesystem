@@ -323,6 +323,9 @@ Get the number of items:
 let size: Uint32 = items.GetSize();
 ```
 
+> Note: arrays are iterated from 1 to N when using Lua. In this case, you must 
+> iterate from 0 to N - 1.
+
 # Development
 Contributions are welcome, feel free to fill an issue or a PR.
 
