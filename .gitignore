@@ -6,6 +6,7 @@ build/
 
 # Scripts bundle
 dist/
+*.zip
 
 # Redscript dependencies
 scripts/Codeware/
