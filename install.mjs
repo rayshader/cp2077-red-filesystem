@@ -1,7 +1,7 @@
 #!/usr/bin/env -S node
 
 // Script to install RedFileSystem in your game's directory.
-// Usage: node --experimental-modules install.mjs [game-path]
+// Usage: node install.mjs [game-path]
 import * as fs from 'fs';
 
 const options = process.argv.slice(2);
