@@ -68,8 +68,8 @@ local function exampleJson()
 end
 
 registerForEvent('onInit', function()
-  print("== RedFS - Examples ==");
-	exampleText()
+  print("== RedFS - Examples ==")
+  exampleText()
   exampleJson()
-  print("== RedFS - Examples ==");
+  print("== RedFS - Examples ==")
 end)
