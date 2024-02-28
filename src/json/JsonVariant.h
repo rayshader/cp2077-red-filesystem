@@ -33,6 +33,8 @@ class JsonVariant : public Red::IScriptable {
   RTTI_IMPL_ALLOCATOR();
 };
 
+using JsonUndefined = JsonVariant;
+
 }  // namespace RedFS
 
 RTTI_DEFINE_CLASS(RedFS::JsonVariant, {

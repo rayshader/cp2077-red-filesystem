@@ -7,6 +7,7 @@
 #include "JsonObject.h"
 #include "JsonString.h"
 #include "JsonVariant.h"
+#include "JsonFactory.h"
 
 #include <simdjson.h>
 #include <fstream>
@@ -82,13 +83,13 @@ Red::Handle<JsonVariant> File::read_as_json() {
 
   if (document.is_object()) {
     auto object = simdjson::dom::object(document);
-    auto root = Red::MakeHandle<JsonObject>();
+    auto root = JsonFactory::CreateObject();
 
     parse_object(object, root);
     return root;
   } else if (document.is_array()) {
     auto array = simdjson::dom::array(document);
-    auto root = Red::MakeHandle<JsonArray>();
+    auto root = JsonFactory::CreateArray();
 
     parse_array(array, root);
     return root;
@@ -133,39 +134,40 @@ void File::parse_object(const simdjson::dom::object& p_object,
                         Red::Handle<JsonObject>& p_root) {
   for (const auto& key_value : p_object) {
     Red::CName key(std::string(key_value.key).c_str());
+    auto el_value = key_value.value;
 
-    if (key_value.value.is_bool()) {
-      auto value = Red::MakeHandle<JsonBool>(bool(key_value.value));
-
-      p_root->insert_field(key, value);
-    } else if (key_value.value.is_int64()) {
-      auto value = Red::MakeHandle<JsonInt64>(int64_t(key_value.value));
+    if (el_value.is_bool()) {
+      auto value = JsonFactory::Create<bool, JsonBool>(el_value);
 
       p_root->insert_field(key, value);
-    } else if (key_value.value.is_double()) {
-      auto value = Red::MakeHandle<JsonDouble>(double(key_value.value));
+    } else if (el_value.is_int64()) {
+      auto value = JsonFactory::Create<int64_t, JsonInt64>(el_value);
 
       p_root->insert_field(key, value);
-    } else if (key_value.value.is_string()) {
-      auto value = Red::MakeHandle<JsonString>(std::string(key_value.value));
+    } else if (el_value.is_double()) {
+      auto value = JsonFactory::Create<double, JsonDouble>(el_value);
 
       p_root->insert_field(key, value);
-    } else if (key_value.value.is_object()) {
-      auto value = Red::MakeHandle<JsonObject>();
-      auto sub_object = simdjson::dom::object(key_value.value);
+    } else if (el_value.is_string()) {
+      auto value = JsonFactory::Create<std::string, JsonString>(el_value);
+
+      p_root->insert_field(key, value);
+    } else if (el_value.is_object()) {
+      auto value = JsonFactory::CreateObject();
+      auto sub_object = simdjson::dom::object(el_value);
 
       parse_object(sub_object, value);
       p_root->insert_field(key, value);
-    } else if (key_value.value.is_array()) {
-      auto value = Red::MakeHandle<JsonArray>();
-      auto array = simdjson::dom::array(key_value.value);
+    } else if (el_value.is_array()) {
+      auto value = JsonFactory::CreateArray();
+      auto sub_array = simdjson::dom::array(el_value);
 
-      parse_array(array, value);
+      parse_array(sub_array, value);
       p_root->insert_field(key, value);
-    } else if (key_value.value.is_null()) {
-      p_root->insert_field(key, Red::MakeHandle<JsonNull>());
+    } else if (el_value.is_null()) {
+      p_root->insert_field(key, JsonFactory::CreateNull());
     } else {
-      p_root->insert_field(key, Red::MakeHandle<JsonVariant>());
+      p_root->insert_field(key, JsonFactory::CreateUndefined());
     }
   }
 }
@@ -174,37 +176,37 @@ void File::parse_array(const simdjson::dom::array& p_array,
                        Red::Handle<JsonArray>& p_root) {
   for (const auto& item : p_array) {
     if (item.is_bool()) {
-      auto value = Red::MakeHandle<JsonBool>(bool(item));
+      auto value = JsonFactory::Create<bool, JsonBool>(item);
 
       p_root->push_back(value);
     } else if (item.is_int64()) {
-      auto value = Red::MakeHandle<JsonInt64>(int64_t(item));
+      auto value = JsonFactory::Create<int64_t, JsonInt64>(item);
 
       p_root->push_back(value);
     } else if (item.is_double()) {
-      auto value = Red::MakeHandle<JsonDouble>(double(item));
+      auto value = JsonFactory::Create<double, JsonDouble>(item);
 
       p_root->push_back(value);
     } else if (item.is_string()) {
-      auto value = Red::MakeHandle<JsonString>(std::string(item));
+      auto value = JsonFactory::Create<std::string, JsonString>(item);
 
       p_root->push_back(value);
     } else if (item.is_object()) {
-      auto value = Red::MakeHandle<JsonObject>();
+      auto value = JsonFactory::CreateObject();
       auto sub_object = simdjson::dom::object(item);
 
       parse_object(sub_object, value);
       p_root->push_back(value);
     } else if (item.is_array()) {
-      auto value = Red::MakeHandle<JsonArray>();
+      auto value = JsonFactory::CreateArray();
       auto sub_array = simdjson::dom::array(item);
 
       parse_array(sub_array, value);
       p_root->push_back(value);
     } else if (item.is_null()) {
-      p_root->push_back(Red::MakeHandle<JsonNull>());
+      p_root->push_back(JsonFactory::CreateNull());
     } else {
-      p_root->push_back(Red::MakeHandle<JsonVariant>());
+      p_root->push_back(JsonFactory::CreateUndefined());
     }
   }
 }

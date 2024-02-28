@@ -22,6 +22,7 @@ set(INC_FILES
         src/json/JsonString.h
         src/json/JsonArray.h
         src/json/JsonObject.h
+        src/json/JsonFactory.h
 )
 
 set(SRC_FILES
