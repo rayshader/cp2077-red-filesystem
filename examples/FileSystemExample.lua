@@ -1,3 +1,6 @@
+-- Rename file to 'init.lua'
+-- Copy file into bin\x64\plugins\cyber_engine_tweaks\mods\FileSystemExample\
+
 local function exampleText()
   print()
   print("== Text ==")
