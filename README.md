@@ -235,6 +235,18 @@ if !json.IsObject() {
 >
 > IsArray() -> Bool  
 > IsObject() -> Bool
+> 
+> ToString() -> String
+
+You can format Json data to a String. It will be pretty-formatted using a two 
+spaces indentation `  `.
+```swift
+// ...
+LogChannel(n"Info", json.ToString());
+```
+
+> Note: order of keys in a `JsonObject` is not preserved due to underlying 
+> optimization.
 
 #### JsonObject
 > GetKeys() -> array&lt;String&gt;  
@@ -325,6 +337,31 @@ let size: Uint32 = items.GetSize();
 
 > Note: arrays are iterated from 1 to N when using Lua. In this case, you must 
 > iterate from 0 to N - 1.
+
+### Write Json
+> WriteJson(json: ref&lt;JsonVariant&gt;) -> Bool  
+
+You can write Json in a `File` which already exists or create the file in the
+same time. When writing Json, the file is always truncated:
+
+```swift
+// Read Json data from a file for now.
+let file: ref<File> = FileSystem.GetFile("MyMod\\data.json", FileSystemPrefix.Redscript);
+let json: ref<JsonVariant> = file.ReadAsJson();
+let status: Bool = file.WriteJson(json);
+// Same as:
+// let status: Bool = file.WriteText(json.ToString());
+
+if !status {
+  LogChannel(n"Error", s"Failed to write in file '\(file.GetFilename())'.");
+} else {
+  LogChannel(n"Info", s"Wrote Json in file '\(file.GetFilename())'.");
+}
+```
+
+> Currently, you cannot create a `JsonObject` / `JsonArray` without reading it 
+> from a file. You cannot update the content of Json data. These features will 
+> be implemented in the future.
 
 # Development
 Contributions are welcome, feel free to fill an issue or a PR.
