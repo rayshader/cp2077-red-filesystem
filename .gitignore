@@ -4,6 +4,9 @@
 # CMake build
 build/
 
+# Scripts bundle
+dist/
+
 # Redscript dependencies
 scripts/Codeware/
 scripts/Logs.reds
