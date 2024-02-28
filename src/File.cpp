@@ -1,18 +1,13 @@
 #include "File.h"
 #include "JsonArray.h"
-#include "JsonBool.h"
-#include "JsonDouble.h"
-#include "JsonInt64.h"
-#include "JsonNull.h"
-#include "JsonObject.h"
-#include "JsonString.h"
-#include "JsonVariant.h"
 #include "JsonFactory.h"
+#include "JsonObject.h"
+#include "JsonVariant.h"
 
-#include <simdjson.h>
 #include <fstream>
 #include <utility>
 
+#include <simdjson.h>
 #include <RED4ext/RED4ext.hpp>
 #include <RedLib.hpp>
 
@@ -137,19 +132,19 @@ void File::parse_object(const simdjson::dom::object& p_object,
     auto el_value = key_value.value;
 
     if (el_value.is_bool()) {
-      auto value = JsonFactory::Create<bool, JsonBool>(el_value);
+      auto value = JsonFactory::CreateBool(el_value);
 
       p_root->insert_field(key, value);
     } else if (el_value.is_int64()) {
-      auto value = JsonFactory::Create<int64_t, JsonInt64>(el_value);
+      auto value = JsonFactory::CreateInt64(el_value);
 
       p_root->insert_field(key, value);
     } else if (el_value.is_double()) {
-      auto value = JsonFactory::Create<double, JsonDouble>(el_value);
+      auto value = JsonFactory::CreateDouble(el_value);
 
       p_root->insert_field(key, value);
     } else if (el_value.is_string()) {
-      auto value = JsonFactory::Create<std::string, JsonString>(el_value);
+      auto value = JsonFactory::CreateString(el_value);
 
       p_root->insert_field(key, value);
     } else if (el_value.is_object()) {
@@ -176,19 +171,19 @@ void File::parse_array(const simdjson::dom::array& p_array,
                        Red::Handle<JsonArray>& p_root) {
   for (const auto& item : p_array) {
     if (item.is_bool()) {
-      auto value = JsonFactory::Create<bool, JsonBool>(item);
+      auto value = JsonFactory::CreateBool(item);
 
       p_root->push_back(value);
     } else if (item.is_int64()) {
-      auto value = JsonFactory::Create<int64_t, JsonInt64>(item);
+      auto value = JsonFactory::CreateInt64(item);
 
       p_root->push_back(value);
     } else if (item.is_double()) {
-      auto value = JsonFactory::Create<double, JsonDouble>(item);
+      auto value = JsonFactory::CreateDouble(item);
 
       p_root->push_back(value);
     } else if (item.is_string()) {
-      auto value = JsonFactory::Create<std::string, JsonString>(item);
+      auto value = JsonFactory::CreateString(item);
 
       p_root->push_back(value);
     } else if (item.is_object()) {
