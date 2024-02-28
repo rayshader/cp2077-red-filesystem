@@ -4,6 +4,8 @@ project(RedFileSystem VERSION 0.1.0)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
+configure_file(src/Config.h.in Config/Config.h)
+
 set(INC_FILES
         src/Plugin.h
 
@@ -52,6 +54,9 @@ add_library(RedFileSystem SHARED
 
 target_include_directories(RedFileSystem PRIVATE src/)
 target_include_directories(RedFileSystem PRIVATE src/json/)
+
+# Include configured files
+target_include_directories(RedFileSystem PUBLIC "${PROJECT_BINARY_DIR}/Config")
 
 # Exclude unused Windows headers
 add_compile_definitions(WIN32_LEAN_AND_MEAN)

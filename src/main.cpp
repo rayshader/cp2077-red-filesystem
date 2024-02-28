@@ -1,5 +1,6 @@
 #include <RED4ext/RED4ext.hpp>
 
+#include "Config.h"
 #include "Plugin.h"
 
 namespace RedFS {
@@ -21,9 +22,9 @@ RED4EXT_C_EXPORT bool RED4EXT_CALL Main(RED4ext::PluginHandle p_handle,
 }
 
 RED4EXT_C_EXPORT void RED4EXT_CALL Query(RED4ext::PluginInfo* p_info) {
-  p_info->name = L"RedFS";
+  p_info->name = L"RedFileSystem";
   p_info->author = L"Rayshader";
-  p_info->version = RED4EXT_SEMVER(0, 1, 0);
+  p_info->version = RED4EXT_SEMVER(VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
   p_info->runtime = RED4EXT_RUNTIME_LATEST;
   p_info->sdk = RED4EXT_SDK_LATEST;
 }

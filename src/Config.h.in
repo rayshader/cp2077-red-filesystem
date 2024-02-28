@@ -1,0 +1,8 @@
+#ifndef REDFS_CONFIG_H
+#define REDFS_CONFIG_H
+
+#define VERSION_MAJOR @RedFileSystem_VERSION_MAJOR@
+#define VERSION_MINOR @RedFileSystem_VERSION_MINOR@
+#define VERSION_PATCH @RedFileSystem_VERSION_PATCH@
+
+#endif  //REDFS_CONFIG_H
