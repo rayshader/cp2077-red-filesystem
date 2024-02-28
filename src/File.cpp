@@ -128,7 +128,7 @@ bool File::write_lines(const Red::DynArray<Red::CString>& p_lines,
 void File::parse_object(const simdjson::dom::object& p_object,
                         Red::Handle<JsonObject>& p_root) {
   for (const auto& key_value : p_object) {
-    Red::CName key(std::string(key_value.key).c_str());
+    std::string key(key_value.key);
     auto el_value = key_value.value;
 
     if (el_value.is_bool()) {

@@ -10,7 +10,7 @@ namespace RedFS {
 
 class JsonObject : public JsonVariant {
  private:
-  std::unordered_map<Red::CName, Red::Handle<JsonVariant>> fields;
+  std::unordered_map<std::string, Red::Handle<JsonVariant>> fields;
 
  public:
   JsonObject();
@@ -25,7 +25,7 @@ class JsonObject : public JsonVariant {
   [[nodiscard]] double get_key_double(const Red::CString& p_key) const;
   [[nodiscard]] Red::CString get_key_string(const Red::CString& p_key) const;
 
-  void insert_field(const Red::CName& p_key,
+  void insert_field(const std::string& p_key,
                     const Red::Handle<JsonVariant>& p_value);
 
   RTTI_IMPL_TYPEINFO(RedFS::JsonObject);
