@@ -366,11 +366,45 @@ if !status {
 # Development
 Contributions are welcome, feel free to fill an issue or a PR.
 
-## Setup
+## Usage
+1. Install requirements:
+  - CMake v3.27+
+  - Visual Studio Community 2022+
+  - Node JS v20.11+
+    - run `npm install --save-dev archiver`
+2. Configure project with:
+```shell
+cmake -G "Visual Studio 17 2022" -A x64 -S . -B build
+```
 
+3. Build in debug mode:
+```shell
+cmake --build build --target RedFileSystem --config Debug
+```
 
 ## Tests
+1. Install in your game directory:
 
+```shell
+node install.mjs
+```
+ 
+2. Run game.
+3. Open CET, show Game Log popup.
+4. Output should show tests result.
+
+## Release
+1. Build in release mode:
+
+```shell
+cmake --build build --target RedFileSystem --config Release
+```
+
+2. Bundle release:
+
+```shell
+node bundle.mjs
+```
 
 <!-- Table of links -->
 [RED4ext]: https://github.com/WopsS/RED4ext
