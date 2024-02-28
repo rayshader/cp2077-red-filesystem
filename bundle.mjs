@@ -91,6 +91,7 @@ archive.on('error', (error) => {
 });
 archive.on('end', () => {
     console.log(`Archive ready ${archivePath} (${getSize(archivePath)} bytes)`);
+    fs.rmSync(BUNDLE_PATH, {recursive: true, force: true});
 });
 archive.finalize();
 
