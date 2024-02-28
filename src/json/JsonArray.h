@@ -37,6 +37,8 @@ class JsonArray : public JsonVariant {
 }  // namespace RedFS
 
 RTTI_DEFINE_CLASS(RedFS::JsonArray, {
+  RTTI_ALIAS("RedFileSystem.Json.JsonArray");
+
   RTTI_PARENT(RedFS::JsonVariant);
 
   RTTI_METHOD(get_size, "GetSize");

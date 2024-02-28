@@ -43,6 +43,8 @@ class FileSystem : public Red::IScriptable {
 }  // namespace RedFS
 
 RTTI_DEFINE_CLASS(RedFS::FileSystem, {
+  RTTI_ALIAS("RedFileSystem.FileSystem");
+
   RTTI_METHOD(exists, "Exists");
   RTTI_METHOD(is_file, "IsFile");
 

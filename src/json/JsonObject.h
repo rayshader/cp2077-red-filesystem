@@ -43,6 +43,8 @@ class JsonObject : public JsonVariant {
 }  // namespace RedFS
 
 RTTI_DEFINE_CLASS(RedFS::JsonObject, {
+  RTTI_ALIAS("RedFileSystem.Json.JsonObject");
+
   RTTI_PARENT(RedFS::JsonVariant);
 
   RTTI_METHOD(get_keys, "GetKeys");

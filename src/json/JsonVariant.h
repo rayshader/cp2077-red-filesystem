@@ -43,6 +43,8 @@ using JsonUndefined = JsonVariant;
 }  // namespace RedFS
 
 RTTI_DEFINE_CLASS(RedFS::JsonVariant, {
+  RTTI_ALIAS("RedFileSystem.Json.JsonVariant");
+
   RTTI_ABSTRACT();
 
   RTTI_METHOD(is_undefined, "IsUndefined");

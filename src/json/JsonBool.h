@@ -27,6 +27,8 @@ class JsonBool : public JsonVariant {
 }  // namespace RedFS
 
 RTTI_DEFINE_CLASS(RedFS::JsonBool, {
+  RTTI_ALIAS("RedFileSystem.Json.JsonBool");
+
   RTTI_PARENT(RedFS::JsonVariant);
 
   RTTI_METHOD(get_bool, "GetBool");

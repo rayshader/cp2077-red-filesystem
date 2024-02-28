@@ -29,6 +29,8 @@ class JsonDouble : public JsonVariant {
 }  // namespace RedFS
 
 RTTI_DEFINE_CLASS(RedFS::JsonDouble, {
+  RTTI_ALIAS("RedFileSystem.Json.JsonDouble");
+
   RTTI_PARENT(RedFS::JsonVariant);
 
   RTTI_METHOD(get_double, "GetDouble");

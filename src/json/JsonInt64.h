@@ -29,6 +29,8 @@ class JsonInt64 : public JsonVariant {
 }  // namespace RedFS
 
 RTTI_DEFINE_CLASS(RedFS::JsonInt64, {
+  RTTI_ALIAS("RedFileSystem.Json.JsonInt64");
+
   RTTI_PARENT(RedFS::JsonVariant);
 
   RTTI_METHOD(get_int64, "GetInt64");

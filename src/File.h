@@ -53,6 +53,8 @@ class File : public Red::IScriptable {
 }  // namespace RedFS
 
 RTTI_DEFINE_CLASS(RedFS::File, {
+  RTTI_ALIAS("RedFileSystem.File");
+
   RTTI_METHOD(get_path, "GetPath");
   RTTI_METHOD(get_absolute_path, "GetAbsolutePath");
   RTTI_METHOD(get_filename, "GetFilename");

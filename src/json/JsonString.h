@@ -29,6 +29,8 @@ class JsonString : public JsonVariant {
 }  // namespace RedFS
 
 RTTI_DEFINE_CLASS(RedFS::JsonString, {
+  RTTI_ALIAS("RedFileSystem.Json.JsonString");
+
   RTTI_PARENT(RedFS::JsonVariant);
 
   RTTI_METHOD(get_string, "GetString");
