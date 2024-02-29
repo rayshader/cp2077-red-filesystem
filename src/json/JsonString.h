@@ -2,6 +2,7 @@
 #define REDFS_JSONSTRING_H
 
 #include <string>
+#include <vector>
 
 #include <RED4ext/RED4ext.hpp>
 #include <RedLib.hpp>
@@ -12,6 +13,9 @@ namespace RedFS {
 
 class JsonString : public JsonVariant {
  private:
+  using EscapeRule = std::pair<std::string, std::string>;
+  static std::vector<EscapeRule> escape_rules;
+
   std::string value;
 
  public:
