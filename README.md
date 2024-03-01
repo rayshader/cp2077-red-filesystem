@@ -253,12 +253,22 @@ LogChannel(n"Info", json.ToString());
 > GetValues() -> array&lt;ref&lt;JsonVariant&gt;&gt;
 >
 > HasKey(key: String) -> Bool  
-> GetKey(key: String) -> ref&lt;JsonVariant&gt;
+> GetKey(key: String) -> ref&lt;JsonVariant&gt;  
+> SetKey(key: String, value: ref&lt;JsonVariant&gt;) -> Void  
+> RemoveKey(key: String) -> Bool
 >
 > GetKeyBool(key: String) -> Bool  
 > GetKeyInt64(key: String) -> Int64  
 > GetKeyDouble(key: String) -> Double  
 > GetKeyString(key: String) -> String
+>
+> SetKeyNull(key: String) -> Void  
+> SetKeyBool(key: String, value: Bool) -> Void  
+> SetKeyInt64(key: String, value: Int64) -> Void  
+> SetKeyDouble(key: String, value: Double) -> Void  
+> SetKeyString(key: String, value: String) -> Void
+> 
+> Clear() -> Void
 
 Get values:
 ```swift
@@ -308,12 +318,36 @@ let hasUnknown: Bool = obj.HasKey("unknown");
 
 #### JsonArray
 > GetSize() -> Uint32  
-> GetItem(index: Uint32) -> ref&lt;JsonVariant&gt;
+> GetItem(index: Uint32) -> ref&lt;JsonVariant&gt;  
+> SetItem(index: Uint32, value: ref&lt;JsonVariant&gt;) -> Void  
+> RemoveItem(index: Uint32) -> Bool  
+> AddItem(value: ref&lt;JsonVariant&gt;) -> Void  
+> InsertItem(index: Uint32, value: ref&lt;JsonVariant&gt;) -> Void
 > 
 > GetItemBool(index: Uint32) -> Bool  
 > GetItemInt64(index: Uint32) -> Int64  
 > GetItemDouble(index: Uint32) -> Double  
 > GetItemString(index: Uint32) -> String
+>
+> SetItemNull(index: Uint32) -> Void  
+> SetItemBool(index: Uint32, value: Bool) -> Void  
+> SetItemInt64(index: Uint32, value: Int64) -> Void  
+> SetItemDouble(index: Uint32, value: Double) -> Void  
+> SetItemString(index: Uint32, value: String) -> Void
+> 
+> AddItemNull() -> Void  
+> AddItemBool(value: Bool) -> Void  
+> AddItemInt64(value: Int64) -> Void  
+> AddItemDouble(value: Double) -> Void  
+> AddItemString(value: String) -> Void
+> 
+> InsertItemNull(index: Uint32) -> Void  
+> InsertItemBool(index: Uint32, value: Bool) -> Void  
+> InsertItemInt64(index: Uint32, value: Int64) -> Void  
+> InsertItemDouble(index: Uint32, value: Double) -> Void  
+> InsertItemString(index: Uint32, value: String) -> Void
+> 
+> Clear() -> Void
 
 Get items:
 ```swift
@@ -345,9 +379,12 @@ You can write Json in a `File` which already exists or create the file in the
 same time. When writing Json, the file is always truncated:
 
 ```swift
-// Read Json data from a file for now.
+let json = new JsonObject();
+
+json.SetKeyString("name", "RedFileSystem");
+json.SetKeyBool("isEnabled", true);
+json.SetKeyDouble("version", 2.12);
 let file: ref<File> = FileSystem.GetFile("MyMod\\data.json", FileSystemPrefix.Redscript);
-let json: ref<JsonVariant> = file.ReadAsJson();
 let status: Bool = file.WriteJson(json);
 // Same as:
 // let status: Bool = file.WriteText(json.ToString());
@@ -358,10 +395,6 @@ if !status {
   LogChannel(n"Info", s"Wrote Json in file '\(file.GetFilename())'.");
 }
 ```
-
-> Currently, you cannot create a `JsonObject` / `JsonArray` without reading it 
-> from a file. You cannot update the content of Json data. These features will 
-> be implemented in the future.
 
 # Development
 Contributions are welcome, feel free to fill an issue or a PR.
