@@ -1,20 +1,23 @@
 #include <RED4ext/RED4ext.hpp>
 
 #include "Config.h"
-#include "Plugin.h"
+#include "FileSystem.h"
 
 namespace RedFS {
 
 RED4EXT_C_EXPORT bool RED4EXT_CALL Main(RED4ext::PluginHandle p_handle,
                                         RED4ext::EMainReason p_reason,
                                         const RED4ext::Sdk* p_sdk) {
+  RED4EXT_UNUSED_PARAMETER(p_handle);
+  RED4EXT_UNUSED_PARAMETER(p_sdk);
+
   switch (p_reason) {
     case RED4ext::EMainReason::Load: {
-      Plugin::get_singleton().load(p_handle, p_sdk);
+      Red::TypeInfoRegistrar::RegisterDiscovered();
+      FileSystem::load();
       break;
     }
     case RED4ext::EMainReason::Unload: {
-      Plugin::get_singleton().unload();
       break;
     }
   }

@@ -7,8 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED YES)
 configure_file(src/Config.h.in Config/Config.h)
 
 set(INC_FILES
-        src/Plugin.h
-
         src/File.h
         src/FileSystem.h
         src/FileSystemPrefix.h
@@ -29,7 +27,6 @@ set(INC_FILES
 
 set(SRC_FILES
         src/main.cpp
-        src/Plugin.cpp
 
         src/File.cpp
         src/FileSystem.cpp
