@@ -4,3 +4,6 @@
 [submodule "deps/RedLib"]
 	path = deps/RedLib
 	url = https://github.com/psiberx/cp2077-red-lib.git
+[submodule "scripts/RedTest"]
+	path = scripts/RedTest
+	url = https://github.com/rayshader/cp2077-red-test.git

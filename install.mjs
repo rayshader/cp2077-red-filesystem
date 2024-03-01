@@ -30,8 +30,9 @@ if (!fs.existsSync(REDSCRIPT_PATH)) {
     process.exit(3);
 }
 
-const GAME_PLUGIN_PATH = `${RED4EXT_PATH}\\RedFileSystem`
-const GAME_SCRIPT_PATH = `${REDSCRIPT_PATH}\\RedFileSystem`
+const GAME_PLUGIN_PATH = `${RED4EXT_PATH}\\RedFileSystem`;
+const GAME_SCRIPT_PATH = `${REDSCRIPT_PATH}\\RedFileSystem`;
+const GAME_TEST_SCRIPT_PATH = `${REDSCRIPT_PATH}\\RedTest`;
 
 // Optionally create plugin's directory.
 if (!fs.existsSync(GAME_PLUGIN_PATH)) {
@@ -44,6 +45,10 @@ fs.rmSync(GAME_SCRIPT_PATH, {force: true, recursive: true});
 fs.mkdirSync(GAME_SCRIPT_PATH);
 console.info(`[RedFS] Script directory created at: ${GAME_SCRIPT_PATH}`);
 
+fs.rmSync(GAME_TEST_SCRIPT_PATH, {force: true, recursive: true});
+fs.mkdirSync(GAME_TEST_SCRIPT_PATH);
+console.info(`[RedFS] Test script directory created at: ${GAME_TEST_SCRIPT_PATH}`);
+
 const BUILD_LIBRARY_PATH = `build\\Debug\\RedFileSystem.dll`;
 const GAME_LIBRARY_PATH = `${GAME_PLUGIN_PATH}\\RedFileSystem.dll`;
 
@@ -51,6 +56,8 @@ fs.cpSync(BUILD_LIBRARY_PATH, GAME_LIBRARY_PATH, {force: true});
 console.info(`[RedFS] Library installed.`);
 
 const BUILD_SCRIPT_PATH = `scripts\\RedFileSystem`;
+const BUILD_TEST_SCRIPT_PATH = `scripts\\RedTest`;
 
 fs.cpSync(BUILD_SCRIPT_PATH, GAME_SCRIPT_PATH, {force: true, recursive: true, preserveTimestamps: true});
+fs.cpSync(BUILD_TEST_SCRIPT_PATH, GAME_TEST_SCRIPT_PATH, {force: true, recursive: true, preserveTimestamps: true});
 console.info(`[RedFS] Scripts installed.`);
