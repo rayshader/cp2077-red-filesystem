@@ -1,8 +1,5 @@
 {
   "name": "FileSystemTest",
-  "authors": [
-    "Rayshader"
-  ],
   "version": 1,
   "isJson": true,
   "delta": 0.016,
