@@ -1,6 +1,6 @@
 # Red File System
 ![Cyberpunk 2077](https://img.shields.io/badge/Cyberpunk%202077-v2.12-blue)
-![GitHub License](https://img.shields.io/github/license/rayshader/cp2077-red-test)
+![GitHub License](https://img.shields.io/github/license/rayshader/cp2077-red-filesystem)
 [![Donate](https://img.shields.io/badge/donate-buy%20me%20a%20coffee-yellow)](https://www.buymeacoffee.com/lpfreelance)
 
 This plugin provides access to the file system using read/write operations. It 
@@ -10,7 +10,7 @@ supports UTF8 text and Json formats. It can be used with Redscript and CET.
 
 ## Compatibility
 - Cyberpunk 2077 v2.12
-- [Redscript] 0.5.16+
+- [Redscript] 0.5.17+
 - [Cyber Engine Tweaks] 1.31.0+
 
 ## Installation
@@ -446,4 +446,4 @@ node bundle.mjs
 [RED4ext]: https://github.com/WopsS/RED4ext
 [Redscript]: https://github.com/jac3km4/redscript
 [Cyber Engine Tweaks]: https://github.com/maximegmd/CyberEngineTweaks
-[latest archive]: https://github.com/rayshader/cp2077-redfs/releases/latest
+[latest archive]: https://github.com/rayshader/cp2077-red-filesystem/releases/latest
