@@ -25,16 +25,26 @@ class JsonObject : public JsonVariant {
   [[nodiscard]] bool has_key(const Red::CString& p_key) const;
   [[nodiscard]] Red::Handle<JsonVariant> get_key(
     const Red::CString& p_key) const;
+  inline void set_key(const Red::CString& p_key,
+                      const Red::Handle<JsonVariant>& p_value);
+  void remove_key(const Red::CString& p_key);
+
   [[nodiscard]] bool get_key_bool(const Red::CString& p_key) const;
   [[nodiscard]] int64_t get_key_int64(const Red::CString& p_key) const;
   [[nodiscard]] double get_key_double(const Red::CString& p_key) const;
   [[nodiscard]] Red::CString get_key_string(const Red::CString& p_key) const;
 
+  void set_key_null(const Red::CString& p_key);
+  void set_key_bool(const Red::CString& p_key, bool p_value);
+  void set_key_int64(const Red::CString& p_key, int64_t p_value);
+  void set_key_double(const Red::CString& p_key, double p_value);
+  void set_key_string(const Red::CString& p_key, const Red::CString& p_value);
+
+  void clear();
+
   [[nodiscard]] Red::CString to_string() const override;
 
   [[nodiscard]] std::vector<std::string> get_string_keys() const;
-  void insert_field(const std::string& p_key,
-                    const Red::Handle<JsonVariant>& p_value);
 
   RTTI_IMPL_TYPEINFO(RedFS::JsonObject);
   RTTI_IMPL_ALLOCATOR();
@@ -52,10 +62,21 @@ RTTI_DEFINE_CLASS(RedFS::JsonObject, {
 
   RTTI_METHOD(has_key, "HasKey");
   RTTI_METHOD(get_key, "GetKey");
+  RTTI_METHOD(set_key, "SetKey");
+  RTTI_METHOD(remove_key, "RemoveKey");
+
   RTTI_METHOD(get_key_bool, "GetKeyBool");
   RTTI_METHOD(get_key_int64, "GetKeyInt64");
   RTTI_METHOD(get_key_double, "GetKeyDouble");
   RTTI_METHOD(get_key_string, "GetKeyString");
+
+  RTTI_METHOD(set_key_null, "SetKeyNull");
+  RTTI_METHOD(set_key_bool, "SetKeyBool");
+  RTTI_METHOD(set_key_int64, "SetKeyInt64");
+  RTTI_METHOD(set_key_double, "SetKeyDouble");
+  RTTI_METHOD(set_key_string, "SetKeyString");
+
+  RTTI_METHOD(clear, "Clear");
 
   RTTI_METHOD(to_string, "ToString");
 });

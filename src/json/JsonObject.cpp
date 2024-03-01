@@ -1,4 +1,5 @@
 #include "JsonObject.h"
+#include "JsonFactory.h"
 
 namespace RedFS {
 
@@ -67,6 +68,15 @@ Red::Handle<JsonVariant> JsonObject::get_key(const Red::CString& p_key) const {
   return fields.at(key);
 }
 
+void JsonObject::set_key(const Red::CString& p_key,
+                         const Red::Handle<JsonVariant>& p_value) {
+  fields[p_key.c_str()] = p_value;
+}
+
+void JsonObject::remove_key(const Red::CString& p_key) {
+  fields.erase(p_key.c_str());
+}
+
 bool JsonObject::get_key_bool(const Red::CString& p_key) const {
   std::string key = p_key.c_str();
 
@@ -103,6 +113,31 @@ Red::CString JsonObject::get_key_string(const Red::CString& p_key) const {
   return fields.at(key)->get_string();
 }
 
+void JsonObject::set_key_null(const Red::CString& p_key) {
+  set_key(p_key, JsonFactory::CreateNull());
+}
+
+void JsonObject::set_key_bool(const Red::CString& p_key, bool p_value) {
+  set_key(p_key, JsonFactory::CreateBool(p_value));
+}
+
+void JsonObject::set_key_int64(const Red::CString& p_key, int64_t p_value) {
+  set_key(p_key, JsonFactory::CreateInt64(p_value));
+}
+
+void JsonObject::set_key_double(const Red::CString& p_key, double p_value) {
+  set_key(p_key, JsonFactory::CreateDouble(p_value));
+}
+
+void JsonObject::set_key_string(const Red::CString& p_key,
+                                const Red::CString& p_value) {
+  set_key(p_key, JsonFactory::CreateString(p_value.c_str()));
+}
+
+void JsonObject::clear() {
+  fields.clear();
+}
+
 Red::CString JsonObject::to_string() const {
   return to_json(this);
 }
@@ -114,11 +149,6 @@ std::vector<std::string> JsonObject::get_string_keys() const {
     keys.push_back(field.first);
   }
   return keys;
-}
-
-void JsonObject::insert_field(const std::string& p_key,
-                              const Red::Handle<JsonVariant>& p_value) {
-  fields[p_key] = p_value;
 }
 
 }  // namespace RedFS

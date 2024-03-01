@@ -144,37 +144,29 @@ void File::parse_object(const simdjson::dom::object& p_object,
     auto el_value = key_value.value;
 
     if (el_value.is_bool()) {
-      auto value = JsonFactory::CreateBool(el_value);
-
-      p_root->insert_field(key, value);
+      p_root->set_key_bool(key, el_value);
     } else if (el_value.is_int64()) {
-      auto value = JsonFactory::CreateInt64(el_value);
-
-      p_root->insert_field(key, value);
+      p_root->set_key_int64(key, el_value);
     } else if (el_value.is_double()) {
-      auto value = JsonFactory::CreateDouble(el_value);
-
-      p_root->insert_field(key, value);
+      p_root->set_key_double(key, el_value);
     } else if (el_value.is_string()) {
-      auto value = JsonFactory::CreateString(el_value);
-
-      p_root->insert_field(key, value);
+      p_root->set_key_string(key, std::string(el_value));
     } else if (el_value.is_object()) {
       auto value = JsonFactory::CreateObject();
       auto sub_object = simdjson::dom::object(el_value);
 
       parse_object(sub_object, value);
-      p_root->insert_field(key, value);
+      p_root->set_key(key, value);
     } else if (el_value.is_array()) {
       auto value = JsonFactory::CreateArray();
       auto sub_array = simdjson::dom::array(el_value);
 
       parse_array(sub_array, value);
-      p_root->insert_field(key, value);
+      p_root->set_key(key, value);
     } else if (el_value.is_null()) {
-      p_root->insert_field(key, JsonFactory::CreateNull());
+      p_root->set_key_null(key);
     } else {
-      p_root->insert_field(key, JsonFactory::CreateUndefined());
+      p_root->set_key(key, JsonFactory::CreateUndefined());
     }
   }
 }
@@ -183,37 +175,29 @@ void File::parse_array(const simdjson::dom::array& p_array,
                        Red::Handle<JsonArray>& p_root) {
   for (const auto& item : p_array) {
     if (item.is_bool()) {
-      auto value = JsonFactory::CreateBool(item);
-
-      p_root->push_back(value);
+      p_root->add_item_bool(item);
     } else if (item.is_int64()) {
-      auto value = JsonFactory::CreateInt64(item);
-
-      p_root->push_back(value);
+      p_root->add_item_int64(item);
     } else if (item.is_double()) {
-      auto value = JsonFactory::CreateDouble(item);
-
-      p_root->push_back(value);
+      p_root->add_item_double(item);
     } else if (item.is_string()) {
-      auto value = JsonFactory::CreateString(item);
-
-      p_root->push_back(value);
+      p_root->add_item_string(std::string(item));
     } else if (item.is_object()) {
       auto value = JsonFactory::CreateObject();
       auto sub_object = simdjson::dom::object(item);
 
       parse_object(sub_object, value);
-      p_root->push_back(value);
+      p_root->add_item(value);
     } else if (item.is_array()) {
       auto value = JsonFactory::CreateArray();
       auto sub_array = simdjson::dom::array(item);
 
       parse_array(sub_array, value);
-      p_root->push_back(value);
+      p_root->add_item(value);
     } else if (item.is_null()) {
-      p_root->push_back(JsonFactory::CreateNull());
+      p_root->add_item_null();
     } else {
-      p_root->push_back(JsonFactory::CreateUndefined());
+      p_root->add_item(JsonFactory::CreateUndefined());
     }
   }
 }

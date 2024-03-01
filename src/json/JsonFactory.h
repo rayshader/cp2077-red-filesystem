@@ -4,6 +4,7 @@
 #include <simdjson.h>
 #include <RED4ext/RED4ext.hpp>
 #include <RedLib.hpp>
+#include <utility>
 
 #include "JsonArray.h"
 #include "JsonBool.h"
@@ -31,8 +32,16 @@ class JsonFactory {
     return Create<bool, JsonBool>(p_value);
   }
 
+  inline static Red::Handle<JsonBool> CreateBool(bool p_value) {
+    return Create<bool, JsonBool>(p_value);
+  }
+
   inline static Red::Handle<JsonInt64> CreateInt64(
     const simdjson::dom::element& p_value) {
+    return Create<int64_t, JsonInt64>(p_value);
+  }
+
+  inline static Red::Handle<JsonInt64> CreateInt64(int64_t p_value) {
     return Create<int64_t, JsonInt64>(p_value);
   }
 
@@ -41,9 +50,17 @@ class JsonFactory {
     return Create<double, JsonDouble>(p_value);
   }
 
+  inline static Red::Handle<JsonDouble> CreateDouble(double p_value) {
+    return Create<double, JsonDouble>(p_value);
+  }
+
   inline static Red::Handle<JsonString> CreateString(
     const simdjson::dom::element& p_value) {
     return Create<std::string, JsonString>(p_value);
+  }
+
+  inline static Red::Handle<JsonString> CreateString(std::string p_value) {
+    return Create<std::string, JsonString>(std::move(p_value));
   }
 
   inline static Red::Handle<JsonArray> CreateArray() {
@@ -57,6 +74,11 @@ class JsonFactory {
   template <typename T, class U>
   inline static Red::Handle<U> Create(const simdjson::dom::element& p_value) {
     return Red::MakeHandle<U>(T(p_value));
+  }
+
+  template <typename T, class U>
+  inline static Red::Handle<U> Create(T p_value) {
+    return Red::MakeHandle<U>(std::move(p_value));
   }
 };
 
