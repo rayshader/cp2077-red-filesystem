@@ -28,7 +28,7 @@ public class FileTest extends JsonBaseTest {
     this.ExpectString("GetAbsolutePath", file.GetAbsolutePath(), s"\(this.GAME_PATH)\(path)");
     this.ExpectString("GetFilename", file.GetFilename(), "Cyberpunk2077.exe");
     this.ExpectString("GetExtension", file.GetExtension(), ".exe");
-    this.ExpectUint64("GetSize", file.GetSize(), 59170304ul);
+    this.ExpectUint64("GetSize", file.GetSize(), 59172352ul);
   }
 
   /// Read ///
