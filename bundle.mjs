@@ -56,6 +56,9 @@ const graph = {
 };
 
 modules.forEach((module) => {
+    if (module.name === 'Test') {
+        return;
+    }
     const path = `${module.path}${module.name}/`;
     const files = fs.readdirSync(path, {withFileTypes: true});
     const scripts = files.filter(filterRedscript);
