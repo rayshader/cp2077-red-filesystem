@@ -3,7 +3,7 @@ public native class JsonArray extends JsonVariant {
   public native func GetSize() -> Uint32;
   public native func GetItem(index: Uint32) -> ref<JsonVariant>;
   public native func SetItem(index: Uint32, value: ref<JsonVariant>) -> Void;
-  public native func RemoveItem(index: Uint32) -> Void;
+  public native func RemoveItem(index: Uint32) -> Bool;
   public native func AddItem(value: ref<JsonVariant>) -> Void;
   public native func InsertItem(index: Uint32, value: ref<JsonVariant>) -> Void;
 
