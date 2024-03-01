@@ -50,7 +50,7 @@ const graph = {
         name: '',
         path: PLUGIN_SCRIPT_PATH,
         scripts: scripts,
-        imports: ['Enums', 'Json']
+        imports: ['Enum', 'Json']
     },
     modules: []
 };
