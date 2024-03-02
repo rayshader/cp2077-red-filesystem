@@ -31,7 +31,7 @@ All paths are relative to the game directory by default
 > ...\Cyberpunk 2077\
 
 Make all paths relative to CET `mods` directory with `FileSystemPrefix.CET`.
-> ...\Cyberpunk 2077\bin\x64\cyber_engine_tweaks\mods\
+> ...\Cyberpunk 2077\bin\x64\plugins\cyber_engine_tweaks\mods\
 
 Make all paths relative to `scripts` directory with 
 `FileSystemPrefix.Redscript`.
@@ -42,7 +42,7 @@ your mod's directory.
 > path: "MyMod\\"
 
 Path will be automatically resolved to:
-> CET: ...\Cyberpunk 2077\bin\x64\cyber_engine_tweaks\mods\MyMod\
+> CET: ...\Cyberpunk 2077\bin\x64\plugins\cyber_engine_tweaks\mods\MyMod\
 > Redscript: ...\Cyberpunk 2077\r6\scripts\MyMod\
 
 ### Exists
