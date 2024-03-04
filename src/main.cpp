@@ -8,16 +8,14 @@ namespace RedFS {
 RED4EXT_C_EXPORT bool RED4EXT_CALL Main(RED4ext::PluginHandle p_handle,
                                         RED4ext::EMainReason p_reason,
                                         const RED4ext::Sdk* p_sdk) {
-  RED4EXT_UNUSED_PARAMETER(p_handle);
-  RED4EXT_UNUSED_PARAMETER(p_sdk);
-
   switch (p_reason) {
     case RED4ext::EMainReason::Load: {
       Red::TypeInfoRegistrar::RegisterDiscovered();
-      FileSystem::load();
+      FileSystem::load(p_handle, p_sdk->logger);
       break;
     }
     case RED4ext::EMainReason::Unload: {
+      FileSystem::unload();
       break;
     }
   }

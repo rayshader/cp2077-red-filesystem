@@ -1,86 +1,105 @@
 #include "FileSystem.h"
-
-#include <RED4ext/RED4ext.hpp>
-#include <RedLib.hpp>
+#include "FileSystemStorage.h"
 
 namespace RedFS {
 
-std::filesystem::path FileSystem::game_path;
-std::filesystem::path FileSystem::cet_path;
-std::filesystem::path FileSystem::redscript_path;
+RED4ext::PluginHandle FileSystem::handle = nullptr;
+RED4ext::Logger* FileSystem::logger = nullptr;
 
-void FileSystem::load() {
+std::filesystem::path FileSystem::game_path;
+std::filesystem::path FileSystem::storages_path;
+
+std::regex FileSystem::storage_name_rule("[A-Za-z]{3,24}");
+
+FileSystem::StorageMap FileSystem::storages{};
+bool FileSystem::has_error = true;
+
+void FileSystem::load(RED4ext::PluginHandle p_handle,
+                      RED4ext::Logger* p_logger) {
+  handle = p_handle;
+  logger = p_logger;
   auto path = std::filesystem::absolute(".");
 
   game_path = path.parent_path().parent_path();
-  cet_path = path / "plugins" / "cyber_engine_tweaks" / "mods";
-  redscript_path = game_path / "r6" / "scripts";
+  storages_path =
+    game_path / "red4ext" / "plugins" / "RedFileSystem" / "storages";
+  bool is_present = request_directory(storages_path);
+
+  if (!is_present) {
+    has_error = true;
+    logger->ErrorF(handle, "Failed to create directory at \"%s\".",
+                   storages_path.c_str());
+    logger->Error(handle, "RedFileSystem has been disabled.");
+    return;
+  }
+  has_error = false;
+  logger->Info(handle, "RedFileSystem has been enabled.");
 }
 
-inline FileSystemStatus FileSystem::exists(
-  const Red::CString& p_path, const Red::Optional<FileSystemPrefix>& p_prefix) {
-  std::error_code error;
-  auto path = restrict_path(p_path.c_str(), p_prefix.value, error);
-
-  if (error) {
-    return FileSystemStatus::Denied;
-  }
-  bool status = std::filesystem::exists(path, error);
-
-  if (error) {
-    return FileSystemStatus::Failure;
-  }
-  return (status) ? FileSystemStatus::True : FileSystemStatus::False;
+void FileSystem::unload() {
+  storages.clear();
+  has_error = true;
+  logger->Info(handle, "RedFileSystem has been terminated.");
+  handle = nullptr;
+  logger = nullptr;
 }
 
-inline FileSystemStatus FileSystem::is_file(
-  const Red::CString& p_path, const Red::Optional<FileSystemPrefix>& p_prefix) {
-  std::error_code error;
-  auto path = restrict_path(p_path.c_str(), p_prefix.value, error);
-
-  if (error) {
-    return FileSystemStatus::Denied;
-  }
-  bool status = std::filesystem::is_regular_file(path, error);
-
-  if (error) {
-    return FileSystemStatus::Failure;
-  }
-  return (status) ? FileSystemStatus::True : FileSystemStatus::False;
-}
-
-inline Red::Handle<File> FileSystem::get_file(
-  const Red::CString& p_path, const Red::Optional<FileSystemPrefix>& p_prefix) {
-  std::error_code error;
-  auto path = restrict_path(p_path.c_str(), p_prefix.value, error);
-
-  if (error) {
+inline Red::Handle<FileSystemStorage> FileSystem::get_storage(
+  const Red::CString& p_name) {
+  if (has_error) {
+    logger->Error(handle, "RedFileSystem is disabled for all mods.");
     return {};
   }
-  return Red::MakeHandle<File>(p_path.c_str(), path);
+  std::string name = p_name.c_str();
+
+  if (!regex_match(name, storage_name_rule)) {
+    logger->ErrorF(handle, "Name of storage \"%s\" is not allowed.", name.c_str());
+    logger->Error(handle, "See the documentation to fix this issue.");
+    return {};
+  }
+  if (storages.contains(name)) {
+    storages.at(name)->revoke_permission();
+    logger->ErrorF(handle, "Attempt to access storage \"%s\" several times.",
+                   name.c_str());
+    logger->Error(handle,
+                  "Only one mod can access its own storage with "
+                  "RedFileSystem.");
+    logger->Error(handle,
+                  "Access to this storage has been permanently revoked "
+                  "for this session.");
+    return {};
+  }
+  auto path = storages_path / name;
+  bool is_present = request_directory(path);
+
+  if (!is_present) {
+    logger->ErrorF(handle, "Failed to create storage \"%s\".",
+                   name.c_str());
+    return {};
+  }
+  auto storage = Red::MakeHandle<FileSystemStorage>(name, path);
+
+  storages[name] = storage;
+  logger->InfoF(handle, "Access to storage \"%s\" has been granted.",
+                name.c_str());
+  return storage;
 }
 
-std::filesystem::path FileSystem::restrict_path(const std::string& p_path,
-                                                FileSystemPrefix p_prefix,
-                                                std::error_code& p_error) {
-  std::filesystem::path prefix_path = game_path;
+bool FileSystem::request_directory(const std::filesystem::path& p_path) {
+  std::error_code error;
+  bool is_present = std::filesystem::exists(p_path, error);
 
-  if (p_prefix == FileSystemPrefix::CET) {
-    prefix_path = cet_path;
-  } else if (p_prefix == FileSystemPrefix::Redscript) {
-    prefix_path = redscript_path;
+  if (error) {
+    return false;
   }
-  std::filesystem::path path = prefix_path / p_path;
-  std::filesystem::path real_path =
-    std::filesystem::weakly_canonical(path, p_error);
-
-  if (p_error) {
-    return real_path;
+  if (is_present) {
+    return true;
   }
-  if (real_path.string().find(prefix_path.string() + "\\") != 0) {
-    p_error = std::make_error_code(std::errc::permission_denied);
+  is_present = std::filesystem::create_directory(p_path, error);
+  if (!is_present || error) {
+    return false;
   }
-  return real_path;
+  return true;
 }
 
 }  // namespace RedFS

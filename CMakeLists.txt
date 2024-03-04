@@ -9,7 +9,8 @@ configure_file(src/Config.h.in Config/Config.h)
 set(INC_FILES
         src/File.h
         src/FileSystem.h
-        src/FileSystemPrefix.h
+        src/FileSystemStorage.h
+
         src/FileSystemStatus.h
         src/FileSystemWriteMode.h
 
@@ -30,6 +31,7 @@ set(SRC_FILES
 
         src/File.cpp
         src/FileSystem.cpp
+        src/FileSystemStorage.cpp
 
         src/json/JsonVariant.cpp
         src/json/JsonNull.cpp

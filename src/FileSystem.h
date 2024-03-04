@@ -2,39 +2,41 @@
 #define REDFS_FILESYSTEM_H
 
 #include <filesystem>
+#include <regex>
+#include <unordered_map>
 
 #include <RED4ext/RED4ext.hpp>
 #include <RedLib.hpp>
 
 #include "File.h"
-#include "FileSystemPrefix.h"
 #include "FileSystemStatus.h"
+#include "FileSystemStorage.h"
 
 namespace RedFS {
 
 class FileSystem : public Red::IScriptable {
  private:
-  static std::filesystem::path game_path;
-  static std::filesystem::path cet_path;
-  static std::filesystem::path redscript_path;
+  using StorageMap =
+    std::unordered_map<std::string, Red::Handle<FileSystemStorage>>;
 
-  static std::filesystem::path restrict_path(const std::string& p_path,
-                                             FileSystemPrefix p_prefix,
-                                             std::error_code& p_error);
+  static RED4ext::PluginHandle handle;
+  static RED4ext::Logger* logger;
+
+  static std::filesystem::path game_path;
+  static std::filesystem::path storages_path;
+
+  static std::regex storage_name_rule;
+
+  static StorageMap storages;
+  static bool has_error;
+
+  static bool request_directory(const std::filesystem::path& p_path);
 
  public:
-  static void load();
+  static void load(RED4ext::PluginHandle p_handle, RED4ext::Logger* p_logger);
+  static void unload();
 
-  static FileSystemStatus exists(
-    const Red::CString& p_path,
-    const Red::Optional<FileSystemPrefix>& p_prefix);
-  static FileSystemStatus is_file(
-    const Red::CString& p_path,
-    const Red::Optional<FileSystemPrefix>& p_prefix);
-
-  static Red::Handle<File> get_file(
-    const Red::CString& p_path,
-    const Red::Optional<FileSystemPrefix>& p_prefix);
+  static Red::Handle<FileSystemStorage> get_storage(const Red::CString& p_name);
 
   RTTI_IMPL_TYPEINFO(RedFS::FileSystem);
   RTTI_IMPL_ALLOCATOR();
@@ -45,10 +47,7 @@ class FileSystem : public Red::IScriptable {
 RTTI_DEFINE_CLASS(RedFS::FileSystem, {
   RTTI_ALIAS("RedFileSystem.FileSystem");
 
-  RTTI_METHOD(exists, "Exists");
-  RTTI_METHOD(is_file, "IsFile");
-
-  RTTI_METHOD(get_file, "GetFile");
+  RTTI_METHOD(get_storage, "GetStorage");
 });
 
 #endif  //REDFS_FILESYSTEM_H
