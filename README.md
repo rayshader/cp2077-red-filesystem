@@ -21,43 +21,67 @@ supports UTF8 text and Json formats. It can be used with Redscript and CET.
 ## Usage
 
 ### Disclaimer
-All operations are restricted to the game directory. You will not be able to 
-read/write files outside the game directory. This is a security measure. Worst 
-case scenario, you can corrupt the game files, nothing else.
+All read/write operations are restricted within:
+> ...\Cyberpunk 2077\red4ext\plugins\RedFileSystem\storages\
 
-### Relative path
-All paths are relative to the game directory by default 
-(`FileSystemPrefix.None`).
-> ...\Cyberpunk 2077\
+You can get a storage with the name of your mod. It must be unique. You can 
+only read/write files within your own storage.
 
-Make all paths relative to CET `mods` directory with `FileSystemPrefix.CET`.
-> ...\Cyberpunk 2077\bin\x64\plugins\cyber_engine_tweaks\mods\
+For example, if your mod is named `Awesome`, your storage will be located in:
+> ...\Cyberpunk 2077\red4ext\plugins\RedFileSystem\storages\Awesome\
 
-Make all paths relative to `scripts` directory with 
-`FileSystemPrefix.Redscript`.
-> ...\Cyberpunk 2077\r6\scripts\
+This is a security measure to prevent malicious access. This way, you and 
+other authors cannot break game files nor the operating system of the player.
 
-You can read/write only in your own mod directory with `FileSystemPrefix` and 
-your mod's directory.
-> path: "MyMod\\"
+### FileSystem
 
-Path will be automatically resolved to:
-> CET: ...\Cyberpunk 2077\bin\x64\plugins\cyber_engine_tweaks\mods\MyMod\
-> Redscript: ...\Cyberpunk 2077\r6\scripts\MyMod\
+#### GetStorage
+> GetStorage(name: String) -> ref&lt;FileSystemStorage&gt;
 
-### Exists
-> Exists(path: String, opt prefix: FileSystemPrefix = None) -> FileSystemStatus
+You can get a storage for your mod like this:
 
-You can test if a path exists, can be a file or a directory (e.g. game 
-directory):
 ```swift
-let path: String = "launcher-configuration.json";
-let status: FileSystemStatus = FileSystem.Exists(path);
+let storage = FileSystem.GetStorage("Awesome");
+
+// ...
+```
+
+`name` must complies with the following rules:
+- minimum of 3 characters
+- maximum of 24 characters
+- only `A-Z` and `a-z` characters
+
+If you use a malformed name, `GetStorage` will return `null`.
+
+You must get your storage only one time when running your mod. If you try to 
+call `GetStorage` again, you will no longer be able to use it. This is a 
+security measure to make sure only you (author of the mod `Awesome`) is using 
+this storage.
+
+For example, if an evil mod tries to hack into your storage, it will also call 
+`GetStorage("Awesome")`. In this case, two mods are trying to get the storage 
+`Awesome`, you and the evil mod. Because there is no way to detect if the call 
+is legitimate (your mod) or not (evil mod), all further attempt to use the 
+storage will be denied.
+
+You can store the unique reference of your `FileSystemStorage` with 
+`ScriptableEnv` from [Codeware]. You can find an example in [examples/].
+
+### FileSystemStorage
+
+#### Exists
+> Exists(path: String) -> FileSystemStatus
+
+You can test if a path exists, can be a file or a directory:
+```swift
+// ...
+let path = "config.json";
+let status = storage.Exists(path);
 
 if Equals(status, FileSystemStatus.Failure) {
   LogChannel(n"Error", "System error.");
 } else if Equals(status, FileSystemStatus.Denied) {
-  LogChannel(n"Error", "Path is outside the game directory.");
+  LogChannel(n"Error", "Operation denied.");
 } else if Equals(status, FileSystemStatus.False) {
   LogChannel(n"Info", "File/Directory not found.");
 } else if Equals(status, FileSystemStatus.True) {
@@ -65,18 +89,19 @@ if Equals(status, FileSystemStatus.Failure) {
 }
 ```
 
-### IsFile
-> IsFile(path: String, opt prefix: FileSystemPrefix = None) -> FileSystemStatus
+#### IsFile
+> IsFile(path: String) -> FileSystemStatus
 
-You can test if a path points to a regular file (e.g. game directory):
+You can test if a path points to a regular file:
 ```swift
-let path: String = "README.md";
-let status: FileSystemStatus = FileSystem.IsFile(path);
+// ...
+let path = "README.md";
+let status = storage.IsFile(path);
 
 if Equals(status, FileSystemStatus.Failure) {
   LogChannel(n"Error", "System error.");
 } else if Equals(status, FileSystemStatus.Denied) {
-  LogChannel(n"Error", "Path is outside of the game directory.");
+  LogChannel(n"Error", "Operation denied.");
 } else if Equals(status, FileSystemStatus.False) {
   LogChannel(n"Info", "Path is a not file.");
 } else if Equals(status, FileSystemStatus.True) {
@@ -84,16 +109,17 @@ if Equals(status, FileSystemStatus.Failure) {
 }
 ```
 
-### GetFile
-> GetFile(path: String, opt prefix: FileSystemPrefix = None) -> ref&lt;File&gt;
+#### GetFile
+> GetFile(path: String) -> ref&lt;File&gt;
 
-You can get a file to get stats (e.g. Redscript mod directory):
+You can get a file to get stats:
 ```swift
-let path: String = "MyMod\\README.md";
-let file: ref<File> = FileSystem.GetFile(path, FileSystemPrefix.Redscript);
+// ...
+let path = "README.md";
+let file = storage.GetFile(path);
 
 if !IsDefined(file) {
-  LogChannel(n"Error", "Path is outside of the Redscript mod directory.");
+  LogChannel(n"Error", "Operation denied.");
   return;
 }
 LogChannel(n"Info", s"Relative path: '\(file.GetPath())'");
@@ -101,8 +127,8 @@ LogChannel(n"Info", s"Absolute path: '\(file.GetAbsolutePath())'");
 LogChannel(n"Info", s"Filename: '\(file.GetFilename())'");
 LogChannel(n"Info", s"Extension: '\(file.GetExtension())'");
 LogChannel(n"Info", s"Size: \(file.GetSize()) bytes");
-// Relative path: 'MyMod\\README.md'
-// Absolute path: 'C:\Program Files (x86)\Steam\steamapps\common\Cyberpunk 2077\r6\scripts\MyMod\README.md'
+// Relative path: 'README.md'
+// Absolute path: 'C:\Program Files (x86)\Steam\steamapps\common\Cyberpunk 2077\red4ext\plugins\RedFileSystem\storages\Awesome\README.md'
 // Filename: 'README.md'
 // Extension: '.md'
 // Size: 0 bytes
@@ -117,8 +143,9 @@ You can read all text content of a `File` using:
 - A single blob stored in a `String`.
 
 ```swift
-let file: ref<File> = FileSystem.GetFile("MyMod\\README.md", FileSystemPrefix.Redscript);
-let text: String = file.ReadAsText();
+// ...
+let file = storage.GetFile("README.md");
+let text = file.ReadAsText();
 
 LogChannel(n"Info", s"File '\(file.GetFilename())' contains \(StrLen(text)) characters:");
 LogChannel(n"Info", text);
@@ -127,8 +154,9 @@ LogChannel(n"Info", text);
 - A list of lines stored in an array of `String`.
 
 ```swift
-let file: ref<File> = FileSystem.GetFile("MyMod\\README.md", FileSystemPrefix.Redscript);
-let lines: array<String> = file.ReadAsLines();
+// ...
+let file = storage.GetFile("README.md");
+let lines = file.ReadAsLines();
 let linesSize = ArraySize(lines);
 let i = 0;
 
@@ -150,15 +178,17 @@ of the file. You can use:
 - A single blob with a `String`.
 
 ```swift
+// ...
+// 
 // Suppose file doesn't exist yet.
-let file: ref<File> = FileSystem.GetFile("MyMod\\welcome.txt", FileSystemPrefix.Redscript);
-let text: String = "";
+let file = storage.GetFile("welcome.txt");
+let text = "";
 
-text += "Welcome Night City!\n";
-text += "Lets do this choom ;)\n";
+text += "Welcome to Night City!\n";
+text += "Let's do this choom ;)\n";
 
 // Create file and write text in it (default is FileSystemWriteMode.Truncate).
-let status: Bool = file.WriteText(text);
+let status = file.WriteText(text);
 
 if !status {
   LogChannel(n"Error", s"Failed to write in file '\(file.GetFilename())'.");
@@ -170,15 +200,17 @@ if !status {
 - A list of lines with an array of `String`.
 
 ```swift
+// ...
+// 
 // Suppose file already exists.
-let file: ref<File> = FileSystem.GetFile("MyMod\\welcome.txt", FileSystemPrefix.Redscript);
-let lines: array<String> = [
+let file = storage.GetFile("welcome.txt");
+let lines = [
   "",
   "Beware of flatlines..."
 ];
 
 // Only append lines to the end of the file.
-let status: Bool = file.WriteLines(lines, FileSystemWriteMode.Append);
+let status = file.WriteLines(lines, FileSystemWriteMode.Append);
 
 if !status {
   LogChannel(n"Error", s"Failed to write in file '\(file.GetFilename())'.");
@@ -188,8 +220,8 @@ if !status {
 ```
 
 After running the two code snippets above, file should contain:
-> Welcome Night City!  
-> Lets do this choom ;)
+> Welcome to Night City!  
+> Let's do this choom ;)
 > 
 > Beware of flatlines...
 
@@ -213,8 +245,9 @@ e.g. with Json file:
 
 You can read all Json content of a `File` like this:
 ```swift
-let file: ref<File> = FileSystem.GetFile("MyMod\\config.json", FileSystemPrefix.Redscript);
-let json: ref<JsonVariant> = file.ReadAsJson();
+// ...
+let file = storage.GetFile("config.json");
+let json = file.ReadAsJson();
 
 if !IsDefined(json) {
   LogChannel(n"Error", s"Failed to parse Json of file '\(file.GetFilename())'.");
@@ -241,7 +274,7 @@ if !json.IsObject() {
 > 
 > ToString() -> String
 
-You can format Json data to a String. It will be pretty-formatted using a two 
+You can format Json data to a `String`. It will be pretty-formatted using a two 
 spaces indentation `  `.
 ```swift
 // ...
@@ -276,7 +309,7 @@ LogChannel(n"Info", json.ToString());
 Get values:
 ```swift
 // ...
-let obj: ref<JsonObject> = json as JsonObject;
+let obj = json as JsonObject;
 let name = obj.GetKeyString("name");
 let version = obj.GetKeyInt64("version");
 let isEnabled = obj.GetKeyBool("isEnabled");
@@ -291,7 +324,7 @@ let pi = obj.GetKeyDouble("pi");
 Get a list of keys:
 ```swift
 // ...
-let keys: array<String> = obj.GetKeys();
+let keys = obj.GetKeys();
 
 // keys == ["name", "version", "isEnabled", "pi", "items", "i18n"]
 ```
@@ -299,7 +332,7 @@ let keys: array<String> = obj.GetKeys();
 Get a list of values:
 ```swift
 // ...
-let values: array<ref<JsonVariant>> = obj.GetValues();
+let values = obj.GetValues();
 
 // values[0].GetString() == "RedFileSystem"
 // values[1].GetInt64() == 1
@@ -312,8 +345,8 @@ let values: array<ref<JsonVariant>> = obj.GetValues();
 Test whether a key is present:
 ```swift
 // ...
-let hasName: Bool = obj.HasKey("name");
-let hasUnknown: Bool = obj.HasKey("unknown");
+let hasName = obj.HasKey("name");
+let hasUnknown = obj.HasKey("unknown");
 
 // hasName == true
 // hasUnknown == false
@@ -355,7 +388,7 @@ let hasUnknown: Bool = obj.HasKey("unknown");
 Get items:
 ```swift
 // ...
-let items: ref<JsonArray> = obj.GetKey("items") as JsonArray;
+let items = obj.GetKey("items") as JsonArray;
 let year = items.GetItemInt64(0u);
 let elite = items.GetItemDouble(1u);
 let theWay = items.GetItemBool(2u);
@@ -382,15 +415,16 @@ You can write Json in a `File` which already exists or create the file in the
 same time. When writing Json, the file is always truncated:
 
 ```swift
+// ...
 let json = new JsonObject();
 
 json.SetKeyString("name", "RedFileSystem");
 json.SetKeyBool("isEnabled", true);
 json.SetKeyDouble("version", 2.12);
-let file: ref<File> = FileSystem.GetFile("MyMod\\data.json", FileSystemPrefix.Redscript);
-let status: Bool = file.WriteJson(json);
+let file = storage.GetFile("data.json");
+let status = file.WriteJson(json);
 // Same as:
-// let status: Bool = file.WriteText(json.ToString());
+// let status = file.WriteText(json.ToString());
 
 if !status {
   LogChannel(n"Error", s"Failed to write in file '\(file.GetFilename())'.");
@@ -447,3 +481,5 @@ node bundle.mjs
 [Redscript]: https://github.com/jac3km4/redscript
 [Cyber Engine Tweaks]: https://github.com/maximegmd/CyberEngineTweaks
 [latest archive]: https://github.com/rayshader/cp2077-red-filesystem/releases/latest
+[Codeware]: https://github.com/psiberx/cp2077-codeware/wiki#lifecycle
+[examples/]: https://github.com/rayshader/cp2077-red-filesystem/tree/master/examples
