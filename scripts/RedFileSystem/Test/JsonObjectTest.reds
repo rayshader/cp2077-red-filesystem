@@ -3,18 +3,6 @@ public class JsonObjectTest extends JsonBaseTest {
   public func Init() {
     this.m_modName = "RedFileSystem";
     this.m_name = "JsonObject";
-
-    this.AddTest(n"Test_Constructor");
-
-    this.AddTest(n"Test_GetKeys");
-    this.AddTest(n"Test_GetValues");
-
-    this.AddTest(n"Test_HasKey");
-    this.AddTest(n"Test_GetKey");
-    this.AddTest(n"Test_SetKey");
-    this.AddTest(n"Test_RemoveKey");
-
-    this.AddTest(n"Test_Clear");
   }
 
   private cb func Test_Constructor() {

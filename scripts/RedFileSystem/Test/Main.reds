@@ -1,20 +1,31 @@
-public class MainTest extends ScriptableSystem {
+import Codeware.*
+
+public class MainTest extends ScriptableEnv {
+  private let m_storage: ref<FileSystemStorage>;
+
   private let m_runner: ref<RedTest>;
+
+  // Get singleton instance for right cases.
+  public func GetStorage() -> ref<FileSystemStorage> {
+    return this.m_storage;
+  }
 
   /// Lifecycle ///
 
-  private func OnAttach() {
+  private cb func OnLoad() {
+    this.m_storage = FileSystem.GetStorage("Test");
     this.m_runner = new RedTest();
     this.m_runner.Setup("RedFileSystem", [
       new FileSystemTest(),
+      new FileSystemStorageTest(),
       new FileTest(),
 
       new JsonArrayTest()
     ]);
   }
 
-  private func OnDetach() {
-    this.m_runner.TearDown();
-  }
+}
 
+public static func GetMainTest() -> ref<MainTest> {
+  return ScriptableEnv.Get(n"MainTest") as MainTest;
 }

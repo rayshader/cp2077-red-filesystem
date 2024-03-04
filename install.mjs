@@ -1,6 +1,7 @@
 #!/usr/bin/env -S node
 
 // Script to install RedFileSystem in your game's directory.
+// 
 // Usage: node install.mjs [game-path]
 import * as fs from 'fs';
 
@@ -34,6 +35,8 @@ const GAME_PLUGIN_PATH = `${RED4EXT_PATH}\\RedFileSystem`;
 const GAME_SCRIPT_PATH = `${REDSCRIPT_PATH}\\RedFileSystem`;
 const GAME_TEST_SCRIPT_PATH = `${REDSCRIPT_PATH}\\RedTest`;
 
+const GAME_STORAGE_PATH = `${RED4EXT_PATH}\\RedFileSystem\\storages\\Test\\`;
+
 // Optionally create plugin's directory.
 if (!fs.existsSync(GAME_PLUGIN_PATH)) {
     fs.mkdirSync(GAME_PLUGIN_PATH);
@@ -49,6 +52,11 @@ fs.rmSync(GAME_TEST_SCRIPT_PATH, {force: true, recursive: true});
 fs.mkdirSync(GAME_TEST_SCRIPT_PATH);
 console.info(`[RedFS] Test script directory created at: ${GAME_TEST_SCRIPT_PATH}`);
 
+fs.rmSync(GAME_STORAGE_PATH, {force: true, recursive: true});
+fs.mkdirSync(GAME_STORAGE_PATH, {recursive: true});
+console.info(`[RedFS] Test storage directory created at: ${GAME_STORAGE_PATH}`);
+
+
 const BUILD_LIBRARY_PATH = `build\\Debug\\RedFileSystem.dll`;
 const GAME_LIBRARY_PATH = `${GAME_PLUGIN_PATH}\\RedFileSystem.dll`;
 
@@ -57,7 +65,9 @@ console.info(`[RedFS] Library installed.`);
 
 const BUILD_SCRIPT_PATH = `scripts\\RedFileSystem`;
 const BUILD_TEST_SCRIPT_PATH = `scripts\\RedTest`;
+const BUILD_STORAGE_PATH = `scripts\\StorageTest`;
 
 fs.cpSync(BUILD_SCRIPT_PATH, GAME_SCRIPT_PATH, {force: true, recursive: true, preserveTimestamps: true});
 fs.cpSync(BUILD_TEST_SCRIPT_PATH, GAME_TEST_SCRIPT_PATH, {force: true, recursive: true, preserveTimestamps: true});
+fs.cpSync(BUILD_STORAGE_PATH, GAME_STORAGE_PATH, {force: true, recursive: true, preserveTimestamps: true});
 console.info(`[RedFS] Scripts installed.`);

@@ -3,13 +3,6 @@ public class JsonArrayTest extends JsonBaseTest {
   public func Init() {
     this.m_modName = "RedFileSystem";
     this.m_name = "JsonArray";
-
-    this.AddTest(n"Test_Constructor");
-    this.AddTest(n"Test_AddItems");
-    this.AddTest(n"Test_SetItems");
-    this.AddTest(n"Test_InsertItems");
-    this.AddTest(n"Test_RemoveItems");
-    this.AddTest(n"Test_Clear");
   }
 
   private cb func Test_Constructor() {

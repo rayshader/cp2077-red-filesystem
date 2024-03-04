@@ -1,40 +1,32 @@
 public class FileTest extends JsonBaseTest {
-  private static let GAME_PATH: String = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cyberpunk 2077\\";
-  private static let CET_PATH: String = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cyberpunk 2077\\bin\\x64\\plugins\\cyber_engine_tweaks\\mods\\";
+  private let STORAGE_PATH: String = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cyberpunk 2077\\red4ext\\plugins\\RedFileSystem\\storages\\Test\\";
+
+  private let m_storage: ref<FileSystemStorage>;
 
   public func Init() {
     this.m_modName = "RedFileSystem";
     this.m_name = "File";
 
-    this.AddTest(n"Test_Stat");
-
-    this.AddTest(n"Test_ReadAsText");
-    this.AddTest(n"Test_ReadAsLines");
-    this.AddTest(n"Test_ReadAsJson");
-
-    this.AddTest(n"Test_WriteText");
-    this.AddTest(n"Test_WriteLines");
-
-    this.AddTest(n"Test_WriteJson");
+    this.m_storage = GetMainTest().GetStorage();
   }
 
   /// Stat functions ///
 
   private cb func Test_Stat() {
-    let path = "bin\\x64\\Cyberpunk2077.exe";
-    let file = FileSystem.GetFile(path);
+    let path = "test.json";
+    let file = this.m_storage.GetFile(path);
 
     this.ExpectString("GetPath", file.GetPath(), path);
-    this.ExpectString("GetAbsolutePath", file.GetAbsolutePath(), s"\(this.GAME_PATH)\(path)");
-    this.ExpectString("GetFilename", file.GetFilename(), "Cyberpunk2077.exe");
-    this.ExpectString("GetExtension", file.GetExtension(), ".exe");
-    this.ExpectUint64("GetSize", file.GetSize(), 59172352ul);
+    this.ExpectString("GetAbsolutePath", file.GetAbsolutePath(), s"\(this.STORAGE_PATH)\(path)");
+    this.ExpectString("GetFilename", file.GetFilename(), "test.json");
+    this.ExpectString("GetExtension", file.GetExtension(), ".json");
+    this.ExpectUint64("GetSize", file.GetSize(), 1063ul);
   }
 
   /// Read ///
 
   private cb func Test_ReadAsText() {
-    let file = FileSystem.GetFile("RedFileSystem\\Test\\test.txt", FileSystemPrefix.Redscript);
+    let file = this.m_storage.GetFile("test.txt");
 
     if !IsDefined(file) {
       this.ExpectBool("ReadAsText /!\\ File not found /!\\", IsDefined(file), true);
@@ -53,7 +45,7 @@ public class FileTest extends JsonBaseTest {
   }
 
   private cb func Test_ReadAsLines() {
-    let file = FileSystem.GetFile("RedFileSystem\\Test\\test.txt", FileSystemPrefix.Redscript);
+    let file = this.m_storage.GetFile("test.txt");
 
     if !IsDefined(file) {
       this.ExpectBool("ReadAsLines /!\\ File not found /!\\", IsDefined(file), true);
@@ -88,7 +80,7 @@ public class FileTest extends JsonBaseTest {
   }
 
   private cb func Test_ReadAsJson() {
-    let file = FileSystem.GetFile("RedFileSystem\\Test\\test.json", FileSystemPrefix.Redscript);
+    let file = this.m_storage.GetFile("test.json");
 
     if !IsDefined(file) {
       this.ExpectBool("ReadAsJson /!\\ File not found /!\\", IsDefined(file), true);
@@ -148,14 +140,14 @@ public class FileTest extends JsonBaseTest {
   /// Write ///
 
   private cb func Test_WriteText() {
-    let path = "RedFileSystem\\Test\\write-text.txt";
-    let status = FileSystem.Exists(path, FileSystemPrefix.Redscript);
+    let path = "write-text.txt";
+    let status = this.m_storage.Exists(path);
 
     if !Equals(status, FileSystemStatus.False) {
       LogChannel(n"Error", s"WriteText file already present /!\\ Abort /!\\");
       return;
     }
-    let file = FileSystem.GetFile(path, FileSystemPrefix.Redscript);
+    let file = this.m_storage.GetFile(path);
     let text = "Welcome to Night City!\n" +
                "Let's do this choom ;)\n";
     let pass = file.WriteText(text, FileSystemWriteMode.Truncate);
@@ -164,7 +156,7 @@ public class FileTest extends JsonBaseTest {
     if !pass {
       return;
     }
-    status = FileSystem.Exists(path, FileSystemPrefix.Redscript);
+    status = this.m_storage.Exists(path);
     pass = this.ExpectString("WriteText file created", s"\(status)", "True");
     if !pass {
       return;
@@ -186,14 +178,14 @@ public class FileTest extends JsonBaseTest {
   }
 
   private cb func Test_WriteLines() {
-    let path = "RedFileSystem\\Test\\write-lines.txt";
-    let status = FileSystem.Exists(path, FileSystemPrefix.Redscript);
+    let path = "write-lines.txt";
+    let status = this.m_storage.Exists(path);
 
     if !Equals(status, FileSystemStatus.False) {
       LogChannel(n"Error", s"WriteLines file already present /!\\ Abort /!\\");
       return;
     }
-    let file = FileSystem.GetFile(path, FileSystemPrefix.Redscript);
+    let file = this.m_storage.GetFile(path);
     let lines = [
       "Welcome to Night City!",
       "Let's do this choom ;)",
@@ -205,7 +197,7 @@ public class FileTest extends JsonBaseTest {
     if !pass {
       return;
     }
-    status = FileSystem.Exists(path, FileSystemPrefix.Redscript);
+    status = this.m_storage.Exists(path);
     pass = this.ExpectString("WriteLines file created", s"\(status)", "True");
     if !pass {
       return;
@@ -229,14 +221,14 @@ public class FileTest extends JsonBaseTest {
   }
 
   private cb func Test_WriteJson() {
-    let path = "RedFileSystem\\Test\\write.json";
-    let status = FileSystem.Exists(path, FileSystemPrefix.Redscript);
+    let path = "write.json";
+    let status = this.m_storage.Exists(path);
 
     if !Equals(status, FileSystemStatus.False) {
       LogChannel(n"Error", s"WriteJson file already present /!\\ Abort /!\\");
       return;
     }
-    let file = FileSystem.GetFile(path, FileSystemPrefix.Redscript);
+    let file = this.m_storage.GetFile(path);
     let json = new JsonObject();
 
     json.SetKeyString("message", "Welcome to Night City!");
@@ -257,7 +249,7 @@ public class FileTest extends JsonBaseTest {
     if !pass {
       return;
     }
-    status = FileSystem.Exists(path, FileSystemPrefix.Redscript);
+    status = this.m_storage.Exists(path);
     pass = this.ExpectString("WriteJson file created", s"\(status)", "True");
     if !pass {
       return;
