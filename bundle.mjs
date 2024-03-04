@@ -9,7 +9,7 @@
 import * as fs from 'fs';
 import archiver from 'archiver';
 
-const PLUGIN_VERSION = '0.2.0';
+const PLUGIN_VERSION = '0.3.0';
 const PLUGIN_NAME = 'RedFileSystem';
 const PLUGIN_LICENSE = 'LICENSE';
 const PLUGIN_LIBRARY_PATH = `build/Release/${PLUGIN_NAME}.dll`;
