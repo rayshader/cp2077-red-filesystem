@@ -33,7 +33,7 @@ fs.mkdirSync(BUNDLE_SCRIPT_PATH, {recursive: true});
 try {
     fs.copyFileSync(PLUGIN_LIBRARY_PATH, `${BUNDLE_LIBRARY_PATH}/${PLUGIN_NAME}.dll`);
 } catch (error) {
-    console.log('Plugin not found in "build/Release/RedFileSystem.dll".');
+    console.log(`Plugin not found in "build/Release/${PLUGIN_NAME}.dll".`);
     console.log('Build library in release mode.');
     process.exit(1);
 }
@@ -82,7 +82,7 @@ console.log('');
 console.log('Archiving...');
 
 // Create an archive to release.
-const archivePath = `RedFileSystem-v${PLUGIN_VERSION}.zip`;
+const archivePath = `${PLUGIN_NAME}-v${PLUGIN_VERSION}.zip`;
 const archiveStream = fs.createWriteStream(archivePath);
 const archive = archiver('zip', {zlib: {level: 9}});
 
@@ -110,7 +110,7 @@ function createModule(module, path) {
         moduleName = `${PLUGIN_NAME}`;
     }
     path = `${path}${moduleName}.reds`;
-    let data = `// RedFileSystem v${PLUGIN_VERSION}\n\n`;
+    let data = `// ${PLUGIN_NAME} v${PLUGIN_VERSION}\n\n`;
 
     for (const script of module.scripts) {
         data += fs.readFileSync(`${module.path}${script.name}`, {encoding: 'utf8'}).trim();
