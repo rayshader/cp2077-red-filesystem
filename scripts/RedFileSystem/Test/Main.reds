@@ -1,6 +1,6 @@
 import Codeware.*
 
-public class MainTest extends ScriptableEnv {
+public class RedFSTest extends ScriptableEnv {
   private let m_storage: ref<FileSystemStorage>;
 
   private let m_runner: ref<RedTest>;
@@ -18,14 +18,12 @@ public class MainTest extends ScriptableEnv {
     this.m_runner.Setup("RedFileSystem", [
       new FileSystemTest(),
       new FileSystemStorageTest(),
-      new FileTest(),
-
-      new JsonArrayTest()
+      new FileTest() as BaseTest
     ]);
   }
 
 }
 
-public static func GetMainTest() -> ref<MainTest> {
-  return ScriptableEnv.Get(n"MainTest") as MainTest;
+public static func GetRedFSTest() -> ref<RedFSTest> {
+  return ScriptableEnv.Get(n"RedFSTest") as RedFSTest;
 }

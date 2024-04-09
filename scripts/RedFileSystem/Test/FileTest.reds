@@ -1,4 +1,4 @@
-public class FileTest extends JsonBaseTest {
+public class FileTest extends BaseTest {
   private let STORAGE_PATH: String = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cyberpunk 2077\\red4ext\\plugins\\RedFileSystem\\storages\\Test\\";
 
   private let m_storage: ref<FileSystemStorage>;
@@ -7,7 +7,7 @@ public class FileTest extends JsonBaseTest {
     this.m_modName = "RedFileSystem";
     this.m_name = "File";
 
-    this.m_storage = GetMainTest().GetStorage();
+    this.m_storage = GetRedFSTest().GetStorage();
   }
 
   /// Stat functions ///
@@ -87,54 +87,8 @@ public class FileTest extends JsonBaseTest {
       return;
     }
     let json = file.ReadAsJson() as JsonObject;
-    let pass = this.ExpectBool("ReadAsJson format valid", IsDefined(json), true);
-
-    if !pass {
-      LogChannel(n"Error", "ReadAsJson /!\\ invalid Json format /!\\");
-      return;
-    }
-    this.ExpectJsonKeyString("ReadAsJson $['name']", json, "name", "FileSystemTest");
-    this.ExpectJsonKeyInt64("ReadAsJson $['version']", json, "version", 1l);
-    this.ExpectJsonKeyBool("ReadAsJson $['isJson']", json, "isJson", true);
-    this.ExpectJsonKeyDouble("ReadAsJson $['delta']", json, "delta", 0.016);
-    let pangrams = json.GetKey("pangrams") as JsonObject;
-
-    pass = this.ExpectBool("ReadAsJson $['pangrams']{...}", pangrams.IsObject(), true);
-    if !pass {
-      LogChannel(n"Error", "ReadAsJson $['pangrams'] /!\\ invalid Json format /!\\");
-      return;
-    }
-    this.ExpectJsonKeyUnicodeString("ReadAsJson $['pangrams']['Arabic']", pangrams, "Arabic", "صِف خَلقَ خَودِ كَمِثلِ الشَمسِ إِذ بَزَغَت — يَحظى الضَجيعُ بِها نَجلاءَ مِعطارِ (A poem by Al Farāhīdi)");
-    this.ExpectJsonKeyUnicodeString("ReadAsJson $['pangrams']['Hindi']", pangrams, "Hindi", "ऋषियों को सताने वाले दुष्ट राक्षसों के राजा रावण का सर्वनाश करने वाले विष्णुवतार भगवान श्रीराम, अयोध्या के महाराज दशरथ के बड़े सपुत्र थे।");
-    this.ExpectJsonKeyUnicodeString("ReadAsJson $['pangrams']['Japanese']", pangrams, "Japanese", "いろはにほへと ちりぬるを わかよたれそ つねならむ うゐのおくやま けふこえて あさきゆめみし ゑひもせす（ん）");
-    this.ExpectJsonKeyUnicodeString("ReadAsJson $['pangrams']['Latin']", pangrams, "Latin", "Sic fugiens, dux, zelotypos, quam Karus haberis.");
-    let random = json.GetKey("random") as JsonArray;
-
-    pass = this.ExpectBool("ReadAsJson $['random'][...]", random.IsArray(), true);
-    if !pass {
-      LogChannel(n"Error", "ReadAsJson $['random'] /!\\ invalid Json format /!\\");
-      return;
-    }
-    this.ExpectBool("ReadAsJson $['random'][0]", random.GetItemBool(0u), true);
-    this.ExpectInt64("ReadAsJson $['random'][1]", random.GetItemInt64(1u), 42l);
-    this.ExpectDouble("ReadAsJson $['random'][2]", random.GetItemDouble(2u), 13.37);
-    this.ExpectString("ReadAsJson $['random'][3]", random.GetItemString(3u), "Weird");
-    let obj = random.GetItem(4u) as JsonObject;
-
-    pass = this.ExpectBool("ReadAsJson $['random'][4]{...}", obj.IsObject(), true);
-    if !pass {
-      LogChannel(n"Error", "ReadAsJson $['random'][4] /!\\ invalid Json format /!\\");
-      return;
-    }
-    this.ExpectJsonKeyNull("ReadAsJson $['random'][4]['object']", obj, "object");
-    let array = random.GetItem(5u) as JsonArray;
-
-    pass = this.ExpectBool("ReadAsJson $['random'][5][...]", array.IsArray(), true);
-    if !pass {
-      LogChannel(n"Error", "ReadAsJson $['random'][5] /!\\ invalid Json format /!\\");
-      return;
-    }
-    this.ExpectString("ReadAsJson $['random'][5][0]", array.GetItemString(0u), "array");
+    
+    this.ExpectBool("Json is valid", IsDefined(json), true);
   }
 
   /// Write ///

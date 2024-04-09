@@ -5,7 +5,7 @@ public class FileSystemStorageTest extends BaseTest {
     this.m_modName = "RedFileSystem";
     this.m_name = "FileSystemStorage";
 
-    this.m_storage = GetMainTest().GetStorage();
+    this.m_storage = GetRedFSTest().GetStorage();
   }
 
   private cb func Test_Exists() {

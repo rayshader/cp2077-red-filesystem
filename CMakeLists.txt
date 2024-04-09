@@ -13,17 +13,6 @@ set(INC_FILES
 
         src/FileSystemStatus.h
         src/FileSystemWriteMode.h
-
-        src/json/JsonType.h
-        src/json/JsonVariant.h
-        src/json/JsonNull.h
-        src/json/JsonBool.h
-        src/json/JsonInt64.h
-        src/json/JsonDouble.h
-        src/json/JsonString.h
-        src/json/JsonArray.h
-        src/json/JsonObject.h
-        src/json/JsonFactory.h
 )
 
 set(SRC_FILES
@@ -32,15 +21,6 @@ set(SRC_FILES
         src/File.cpp
         src/FileSystem.cpp
         src/FileSystemStorage.cpp
-
-        src/json/JsonVariant.cpp
-        src/json/JsonNull.cpp
-        src/json/JsonBool.cpp
-        src/json/JsonInt64.cpp
-        src/json/JsonDouble.cpp
-        src/json/JsonString.cpp
-        src/json/JsonArray.cpp
-        src/json/JsonObject.cpp
 )
 
 source_group(include FILES INC_FILES)
@@ -52,7 +32,6 @@ add_library(RedFileSystem SHARED
 )
 
 target_include_directories(RedFileSystem PRIVATE src/)
-target_include_directories(RedFileSystem PRIVATE src/json/)
 
 # Include configured files
 target_include_directories(RedFileSystem PUBLIC "${PROJECT_BINARY_DIR}/Config")
@@ -73,20 +52,7 @@ add_subdirectory(deps/RedLib)
 set_target_properties(RedLib PROPERTIES FOLDER "Dependencies")
 ##
 
-## Library simdjson
-include(FetchContent)
-
-FetchContent_Declare(
-        simdjson
-        GIT_REPOSITORY https://github.com/simdjson/simdjson.git
-        GIT_TAG  tags/v3.7.0
-        GIT_SHALLOW TRUE)
-
-FetchContent_MakeAvailable(simdjson)
-##
-
 target_link_libraries(RedFileSystem PRIVATE
         RED4ext::SDK
         RedLib
-        simdjson
 )

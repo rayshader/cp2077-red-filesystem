@@ -1,13 +1,8 @@
 #include "File.h"
-#include "JsonArray.h"
-#include "JsonFactory.h"
-#include "JsonObject.h"
-#include "JsonVariant.h"
 
 #include <fstream>
 #include <utility>
 
-#include <simdjson.h>
 #include <RED4ext/RED4ext.hpp>
 #include <RedLib.hpp>
 
@@ -72,26 +67,6 @@ Red::DynArray<Red::CString> File::read_as_lines() {
   return lines;
 }
 
-Red::Handle<JsonVariant> File::read_as_json() {
-  simdjson::dom::parser parser;
-  auto document = parser.load(absolute_path.string());
-
-  if (document.is_object()) {
-    auto object = simdjson::dom::object(document);
-    auto root = JsonFactory::CreateObject();
-
-    parse_object(object, root);
-    return root;
-  } else if (document.is_array()) {
-    auto array = simdjson::dom::array(document);
-    auto root = JsonFactory::CreateArray();
-
-    parse_array(array, root);
-    return root;
-  }
-  return {};
-}
-
 bool File::write_text(const Red::CString& p_text,
                       const Red::Optional<FileSystemWriteMode>& p_mode) {
   std::ios_base::openmode mode = get_mode(p_mode.value);
@@ -123,83 +98,6 @@ bool File::write_lines(const Red::DynArray<Red::CString>& p_lines,
   }
   stream.close();
   return true;
-}
-
-bool File::write_json(const Red::Handle<JsonVariant>& p_json) {
-  std::ofstream stream;
-
-  stream.open(absolute_path, std::ios_base::trunc);
-  if (!stream.is_open()) {
-    return false;
-  }
-  stream << p_json->to_string().c_str();
-  stream.close();
-  return true;
-}
-
-void File::parse_object(const simdjson::dom::object& p_object,
-                        Red::Handle<JsonObject>& p_root) {
-  for (const auto& key_value : p_object) {
-    std::string key(key_value.key);
-    auto el_value = key_value.value;
-
-    if (el_value.is_bool()) {
-      p_root->set_key_bool(key, el_value);
-    } else if (el_value.is_int64()) {
-      p_root->set_key_int64(key, el_value);
-    } else if (el_value.is_double()) {
-      p_root->set_key_double(key, el_value);
-    } else if (el_value.is_string()) {
-      p_root->set_key_string(key, std::string(el_value));
-    } else if (el_value.is_object()) {
-      auto value = JsonFactory::CreateObject();
-      auto sub_object = simdjson::dom::object(el_value);
-
-      parse_object(sub_object, value);
-      p_root->set_key(key, value);
-    } else if (el_value.is_array()) {
-      auto value = JsonFactory::CreateArray();
-      auto sub_array = simdjson::dom::array(el_value);
-
-      parse_array(sub_array, value);
-      p_root->set_key(key, value);
-    } else if (el_value.is_null()) {
-      p_root->set_key_null(key);
-    } else {
-      p_root->set_key(key, JsonFactory::CreateUndefined());
-    }
-  }
-}
-
-void File::parse_array(const simdjson::dom::array& p_array,
-                       Red::Handle<JsonArray>& p_root) {
-  for (const auto& item : p_array) {
-    if (item.is_bool()) {
-      p_root->add_item_bool(item);
-    } else if (item.is_int64()) {
-      p_root->add_item_int64(item);
-    } else if (item.is_double()) {
-      p_root->add_item_double(item);
-    } else if (item.is_string()) {
-      p_root->add_item_string(std::string(item));
-    } else if (item.is_object()) {
-      auto value = JsonFactory::CreateObject();
-      auto sub_object = simdjson::dom::object(item);
-
-      parse_object(sub_object, value);
-      p_root->add_item(value);
-    } else if (item.is_array()) {
-      auto value = JsonFactory::CreateArray();
-      auto sub_array = simdjson::dom::array(item);
-
-      parse_array(sub_array, value);
-      p_root->add_item(value);
-    } else if (item.is_null()) {
-      p_root->add_item_null();
-    } else {
-      p_root->add_item(JsonFactory::CreateUndefined());
-    }
-  }
 }
 
 std::ios_base::openmode File::get_mode(FileSystemWriteMode p_mode) {

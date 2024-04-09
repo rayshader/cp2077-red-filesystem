@@ -8,10 +8,16 @@ public native class File {
 
   public native func ReadAsText() -> String;
   public native func ReadAsLines() -> array<String>;
-  public native func ReadAsJson() -> ref<JsonVariant>;
 
   public native func WriteText(text: String, opt mode: FileSystemWriteMode) -> Bool;
   public native func WriteLines(lines: array<String>, opt mode: FileSystemWriteMode) -> Bool;
-  public native func WriteJson(json: ref<JsonVariant>) -> Bool;
+
+  public func ReadAsJson() -> ref<JsonVariant> {
+    return ParseJson(this.ReadAsText());
+  }
+
+  public func WriteJson(json: ref<JsonVariant>) -> Bool {
+    return this.WriteText(json.ToString());
+  }
 
 }
