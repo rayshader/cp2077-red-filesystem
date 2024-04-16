@@ -10,13 +10,13 @@ supports UTF8 text and Json formats. It can be used with Redscript and CET.
 
 ## Compatibility
 - Cyberpunk 2077 v2.12
-- [Redscript] 0.5.17+
-- [Cyber Engine Tweaks] 1.31.0+
+- [Redscript] v0.5.18+
+- [Cyber Engine Tweaks] v1.31.0+
 
 ## Installation
 1. Install requirements:
   - [RED4ext] v1.23.0+
-  - [RedData] v0.1.0+
+  - [RedData] v0.2.0+
 2. Extract the [latest archive] into the Cyberpunk 2077 directory.
 
 ## Usage
