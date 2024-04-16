@@ -1,7 +1,7 @@
 public class FileSystemTest extends BaseTest {
   private let m_storage: ref<FileSystemStorage>;
 
-  public func Init() {
+  public func Create() {
     this.m_modName = "RedFileSystem";
     this.m_name = "FileSystem";
   }

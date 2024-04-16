@@ -3,10 +3,12 @@ public class FileTest extends BaseTest {
 
   private let m_storage: ref<FileSystemStorage>;
 
-  public func Init() {
+  public func Create() {
     this.m_modName = "RedFileSystem";
     this.m_name = "File";
+  }
 
+  public func Setup() {
     this.m_storage = GetRedFSTest().GetStorage();
   }
 
