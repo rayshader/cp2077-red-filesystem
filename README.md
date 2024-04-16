@@ -34,6 +34,11 @@ For example, if your mod is named `Awesome`, your storage will be located in:
 This is a security measure to prevent malicious access. This way, you and 
 other authors cannot break game files nor the operating system of the player.
 
+All features are defined in module `RedFileSystem`. You need to import it with:
+```swift
+import RedFileSystem.*
+``` 
+
 ### FileSystem
 
 #### GetStorage

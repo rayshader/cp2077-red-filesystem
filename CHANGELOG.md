@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ------------------------
 
+## [0.5.0] - 2024-04-16
+### Added
+- Json read/write functions are now undefined when 'RedData.Json' is not present.
+- declaration of module 'RedFileSystem'.
+
+------------------------
+
 ## [0.4.0] - 2024-04-09
 ### Added
 - Json dependency with plugin [RedData](https://github.com/rayshader/cp2077-red-data).
