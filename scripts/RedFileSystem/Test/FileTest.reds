@@ -1,3 +1,6 @@
+import RedFileSystem.*
+import RedData.Json.*
+
 public class FileTest extends BaseTest {
   private let STORAGE_PATH: String = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cyberpunk 2077\\red4ext\\plugins\\RedFileSystem\\storages\\Test\\";
 

@@ -12,10 +12,12 @@ public native class File {
   public native func WriteText(text: String, opt mode: FileSystemWriteMode) -> Bool;
   public native func WriteLines(lines: array<String>, opt mode: FileSystemWriteMode) -> Bool;
 
+  @if(ModuleExists("RedData.Json"))
   public func ReadAsJson() -> ref<JsonVariant> {
     return ParseJson(this.ReadAsText());
   }
 
+  @if(ModuleExists("RedData.Json"))
   public func WriteJson(json: ref<JsonVariant>) -> Bool {
     return this.WriteText(json.ToString());
   }

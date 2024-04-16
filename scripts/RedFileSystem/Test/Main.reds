@@ -1,4 +1,5 @@
 import Codeware.*
+import RedFileSystem.*
 
 public class RedFSTest extends ScriptableEnv {
   private let m_storage: ref<FileSystemStorage>;

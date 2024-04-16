@@ -50,7 +50,7 @@ const graph = {
         name: '',
         path: PLUGIN_SCRIPT_PATH,
         scripts: scripts,
-        imports: ['Enum']
+        imports: ['$RedData.Json.*']
     },
     modules: []
 };
@@ -102,6 +102,10 @@ archive.finalize();
 /// Helpers ///
 
 function createModule(module, path) {
+    if (module.scripts.length === 0) {
+        console.log(` · no entry-point module`);
+        return 0;
+    }
     let moduleName;
 
     if (module.name.length > 0) {
@@ -110,8 +114,17 @@ function createModule(module, path) {
         moduleName = `${PLUGIN_NAME}`;
     }
     path = `${path}${moduleName}.reds`;
-    let data = `// ${PLUGIN_NAME} v${PLUGIN_VERSION}\n\n`;
+    let data = `// ${PLUGIN_NAME} v${PLUGIN_VERSION}\n`;
 
+    data += `module ${moduleName}\n`;
+    for (const dependencyName of module.imports) {
+        if (dependencyName.startsWith('$')) {
+            data += `import ${dependencyName.slice(1)}\n`;
+        } else {
+            data += `import ${PLUGIN_NAME}.${dependencyName}.*\n`;
+        }
+    }
+    data += '\n';
     for (const script of module.scripts) {
         data += fs.readFileSync(`${module.path}${script.name}`, {encoding: 'utf8'}).trim();
         data += '\n\n';

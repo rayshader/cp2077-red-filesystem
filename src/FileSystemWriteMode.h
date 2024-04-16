@@ -12,6 +12,6 @@ enum class FileSystemWriteMode {
 
 }
 
-RTTI_DEFINE_ENUM(RedFS::FileSystemWriteMode)
+RTTI_DEFINE_ENUM(RedFS::FileSystemWriteMode, "RedFileSystem.FileSystemWriteMode")
 
 #endif  //REDFS_FILESYSTEMWRITEMODE_H

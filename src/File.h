@@ -53,11 +53,9 @@ RTTI_DEFINE_CLASS(RedFS::File, {
 
   RTTI_METHOD(read_as_text, "ReadAsText");
   RTTI_METHOD(read_as_lines, "ReadAsLines");
-  //RTTI_METHOD(read_as_json, "ReadAsJson");
 
   RTTI_METHOD(write_text, "WriteText");
   RTTI_METHOD(write_lines, "WriteLines");
-  //RTTI_METHOD(write_json, "WriteJson");
 });
 
 #endif  //REDFS_FILE_H

@@ -14,6 +14,6 @@ enum class FileSystemStatus {
 
 }
 
-RTTI_DEFINE_ENUM(RedFS::FileSystemStatus)
+RTTI_DEFINE_ENUM(RedFS::FileSystemStatus, "RedFileSystem.FileSystemStatus")
 
 #endif  //REDFS_FILESYSTEMSTATUS_H

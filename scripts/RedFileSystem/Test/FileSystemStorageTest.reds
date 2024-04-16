@@ -1,3 +1,5 @@
+import RedFileSystem.*
+
 public class FileSystemStorageTest extends BaseTest {
   private let m_storage: ref<FileSystemStorage>;
 
