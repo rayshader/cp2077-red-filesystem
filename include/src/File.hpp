@@ -11,6 +11,7 @@ class File {
   Red::Handle<Red::IScriptable> wrapper;
 
  public:
+  File() = default;
   explicit File(const Red::Handle<Red::IScriptable>& acWrapper)
       : wrapper(acWrapper) {}
 

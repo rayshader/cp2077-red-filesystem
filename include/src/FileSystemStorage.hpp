@@ -14,6 +14,7 @@ class FileSystemStorage {
   Red::Handle<Red::IScriptable> wrapper;
 
  public:
+  FileSystemStorage() = default;
   explicit FileSystemStorage(const Red::Handle<Red::IScriptable>& acWrapper)
       : wrapper(acWrapper) {}
 
