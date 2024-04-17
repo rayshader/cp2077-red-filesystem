@@ -4,6 +4,10 @@
 #include <RED4ext/RED4ext.hpp>
 #include <RedLib.hpp>
 
+#ifdef HAS_REDDATA
+#include <RedData.hpp>
+#endif
+
 #include "Enums.hpp"
 
 namespace RedFileSystem {
@@ -69,12 +73,14 @@ class File {
     return lines;
   }
 
-  inline Red::Handle<Red::IScriptable> ReadAsJson() {
+#ifdef HAS_REDDATA
+  inline RedData::Json::JsonVariant ReadAsJson() {
     Red::Handle<Red::IScriptable> json;
 
     Red::CallVirtual(wrapper, "ReadAsJson", json);
     return json;
   }
+#endif
 
   inline bool WriteText(
     const Red::CString& text,
@@ -94,12 +100,14 @@ class File {
     return status;
   }
 
-  inline bool WriteJson(const Red::Handle<Red::IScriptable>& json) {
+#ifdef HAS_REDDATA
+  inline bool WriteJson(const RedData::Json::JsonVariant& json) {
     bool status;
 
-    Red::CallVirtual(wrapper, "WriteJson", status, json);
+    Red::CallVirtual(wrapper, "WriteJson", status, json.GetHandle());
     return status;
   }
+#endif
 };
 
 }  // namespace RedFileSystem
