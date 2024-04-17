@@ -4,6 +4,8 @@
 #include <RED4ext/RED4ext.hpp>
 #include <RedLib.hpp>
 
+#include "Enums.hpp"
+
 namespace RedFileSystem {
 
 class File {
