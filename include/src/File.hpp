@@ -15,8 +15,8 @@ class File {
  public:
   File() = default;
 
-  explicit File(const Red::Handle<Red::IScriptable>& acWrapper)
-      : wrapper(acWrapper) {}
+  explicit File(const Red::Handle<Red::IScriptable>& wrapper)
+      : wrapper(wrapper) {}
 
   explicit operator bool() const noexcept { return wrapper; }
 
@@ -77,27 +77,27 @@ class File {
   }
 
   inline bool WriteText(
-    const Red::CString& acText,
-    FileSystemWriteMode aMode = FileSystemWriteMode::Truncate) {
+    const Red::CString& text,
+    FileSystemWriteMode mode = FileSystemWriteMode::Truncate) {
     bool status;
 
-    Red::CallVirtual(wrapper, "WriteText", status, acText, aMode);
+    Red::CallVirtual(wrapper, "WriteText", status, text, mode);
     return status;
   }
 
   inline bool WriteLines(
-    const Red::DynArray<Red::CString>& acLines,
-    FileSystemWriteMode aMode = FileSystemWriteMode::Truncate) {
+    const Red::DynArray<Red::CString>& lines,
+    FileSystemWriteMode mode = FileSystemWriteMode::Truncate) {
     bool status;
 
-    Red::CallVirtual(wrapper, "WriteLines", status, acLines, aMode);
+    Red::CallVirtual(wrapper, "WriteLines", status, lines, mode);
     return status;
   }
 
-  inline bool WriteJson(const Red::Handle<Red::IScriptable>& acJson) {
+  inline bool WriteJson(const Red::Handle<Red::IScriptable>& json) {
     bool status;
 
-    Red::CallVirtual(wrapper, "WriteJson", status, acJson);
+    Red::CallVirtual(wrapper, "WriteJson", status, json);
     return status;
   }
 };
