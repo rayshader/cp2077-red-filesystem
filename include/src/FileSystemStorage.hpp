@@ -15,10 +15,11 @@ class FileSystemStorage {
 
  public:
   FileSystemStorage() = default;
+
   explicit FileSystemStorage(const Red::Handle<Red::IScriptable>& acWrapper)
       : wrapper(acWrapper) {}
 
-  inline bool operator() const { return wrapper; }
+  explicit operator bool() const noexcept { return wrapper; }
 
   inline FileSystemStatus Exists(const Red::CString& acPath) const {
     FileSystemStatus status;

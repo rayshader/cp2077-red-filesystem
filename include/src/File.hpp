@@ -12,10 +12,11 @@ class File {
 
  public:
   File() = default;
+
   explicit File(const Red::Handle<Red::IScriptable>& acWrapper)
       : wrapper(acWrapper) {}
 
-  bool operator() const { return wrapper; }
+  explicit operator bool() const noexcept { return wrapper; }
 
   inline Red::CString GetPath() const {
     Red::CString path;
