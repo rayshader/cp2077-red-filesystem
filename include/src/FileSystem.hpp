@@ -13,7 +13,7 @@ class FileSystem {
   inline static FileSystemStorage GetStorage(const Red::CString& name) {
     Red::Handle<Red::IScriptable> storage;
 
-    Red::CallStatic("RedFileSystem.FileSystem", "GetStorage", storage, name);
+    Red::CallStatic("FileSystem", "GetStorage", storage, name);
     return FileSystemStorage(storage);
   }
 };

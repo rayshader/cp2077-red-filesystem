@@ -10,7 +10,7 @@
 namespace RedFileSystem {
 
 inline bool IsDetected() {
-  return Red::GetClass("RedFileSystem.FileSystem") != nullptr;
+  return Red::GetClass("FileSystem") != nullptr;
 }
 
 }  // namespace RedFileSystem
