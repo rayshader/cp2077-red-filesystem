@@ -9,7 +9,7 @@
 
 namespace RedFileSystem {
 
-bool IsDetected() {
+inline bool IsDetected() {
   return Red::GetClass("RedFileSystem.FileSystem") != nullptr;
 }
 
