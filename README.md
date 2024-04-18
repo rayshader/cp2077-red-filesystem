@@ -19,6 +19,11 @@ supports UTF8 text and Json formats. It can be used with Redscript and CET.
   - [RedData] v0.2.0+
 2. Extract the [latest archive] into the Cyberpunk 2077 directory.
 
+## API wrapper
+
+This plugin can be used when writing a RED4ext plugin with RedLib. You can
+find a C++ API wrapper in [branch api].
+
 ## Usage
 
 ### Disclaimer
@@ -344,3 +349,4 @@ node bundle.mjs
 [Codeware]: https://github.com/psiberx/cp2077-codeware/wiki#lifecycle
 [RedData]: https://github.com/rayshader/cp2077-red-data
 [examples/]: https://github.com/rayshader/cp2077-red-filesystem/tree/master/examples
+[branch api]: https://github.com/rayshader/cp2077-red-filesystem/tree/api
