@@ -22,17 +22,17 @@ class FileSystemStorage {
   explicit operator bool() const noexcept { return wrapper; }
 
   inline FileSystemStatus Exists(const Red::CString& path) const {
-    int32_t status;
+    FileSystemStatus status;
 
     Red::CallVirtual(wrapper, "Exists", status, path);
-    return static_cast<FileSystemStatus>(status);
+    return status;
   }
 
   inline FileSystemStatus IsFile(const Red::CString& path) const {
-    int32_t status;
+    FileSystemStatus status;
 
     Red::CallVirtual(wrapper, "IsFile", status, path);
-    return static_cast<FileSystemStatus>(status);
+    return status;
   }
 
   inline File GetFile(const Red::CString& path) const {
