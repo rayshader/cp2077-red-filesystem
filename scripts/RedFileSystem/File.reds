@@ -18,8 +18,8 @@ public native class File {
   }
 
   @if(ModuleExists("RedData.Json"))
-  public func WriteJson(json: ref<JsonVariant>) -> Bool {
-    return this.WriteText(json.ToString());
+  public func WriteJson(json: ref<JsonVariant>, opt indent: String) -> Bool {
+    return this.WriteText(json.ToString(indent));
   }
 
 }

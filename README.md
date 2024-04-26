@@ -11,12 +11,12 @@ supports UTF8 text and Json formats. It can be used with Redscript and CET.
 ## Compatibility
 - Cyberpunk 2077 v2.12
 - [Redscript] v0.5.18+
-- [Cyber Engine Tweaks] v1.31.0+
+- [Cyber Engine Tweaks] v1.32.0+
 
 ## Installation
 1. Install requirements:
   - [RED4ext] v1.24.0+
-  - [RedData] v0.2.0+
+  - [RedData] v0.4.0+
 2. Extract the [latest archive] into the Cyberpunk 2077 directory.
 
 ## API wrapper
@@ -272,10 +272,11 @@ if !json.IsObject() {
 ```
 
 ### Write Json
-> WriteJson(json: ref&lt;JsonVariant&gt;) -> Bool  
+> WriteJson(json: ref&lt;JsonVariant&gt;, opt indent: String) -> Bool  
 
 You can write Json in a `File` which already exists or create the file in the
-same time. When writing Json, the file is always truncated:
+same time. You can output pretty Json using `indent` argument, default is 
+minified. When writing Json, the file is always truncated:
 
 ```swift
 // ...
@@ -296,7 +297,8 @@ if !status {
 }
 ```
 
-See [RedData] to parse/create/format Json data.
+> [!TIP]  
+> See [RedData] to learn more about Json data.
 
 # Development
 Contributions are welcome, feel free to fill an issue or a PR.

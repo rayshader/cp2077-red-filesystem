@@ -179,12 +179,12 @@ public class FileTest extends BaseTest {
     this.ExpectUnicodeString("WriteLines content", text, expect);
   }
 
-  private cb func Test_WriteJson() {
-    let path = "write.json";
+  private cb func Test_WriteJson_Minified() {
+    let path = "write.min.json";
     let status = this.m_storage.Exists(path);
 
     if !Equals(status, FileSystemStatus.False) {
-      LogChannel(n"Error", s"WriteJson file already present /!\\ Abort /!\\");
+      LogChannel(n"Error", s"WriteJson(Minified) file already present /!\\ Abort /!\\");
       return;
     }
     let file = this.m_storage.GetFile(path);
@@ -204,12 +204,65 @@ public class FileTest extends BaseTest {
     json.SetKey("items", array);
     let pass = file.WriteJson(json);
 
-    pass = this.ExpectBool("WriteJson write", pass, true);
+    pass = this.ExpectBool("WriteJson(Minified) write", pass, true);
     if !pass {
       return;
     }
     status = this.m_storage.Exists(path);
-    pass = this.ExpectString("WriteJson file created", s"\(status)", "True");
+    pass = this.ExpectString("WriteJson(Minified) file created", s"\(status)", "True");
+    if !pass {
+      return;
+    }
+    let actual = file.ReadAsText();
+    // Follow hash order of 'std::unordered_map'.
+    let expect = "{" +
+                   "\"code\":1337," +
+                   "\"message\":\"Welcome to Night City!\"," +
+                   "\"items\":[" +
+                     "\"Hello\"," +
+                     "42," +
+                     "3.14159," +
+                     "null" +
+                   "]," +
+                   "\"version\":2.11," +
+                   "\"test\":true," +
+                   "\"empty\":null" +
+                 "}";
+
+    this.ExpectUnicodeString("WriteJson(Minified) content", actual, expect);
+  }
+
+  private cb func Test_WriteJson_Pretty() {
+    let path = "write.json";
+    let status = this.m_storage.Exists(path);
+
+    if !Equals(status, FileSystemStatus.False) {
+      LogChannel(n"Error", s"WriteJson(Pretty) file already present /!\\ Abort /!\\");
+      return;
+    }
+    let file = this.m_storage.GetFile(path);
+    let json = new JsonObject();
+
+    json.SetKeyString("message", "Welcome to Night City!");
+    json.SetKeyDouble("version", 2.11);
+    json.SetKeyInt64("code", 1337);
+    json.SetKeyBool("test", true);
+    json.SetKeyNull("empty");
+    let array = new JsonArray();
+
+    array.AddItemString("Hello");
+    array.AddItemInt64(42);
+    array.AddItemDouble(3.14159);
+    array.AddItemNull();
+    json.SetKey("items", array);
+    let pass = file.WriteJson(json, "  ");
+
+    pass = this.ExpectBool("WriteJson(Pretty) write", pass, true);
+    if !pass {
+      return;
+    }
+    status = this.m_storage.Exists(path);
+    pass = this.ExpectString("WriteJson(Pretty) file created", s"\(status)", "True");
     if !pass {
       return;
     }
@@ -229,7 +282,7 @@ public class FileTest extends BaseTest {
                  "  \"empty\": null\n" +
                  "}";
 
-    this.ExpectUnicodeString("WriteJson content", actual, expect);
+    this.ExpectUnicodeString("WriteJson(Pretty) formatted content (two spaces)", actual, expect);
   }
 
 }
