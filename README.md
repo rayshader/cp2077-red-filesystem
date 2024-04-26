@@ -8,7 +8,7 @@ This header-only library provides an API wrapper for [RedFileSystem] plugin.
 # Getting started
 
 ## Compatibility
-- [RedFileSystem] v0.5.0
+- [RedFileSystem] v0.6.0
 
 ## Requirements
 - [RED4ext.SDK]

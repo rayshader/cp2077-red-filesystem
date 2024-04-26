@@ -101,10 +101,11 @@ class File {
   }
 
 #ifdef HAS_REDDATA
-  inline bool WriteJson(const RedData::Json::JsonVariant& json) {
+  inline bool WriteJson(const RedData::Json::JsonVariant& json,
+                        const Red::CString& indent = "") {
     bool status;
 
-    Red::CallVirtual(wrapper, "WriteJson", status, json.GetHandle());
+    Red::CallVirtual(wrapper, "WriteJson", status, json.GetHandle(), indent);
     return status;
   }
 #endif
