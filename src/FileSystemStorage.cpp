@@ -66,6 +66,28 @@ Red::Handle<File> FileSystemStorage::get_file(
   return Red::MakeHandle<File>(p_path.c_str(), path);
 }
 
+Red::DynArray<Red::Handle<File>> FileSystemStorage::get_files() const {
+  if (!rw_permission) {
+    return {};
+  }
+  std::error_code error;
+  auto entries = std::filesystem::directory_iterator(storage_path, error);
+
+  if (error) {
+    return {};
+  }
+  Red::DynArray<Red::Handle<File>> files;
+
+  for (const auto& entry : entries) {
+    if (entry.is_regular_file()) {
+      auto file = Red::MakeHandle<File>(entry.path().filename(), storage_path);
+
+      files.PushBack(file);
+    }
+  }
+  return files;
+}
+
 std::filesystem::path FileSystemStorage::restrict_path(
   const std::string& p_path, std::error_code& p_error) const {
   std::filesystem::path path = storage_path / p_path;

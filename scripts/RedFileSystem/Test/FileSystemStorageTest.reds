@@ -48,4 +48,18 @@ public class FileSystemStorageTest extends BaseTest {
     this.ExpectBool("GetFile valid", IsDefined(file), true);
   }
 
+  private cb func Test_GetFiles() {
+    let files = this.m_storage.GetFiles();
+
+    this.ExpectInt32("GetFiles() return 6 files", ArraySize(files), 6);
+    let i = 0;
+
+    while i < 4 {
+      this.ExpectString(s"files[\(i)] == 'dummy\(i).txt'", files[i].GetFilename(), s"dummy\(i).txt");
+      i += 1;
+    }
+    this.ExpectString("files[4] == 'test.json'", files[4].GetFilename(), "test.json");
+    this.ExpectString("files[5] == 'test.txt'", files[5].GetFilename(), "test.txt");
+  }
+
 }

@@ -145,6 +145,23 @@ LogChannel(n"Info", s"Size: \(file.GetSize()) bytes");
 // Size: 0 bytes
 ```
 
+#### GetFiles
+> GetFiles() -> array&lt;ref&lt;File&gt;&gt;
+
+You can list all files present in storage:
+```swift
+// ...
+let files = storage.GetFiles();
+
+for file in files {
+  LogChannel(n"Info", s"Filename: '\(file.GetFilename())'");
+}
+```
+
+> [!TIP]  
+> It will only include regular files. Using `IsFile()` is redundant as it will 
+> return `FileSystemStatus.true` for each item.
+
 ### Read text
 > ReadAsText() -> String  
 > ReadAsLines() -> array&lt;String&gt;

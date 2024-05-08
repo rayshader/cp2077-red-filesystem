@@ -32,6 +32,8 @@ class FileSystemStorage : public Red::IScriptable {
 
   [[nodiscard]] Red::Handle<File> get_file(const Red::CString& p_path) const;
 
+  [[nodiscard]] Red::DynArray<Red::Handle<File>> get_files() const;
+
   RTTI_IMPL_TYPEINFO(RedFS::FileSystemStorage);
   RTTI_IMPL_ALLOCATOR();
 };
@@ -45,6 +47,7 @@ RTTI_DEFINE_CLASS(RedFS::FileSystemStorage, {
   RTTI_METHOD(is_file, "IsFile");
 
   RTTI_METHOD(get_file, "GetFile");
+  RTTI_METHOD(get_files, "GetFiles");
 });
 
 #endif  //REDFILESYSTEM_FILESYSTEMSTORAGE_H
