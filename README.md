@@ -83,7 +83,7 @@ You can store the unique reference of your `FileSystemStorage` with
 #### Exists
 > Exists(path: String) -> FileSystemStatus
 
-You can test if a path exists, can be a file or a directory:
+You can test if a path exists, it can be a file or a directory:
 ```swift
 // ...
 let path = "config.json";
@@ -114,7 +114,7 @@ if Equals(status, FileSystemStatus.Failure) {
 } else if Equals(status, FileSystemStatus.Denied) {
   LogChannel(n"Error", "Operation denied.");
 } else if Equals(status, FileSystemStatus.False) {
-  LogChannel(n"Info", "Path is a not file.");
+  LogChannel(n"Info", "Path is not a file.");
 } else if Equals(status, FileSystemStatus.True) {
   LogChannel(n"Info", "Path is a file.");
 }
