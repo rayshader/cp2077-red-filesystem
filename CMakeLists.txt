@@ -52,7 +52,13 @@ add_subdirectory(deps/RedLib)
 set_target_properties(RedLib PROPERTIES FOLDER "Dependencies")
 ##
 
+## Library RedData
+add_subdirectory(deps/RedData)
+set_target_properties(RedData PROPERTIES FOLDER "Dependencies")
+##
+
 target_link_libraries(RedFileSystem PRIVATE
         RED4ext::SDK
         RedLib
+        RedData
 )

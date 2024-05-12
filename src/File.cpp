@@ -4,6 +4,7 @@
 #include <utility>
 
 #include <RED4ext/RED4ext.hpp>
+#include <RedData.hpp>
 #include <RedLib.hpp>
 
 namespace RedFS {
@@ -67,6 +68,16 @@ Red::DynArray<Red::CString> File::read_as_lines() {
   return lines;
 }
 
+Red::Handle<Red::IScriptable> File::read_as_json() {
+  if (!RedData::IsDetected()) {
+    return {};
+  }
+  Red::CString text = read_as_text();
+  RedData::Json::JsonVariant json = RedData::Json::ParseJson(text);
+
+  return json.GetHandle();
+}
+
 bool File::write_text(const Red::CString& p_text,
                       const Red::Optional<FileSystemWriteMode>& p_mode) {
   std::ios_base::openmode mode = get_mode(p_mode.value);
@@ -98,6 +109,19 @@ bool File::write_lines(const Red::DynArray<Red::CString>& p_lines,
   }
   stream.close();
   return true;
+}
+
+bool File::write_json(const Red::Handle<Red::IScriptable>& p_json,
+                      const Red::Optional<Red::CString>& p_indent) {
+  if (!RedData::IsDetected()) {
+    return false;
+  }
+  RedData::Json::JsonVariant json(p_json);
+  Red::CString text = json.ToString(p_indent.value);
+  Red::Optional<FileSystemWriteMode> mode;
+
+  mode.value = FileSystemWriteMode::Truncate;
+  return write_text(text, mode);
 }
 
 std::ios_base::openmode File::get_mode(FileSystemWriteMode p_mode) {

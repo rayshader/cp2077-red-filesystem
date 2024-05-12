@@ -7,3 +7,7 @@
 [submodule "scripts/RedTest"]
 	path = scripts/RedTest
 	url = https://github.com/rayshader/cp2077-red-test.git
+[submodule "deps/RedData"]
+	path = deps/RedData
+	url = https://github.com/rayshader/cp2077-red-data
+	branch = api
