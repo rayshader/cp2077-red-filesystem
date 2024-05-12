@@ -11,14 +11,19 @@
 
 namespace RedFS {
 
+using SharedMutex = std::shared_ptr<std::mutex>;
+
 class AsyncFile : public Red::IScriptable {
  private:
   const std::filesystem::path path;
   const std::filesystem::path absolute_path;
 
+  SharedMutex mutex;
+
  public:
   AsyncFile() = default;
-  explicit AsyncFile(std::filesystem::path p_path,
+  explicit AsyncFile(SharedMutex p_mutex,
+                     std::filesystem::path p_path,
                      std::filesystem::path p_absolute_path);
 
   [[nodiscard]] Red::CString get_path() const;

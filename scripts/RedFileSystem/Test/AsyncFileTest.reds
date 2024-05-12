@@ -238,4 +238,60 @@ public class AsyncFileTest extends BaseTest {
   }
   */
 
+  private cb func Test_WriteText_ThreadSafe(done: ref<CallbackTest>) {
+    let path = "write-text-async-threadsafe.txt";
+    let status = this.m_storage.Exists(path);
+
+    if !Equals(status, FileSystemStatus.False) {
+      LogChannel(n"Error", s"WriteText ThreadSafe file already present /!\\ Abort /!\\");
+      return;
+    }
+    let i = 0;
+
+    while i < 10 {
+      let promise = FilePromise.Create(this, n"Async_WriteText_ThreadSafe_Pass", n"Async_WriteText_ThreadSafe_Fail", [i, done]);
+      let file = this.m_storage.GetAsyncFile(path);
+      let text = s"Choom #\(i + 1) ;)\n";
+
+      file.WriteText(promise, text, FileSystemWriteMode.Append);
+      i += 1;
+    }
+  }
+
+  private cb func Async_WriteText_ThreadSafe_Pass(data: array<Variant>) {
+    let i: Int32 = FromVariant(data[0]);
+
+    this.ExpectBool(s"WriteText ThreadSafe #\(i + 1) append mode", true, true);
+    if i != 9 {
+      return;
+    }
+    let path = "write-text-async-threadsafe.txt";
+    let status = this.m_storage.Exists(path);
+
+    this.ExpectString(s"WriteText ThreadSafe file created", s"\(status)", "True");
+    let expect = "";
+    let i = 0;
+
+    while i < 10 {
+      expect += s"Choom #\(i + 1) ;)\n";
+      i += 1;
+    }
+    let file = this.m_storage.GetFile(path);
+    let actual = file.ReadAsText();
+
+    this.ExpectUnicodeString(s"WriteText ThreadSafe content", actual, expect);
+    let done: ref<CallbackTest> = FromVariant(data[1]);
+
+    done.Call();
+  }
+
+  private cb func Async_WriteText_ThreadSafe_Fail(data: array<Variant>) {
+    let i: Int32 = FromVariant(data[0]);
+
+    this.ExpectBool(s"WriteText ThreadSafe #\(i + 1) failure", true, false);
+    let done: ref<CallbackTest> = FromVariant(data[1]);
+
+    done.Call();
+  }
+
 }

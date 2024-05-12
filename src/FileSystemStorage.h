@@ -2,6 +2,8 @@
 #define REDFILESYSTEM_FILESYSTEMSTORAGE_H
 
 #include <filesystem>
+#include <unordered_map>
+#include <mutex>
 
 #include <RED4ext/RED4ext.hpp>
 #include <RedLib.hpp>
@@ -12,15 +14,20 @@
 
 namespace RedFS {
 
+using SharedMutex = std::shared_ptr<std::mutex>;
+
 class FileSystemStorage : public Red::IScriptable {
  private:
   const std::string name;
   const std::filesystem::path storage_path;
 
+  std::unordered_map<std::filesystem::path, SharedMutex> mutexes;
+
   bool rw_permission;
 
   std::filesystem::path restrict_path(const std::string& p_path,
                                       std::error_code& p_error) const;
+  SharedMutex get_mutex(const std::filesystem::path& p_path);
 
  public:
   FileSystemStorage();
@@ -35,8 +42,8 @@ class FileSystemStorage : public Red::IScriptable {
   [[nodiscard]] Red::DynArray<Red::Handle<File>> get_files() const;
 
   [[nodiscard]] Red::Handle<AsyncFile> get_async_file(
-    const Red::CString& p_path) const;
-  [[nodiscard]] Red::DynArray<Red::Handle<AsyncFile>> get_async_files() const;
+    const Red::CString& p_path);
+  [[nodiscard]] Red::DynArray<Red::Handle<AsyncFile>> get_async_files();
 
   RTTI_IMPL_TYPEINFO(RedFS::FileSystemStorage);
   RTTI_IMPL_ALLOCATOR();

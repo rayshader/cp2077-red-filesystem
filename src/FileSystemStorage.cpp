@@ -91,7 +91,7 @@ Red::DynArray<Red::Handle<File>> FileSystemStorage::get_files() const {
 }
 
 Red::Handle<AsyncFile> FileSystemStorage::get_async_file(
-  const Red::CString& p_path) const {
+  const Red::CString& p_path) {
   if (!rw_permission) {
     return {};
   }
@@ -101,11 +101,12 @@ Red::Handle<AsyncFile> FileSystemStorage::get_async_file(
   if (error) {
     return {};
   }
-  return Red::MakeHandle<AsyncFile>(p_path.c_str(), path);
+  SharedMutex mutex = get_mutex(path);
+
+  return Red::MakeHandle<AsyncFile>(mutex, p_path.c_str(), path);
 }
 
-Red::DynArray<Red::Handle<AsyncFile>> FileSystemStorage::get_async_files()
-  const {
+Red::DynArray<Red::Handle<AsyncFile>> FileSystemStorage::get_async_files() {
   if (!rw_permission) {
     return {};
   }
@@ -119,8 +120,10 @@ Red::DynArray<Red::Handle<AsyncFile>> FileSystemStorage::get_async_files()
 
   for (const auto& entry : entries) {
     if (entry.is_regular_file()) {
+      SharedMutex mutex = get_mutex(storage_path);
+
       auto file =
-        Red::MakeHandle<AsyncFile>(entry.path().filename(), storage_path);
+        Red::MakeHandle<AsyncFile>(mutex, entry.path().filename(), storage_path);
 
       files.PushBack(file);
     }
@@ -141,6 +144,16 @@ std::filesystem::path FileSystemStorage::restrict_path(
     p_error = std::make_error_code(std::errc::permission_denied);
   }
   return real_path;
+}
+
+SharedMutex FileSystemStorage::get_mutex(const std::filesystem::path& p_path) {
+  if (mutexes.contains(p_path)) {
+    return mutexes[p_path];
+  }
+  SharedMutex mutex = std::make_shared<std::mutex>();
+
+  mutexes[p_path] = mutex;
+  return mutex;
 }
 
 }  // namespace RedFS

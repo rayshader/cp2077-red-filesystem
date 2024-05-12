@@ -6,9 +6,11 @@
 #include <utility>
 
 namespace RedFS {
-AsyncFile::AsyncFile(std::filesystem::path p_path,
+AsyncFile::AsyncFile(SharedMutex p_mutex, std::filesystem::path p_path,
                      std::filesystem::path p_absolute_path)
-    : path(std::move(p_path)), absolute_path(std::move(p_absolute_path)) {}
+    : mutex(std::move(p_mutex)),
+      path(std::move(p_path)),
+      absolute_path(std::move(p_absolute_path)) {}
 
 Red::CString AsyncFile::get_path() const {
   return path.string();
@@ -36,10 +38,12 @@ void AsyncFile::read_as_text(const FilePromise& p_promise) {
   Red::JobQueue job_queue;
 
   job_queue.Dispatch([*this, p_promise]() -> void {
+    mutex->lock();
     std::ifstream stream;
 
     stream.open(absolute_path);
     if (!stream.is_open()) {
+      mutex->unlock();
       p_promise.reject();
       return;
     }
@@ -47,6 +51,7 @@ void AsyncFile::read_as_text(const FilePromise& p_promise) {
 
     data << stream.rdbuf();
     stream.close();
+    mutex->unlock();
     Red::CString text = data.str();
 
     p_promise.resolve(text);
@@ -57,10 +62,12 @@ void AsyncFile::read_as_lines(const FilePromise& p_promise) {
   Red::JobQueue job_queue;
 
   job_queue.Dispatch([*this, p_promise]() -> void {
+    mutex->lock();
     std::ifstream stream;
 
     stream.open(absolute_path);
     if (!stream.is_open()) {
+      mutex->unlock();
       p_promise.reject();
       return;
     }
@@ -69,12 +76,14 @@ void AsyncFile::read_as_lines(const FilePromise& p_promise) {
 
     while (std::getline(stream, line)) {
       if (stream.fail() || stream.bad()) {
+        mutex->unlock();
         p_promise.reject();
         return;
       }
       lines.EmplaceBack(line);
     }
     stream.close();
+    mutex->unlock();
     p_promise.resolve(lines);
   });
 }
@@ -87,10 +96,12 @@ void AsyncFile::read_as_json(const FilePromise& p_promise) {
   Red::JobQueue job_queue;
 
   job_queue.Dispatch([*this, p_promise]() -> void {
+    mutex->lock();
     std::ifstream stream;
 
     stream.open(absolute_path);
     if (!stream.is_open()) {
+      mutex->unlock();
       p_promise.reject();
       return;
     }
@@ -98,6 +109,7 @@ void AsyncFile::read_as_json(const FilePromise& p_promise) {
 
     data << stream.rdbuf();
     stream.close();
+    mutex->unlock();
     Red::CString text = data.str();
     RedData::Json::JsonVariant json = RedData::Json::ParseJson(text);
 
@@ -112,15 +124,18 @@ void AsyncFile::write_text(const FilePromise& p_promise,
   Red::JobQueue job_queue;
 
   job_queue.Dispatch([*this, p_promise, p_text, mode]() -> void {
+    mutex->lock();
     std::ofstream stream;
 
     stream.open(absolute_path, mode);
     if (!stream.is_open()) {
+      mutex->unlock();
       p_promise.reject();
       return;
     }
     stream << p_text.c_str();
     stream.close();
+    mutex->unlock();
     p_promise.resolve();
   });
 }
@@ -132,10 +147,12 @@ void AsyncFile::write_lines(const FilePromise& p_promise,
   Red::JobQueue job_queue;
 
   job_queue.Dispatch([*this, p_promise, p_lines, mode]() -> void {
+    mutex->lock();
     std::ofstream stream;
 
     stream.open(absolute_path, mode);
     if (!stream.is_open()) {
+      mutex->unlock();
       p_promise.reject();
       return;
     }
@@ -146,6 +163,7 @@ void AsyncFile::write_lines(const FilePromise& p_promise,
       }
     }
     stream.close();
+    mutex->unlock();
     p_promise.resolve();
   });
 }
