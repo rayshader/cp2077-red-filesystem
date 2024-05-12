@@ -19,7 +19,8 @@ public class RedFSTest extends ScriptableEnv {
     this.m_runner.Setup("RedFileSystem", [
       new FileSystemTest(),
       new FileSystemStorageTest(),
-      new FileTest() as BaseTest
+      new FileTest(),
+      new AsyncFileTest() as BaseTest
     ]);
   }
 

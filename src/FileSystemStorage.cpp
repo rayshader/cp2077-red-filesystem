@@ -90,6 +90,44 @@ Red::DynArray<Red::Handle<File>> FileSystemStorage::get_files() const {
   return files;
 }
 
+Red::Handle<AsyncFile> FileSystemStorage::get_async_file(
+  const Red::CString& p_path) const {
+  if (!rw_permission) {
+    return {};
+  }
+  std::error_code error;
+  auto path = restrict_path(p_path.c_str(), error);
+
+  if (error) {
+    return {};
+  }
+  return Red::MakeHandle<AsyncFile>(p_path.c_str(), path);
+}
+
+Red::DynArray<Red::Handle<AsyncFile>> FileSystemStorage::get_async_files()
+  const {
+  if (!rw_permission) {
+    return {};
+  }
+  std::error_code error;
+  auto entries = std::filesystem::directory_iterator(storage_path, error);
+
+  if (error) {
+    return {};
+  }
+  Red::DynArray<Red::Handle<AsyncFile>> files;
+
+  for (const auto& entry : entries) {
+    if (entry.is_regular_file()) {
+      auto file =
+        Red::MakeHandle<AsyncFile>(entry.path().filename(), storage_path);
+
+      files.PushBack(file);
+    }
+  }
+  return files;
+}
+
 std::filesystem::path FileSystemStorage::restrict_path(
   const std::string& p_path, std::error_code& p_error) const {
   std::filesystem::path path = storage_path / p_path;

@@ -6,6 +6,7 @@
 #include <RED4ext/RED4ext.hpp>
 #include <RedLib.hpp>
 
+#include "AsyncFile.h"
 #include "File.h"
 #include "FileSystemStatus.h"
 
@@ -31,8 +32,11 @@ class FileSystemStorage : public Red::IScriptable {
   [[nodiscard]] FileSystemStatus is_file(const Red::CString& p_path) const;
 
   [[nodiscard]] Red::Handle<File> get_file(const Red::CString& p_path) const;
-
   [[nodiscard]] Red::DynArray<Red::Handle<File>> get_files() const;
+
+  [[nodiscard]] Red::Handle<AsyncFile> get_async_file(
+    const Red::CString& p_path) const;
+  [[nodiscard]] Red::DynArray<Red::Handle<AsyncFile>> get_async_files() const;
 
   RTTI_IMPL_TYPEINFO(RedFS::FileSystemStorage);
   RTTI_IMPL_ALLOCATOR();
@@ -48,6 +52,9 @@ RTTI_DEFINE_CLASS(RedFS::FileSystemStorage, {
 
   RTTI_METHOD(get_file, "GetFile");
   RTTI_METHOD(get_files, "GetFiles");
+
+  RTTI_METHOD(get_async_file, "GetAsyncFile");
+  RTTI_METHOD(get_async_files, "GetAsyncFiles");
 });
 
 #endif  //REDFILESYSTEM_FILESYSTEMSTORAGE_H

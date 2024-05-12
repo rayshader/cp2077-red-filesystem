@@ -68,4 +68,27 @@ public class FileSystemStorageTest extends BaseTest {
     this.ExpectString("files[5] == '<path>\\test.txt'", files[5].GetAbsolutePath(), s"\(this.STORAGE_PATH)test.txt");
   }
 
+  private cb func Test_GetAsyncFile() {
+    let file = this.m_storage.GetAsyncFile("..\\..\\..\\steam.exe");
+
+    this.ExpectBool("GetAsyncFile denied", IsDefined(file), false);
+    let file = this.m_storage.GetAsyncFile("test.txt");
+
+    this.ExpectBool("GetAsyncFile valid", IsDefined(file), true);
+  }
+
+  private cb func Test_GetAsyncFiles() {
+    let files = this.m_storage.GetAsyncFiles();
+
+    this.ExpectInt32("GetAsyncFiles() return 6 files", ArraySize(files), 6);
+    let i = 0;
+
+    while i < 4 {
+      this.ExpectString(s"files[\(i)] == 'dummy\(i).txt'", files[i].GetFilename(), s"dummy\(i).txt");
+      i += 1;
+    }
+    this.ExpectString("files[4] == 'test.json'", files[4].GetFilename(), "test.json");
+    this.ExpectString("files[5] == 'test.txt'", files[5].GetFilename(), "test.txt");
+  }
+
 }

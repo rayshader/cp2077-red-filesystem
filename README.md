@@ -121,13 +121,17 @@ if Equals(status, FileSystemStatus.Failure) {
 ```
 
 #### GetFile
-> GetFile(path: String) -> ref&lt;File&gt;
+> GetFile(path: String) -> ref&lt;File&gt;  
+> GetAsyncFile(path: String) -> ref&lt;AsyncFile&gt;
 
 You can get a file to get stats:
 ```swift
 // ...
 let path = "README.md";
 let file = storage.GetFile(path);
+// Same usage with asynchronous mode:
+// 
+// let file = storage.GetAsyncFile(path);
 
 if !IsDefined(file) {
   LogChannel(n"Error", "Operation denied.");
@@ -146,12 +150,16 @@ LogChannel(n"Info", s"Size: \(file.GetSize()) bytes");
 ```
 
 #### GetFiles
-> GetFiles() -> array&lt;ref&lt;File&gt;&gt;
+> GetFiles() -> array&lt;ref&lt;File&gt;&gt;  
+> GetAsyncFiles() -> array&lt;ref&lt;AsyncFile&gt;&gt;
 
 You can list all files present in storage:
 ```swift
 // ...
 let files = storage.GetFiles();
+// Same usage with asynchronous mode:
+// 
+// let files = storage.GetAsyncFiles();
 
 for file in files {
   LogChannel(n"Info", s"Filename: '\(file.GetFilename())'");
@@ -164,7 +172,10 @@ for file in files {
 
 ### Read text
 > ReadAsText() -> String  
-> ReadAsLines() -> array&lt;String&gt;
+> ReadAsLines() -> array&lt;String&gt;  
+>   
+> ReadAsText(promise: FilePromise) -> Void  
+> ReadAsLines(promise: FilePromise) -> Void
 
 You can read all text content of a `File` using:
 
@@ -197,7 +208,10 @@ while i < linesSize {
 
 ### Write text
 > WriteText(text: String, opt mode: FileSystemWriteMode = Truncate) -> Bool  
-> WriteLines(lines: array&lt;String&gt;, opt mode: FileSystemWriteMode = Truncate) -> Bool
+> WriteLines(lines: array&lt;String&gt;, opt mode: FileSystemWriteMode = Truncate) -> Bool  
+>   
+> WriteText(promise: FilePromise, text: String, opt mode: FileSystemWriteMode) -> Void  
+> WriteLines(promise: FilePromise, lines: array&lt;String&gt;, opt mode: FileSystemWriteMode) -> Void
 
 You can write text in a `File` which already exists or create the file in the 
 same time. When writing, you can truncate the file or append text to the end 
@@ -254,7 +268,9 @@ After running the two code snippets above, file should contain:
 > Beware of flatlines...
 
 ### Read Json
-> ReadAsJson() -> ref&lt;JsonVariant&gt;
+> ReadAsJson() -> ref&lt;JsonVariant&gt;  
+>   
+> ReadAsJson(promise: FilePromise) -> Void
 
 e.g. with Json file:
 ```json
@@ -290,6 +306,8 @@ if !json.IsObject() {
 
 ### Write Json
 > WriteJson(json: ref&lt;JsonVariant&gt;, opt indent: String) -> Bool  
+>   
+> WriteJson(promise: FilePromise, json: ref&lt;JsonVariant&gt;, opt indent: String) -> Void
 
 You can write Json in a `File` which already exists or create the file in the
 same time. You can output pretty Json using `indent` argument, default is 
@@ -316,6 +334,72 @@ if !status {
 
 > [!TIP]  
 > See [RedData] to learn more about Json data.
+
+### Asynchronous mode
+> FilePromise.Create(target: wref&lt;IScriptable&gt;, resolve: CName, opt reject: CName, opt data: array&lt;Variant&gt;) -> FilePromise
+
+You can run read/write operations in asynchronous mode. This allows you to 
+delegate heavy operations in background. It prevents the game from freezing 
+while data is being read/written. It is recommended when operating on big 
+chunks of data or when running into performance issues.
+
+You need to get an `AsyncFile` from a storage to operate in asynchronous mode:
+```swift
+// ...
+let file = storage.GetAsyncFile("async.txt");
+```
+
+You need to define a `FilePromise` to execute your own function when an 
+operation is finished, whether it was successful or not:
+```swift
+
+public class YourClass {
+  // ...
+
+  public func YourFunction() {
+    // ...
+    let file = storage.GetAsyncFile("async.txt");
+    let promise = FilePromise.Create(this, n"OnRead", n"OnReadFailed", ["FYI"]);
+    //                                                ^
+    //                                                | It is not required to 
+    //                                                | define this callback.
+
+    file.ReadAsText(promise);
+  }
+
+  // Callback when read is done.
+  // 
+  //                     | Argument's type is the same as the return's 
+  //                     | type of the synchronous version.
+  //                     v
+  private cb func OnRead(text: String, data: array<Variant>) {
+    let arg0: String = FromVariant(data[0]); // == "FYI"
+
+    LogChannel(n"Info", s"text in file: \(text)");
+  }
+
+  // Callback when read failed.
+  //                           
+  //                           | Argument is only present when you define an 
+  //                           | array of data with FilePromise.Create(...).
+  //                           v
+  private cb func OnReadFailed(data: array<Variant>) {
+    let arg0: String = FromVariant(data[0]); // == "FYI"
+
+    LogChannel(n"Error", "Failed to read in file!");
+  }
+
+  // ...
+}
+```
+
+You can call read/write methods with the same arguments used in the 
+synchronous mode. You only need to insert a `FilePromise` as the first 
+argument.
+
+When callback is executed for write operations, your function is only executed 
+with optional arguments (array of Variant) when provided, no boolean value is 
+to be expected (unlike in the synchronous version).
 
 # Development
 Contributions are welcome, feel free to fill an issue or a PR.
