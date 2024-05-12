@@ -5,8 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+------------------------
+
+## [0.7.1] - 2024-05-12
 ### Fixed
-- issue when using files listed with method `GetFiles`. 
+- issue when using files listed with method `GetFiles`.
 
 ------------------------
 
@@ -70,7 +74,8 @@ This version is not compatible with v0.2.0 and below, see the README and
 - read / write / stringify Json data.
 
 <!-- Table of releases -->
-[Unreleased]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.7.1...HEAD
+[0.7.1]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.4.0...v0.5.0
