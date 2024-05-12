@@ -120,10 +120,10 @@ Red::DynArray<Red::Handle<AsyncFile>> FileSystemStorage::get_async_files() {
 
   for (const auto& entry : entries) {
     if (entry.is_regular_file()) {
-      SharedMutex mutex = get_mutex(storage_path);
-
-      auto file =
-        Red::MakeHandle<AsyncFile>(mutex, entry.path().filename(), storage_path);
+      auto file_name = entry.path().filename();
+      auto file_path = storage_path / file_name;
+      auto file_mutex = get_mutex(file_path);
+      auto file = Red::MakeHandle<AsyncFile>(file_mutex, file_name, file_path);
 
       files.PushBack(file);
     }
