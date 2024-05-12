@@ -1,6 +1,8 @@
 import RedFileSystem.*
 
 public class FileSystemStorageTest extends BaseTest {
+  private let STORAGE_PATH: String = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cyberpunk 2077\\red4ext\\plugins\\RedFileSystem\\storages\\Test\\";
+
   private let m_storage: ref<FileSystemStorage>;
 
   public func Create() {
@@ -56,10 +58,14 @@ public class FileSystemStorageTest extends BaseTest {
 
     while i < 4 {
       this.ExpectString(s"files[\(i)] == 'dummy\(i).txt'", files[i].GetFilename(), s"dummy\(i).txt");
+      this.ExpectString(s"files[\(i)] == '<path>\\dummy\(i).txt'", files[i].GetAbsolutePath(), s"\(this.STORAGE_PATH)dummy\(i).txt");
       i += 1;
     }
     this.ExpectString("files[4] == 'test.json'", files[4].GetFilename(), "test.json");
+    this.ExpectString("files[4] == '<path>\\test.json'", files[4].GetAbsolutePath(), s"\(this.STORAGE_PATH)test.json");
+
     this.ExpectString("files[5] == 'test.txt'", files[5].GetFilename(), "test.txt");
+    this.ExpectString("files[5] == '<path>\\test.txt'", files[5].GetAbsolutePath(), s"\(this.STORAGE_PATH)test.txt");
   }
 
 }

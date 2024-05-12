@@ -80,7 +80,9 @@ Red::DynArray<Red::Handle<File>> FileSystemStorage::get_files() const {
 
   for (const auto& entry : entries) {
     if (entry.is_regular_file()) {
-      auto file = Red::MakeHandle<File>(entry.path().filename(), storage_path);
+      auto file_name = entry.path().filename();
+      auto file_path = storage_path / file_name;
+      auto file = Red::MakeHandle<File>(file_name, file_path);
 
       files.PushBack(file);
     }
