@@ -344,8 +344,9 @@ if !status {
 
 You can run read/write operations in asynchronous mode. This allows you to 
 delegate heavy operations in background. It prevents the game from freezing 
-while data is being read/written. It is recommended when operating on big 
-chunks of data or when running into performance issues.
+while data is being read/written. It is recommended when operating with big 
+chunks of data. It should be used when running into performance issues 
+otherwise.
 
 You need to get an `AsyncFile` from a storage to operate in asynchronous mode:
 ```swift
