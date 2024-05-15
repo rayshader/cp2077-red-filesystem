@@ -8,10 +8,9 @@
 
 #include "FilePromise.h"
 #include "FileSystemWriteMode.h"
+#include "Utils.h"
 
 namespace RedFS {
-
-using SharedMutex = std::shared_ptr<std::mutex>;
 
 class AsyncFile : public Red::IScriptable {
  private:
@@ -22,8 +21,7 @@ class AsyncFile : public Red::IScriptable {
 
  public:
   AsyncFile() = default;
-  explicit AsyncFile(SharedMutex p_mutex,
-                     std::filesystem::path p_path,
+  explicit AsyncFile(SharedMutex p_mutex, std::filesystem::path p_path,
                      std::filesystem::path p_absolute_path);
 
   [[nodiscard]] Red::CString get_path() const;

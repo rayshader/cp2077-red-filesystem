@@ -2,8 +2,8 @@
 #define REDFILESYSTEM_FILESYSTEMSTORAGE_H
 
 #include <filesystem>
-#include <unordered_map>
 #include <mutex>
+#include <unordered_map>
 
 #include <RED4ext/RED4ext.hpp>
 #include <RedLib.hpp>
@@ -11,10 +11,9 @@
 #include "AsyncFile.h"
 #include "File.h"
 #include "FileSystemStatus.h"
+#include "Utils.h"
 
 namespace RedFS {
-
-using SharedMutex = std::shared_ptr<std::mutex>;
 
 class FileSystemStorage : public Red::IScriptable {
  private:
