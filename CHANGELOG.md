@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - asynchronous read/write operations with `AsyncFile`.
 - callback handling with `FilePromise` when operation passes/fails.
 
+### Changed
+- migrate storages from `<game>/red4ext/plugins/RedFileSystem/storages/` to 
+  `<game>/r6/storages/` at startup.
+
 ------------------------
 
 ## [0.7.1] - 2024-05-12

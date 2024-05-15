@@ -2,7 +2,7 @@ import RedFileSystem.*
 import RedData.Json.*
 
 public class AsyncFileTest extends BaseTest {
-  private let STORAGE_PATH: String = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cyberpunk 2077\\red4ext\\plugins\\RedFileSystem\\storages\\Test\\";
+  private let STORAGE_PATH: String = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cyberpunk 2077\\r6\\storages\\Test\\";
 
   private let m_storage: ref<FileSystemStorage>;
 

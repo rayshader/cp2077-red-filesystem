@@ -28,13 +28,17 @@ find a C++ API wrapper in [branch api].
 
 ### Disclaimer
 All read/write operations are restricted within:
-> ...\Cyberpunk 2077\red4ext\plugins\RedFileSystem\storages\
+> Cyberpunk 2077\r6\storages\
+
+> [!NOTE]  
+> Old path was: `Cyberpunk 2077\red4ext\plugins\RedFileSystem\storages\`. Its 
+> content will automatically be migrated to `Cyberpunk 2077\r6\storages\`.
 
 You can get a storage with the name of your mod. It must be unique. You can 
 only read/write files within your own storage.
 
 For example, if your mod is named `Awesome`, your storage will be located in:
-> ...\Cyberpunk 2077\red4ext\plugins\RedFileSystem\storages\Awesome\
+> Cyberpunk 2077\r6\storages\Awesome\
 
 This is a security measure to prevent malicious access. This way, you and 
 other authors cannot break game files nor the operating system of the player.
@@ -143,7 +147,7 @@ LogChannel(n"Info", s"Filename: '\(file.GetFilename())'");
 LogChannel(n"Info", s"Extension: '\(file.GetExtension())'");
 LogChannel(n"Info", s"Size: \(file.GetSize()) bytes");
 // Relative path: 'README.md'
-// Absolute path: 'C:\Program Files (x86)\Steam\steamapps\common\Cyberpunk 2077\red4ext\plugins\RedFileSystem\storages\Awesome\README.md'
+// Absolute path: 'C:\Program Files (x86)\Steam\steamapps\common\Cyberpunk 2077\r6\storages\Awesome\README.md'
 // Filename: 'README.md'
 // Extension: '.md'
 // Size: 0 bytes
