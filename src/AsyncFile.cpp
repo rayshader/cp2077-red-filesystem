@@ -76,6 +76,7 @@ void AsyncFile::read_as_lines(const FilePromise& p_promise) {
 
     while (std::getline(stream, line)) {
       if (stream.fail() || stream.bad()) {
+        stream.close();
         mutex->unlock();
         p_promise.reject();
         return;
