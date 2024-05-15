@@ -7,6 +7,7 @@
 #include <RedLib.hpp>
 
 #include "FileSystemWriteMode.h"
+#include "Utils.h"
 
 namespace RedFS {
 
@@ -15,12 +16,14 @@ class File : public Red::IScriptable {
   const std::filesystem::path path;
   const std::filesystem::path absolute_path;
 
+  SharedMutex mutex;
+
  public:
   static std::ios_base::openmode get_mode(FileSystemWriteMode p_mode);
 
  public:
   File() = default;
-  explicit File(std::filesystem::path p_path,
+  explicit File(SharedMutex p_mutex, std::filesystem::path p_path,
                 std::filesystem::path p_absolute_path);
 
   [[nodiscard]] Red::CString get_path() const;
@@ -38,7 +41,7 @@ class File : public Red::IScriptable {
   bool write_lines(const Red::DynArray<Red::CString>& p_lines,
                    const Red::Optional<FileSystemWriteMode>& p_mode);
   bool write_json(const Red::Handle<Red::IScriptable>& p_json,
-                   const Red::Optional<Red::CString>& p_indent);
+                  const Red::Optional<Red::CString>& p_indent);
 
   RTTI_IMPL_TYPEINFO(RedFS::File);
   RTTI_IMPL_ALLOCATOR();

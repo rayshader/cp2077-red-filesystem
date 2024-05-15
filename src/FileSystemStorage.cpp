@@ -53,7 +53,7 @@ FileSystemStatus FileSystemStorage::is_file(const Red::CString& p_path) const {
 }
 
 Red::Handle<File> FileSystemStorage::get_file(
-  const Red::CString& p_path) const {
+  const Red::CString& p_path) {
   if (!rw_permission) {
     return {};
   }
@@ -63,10 +63,12 @@ Red::Handle<File> FileSystemStorage::get_file(
   if (error) {
     return {};
   }
-  return Red::MakeHandle<File>(p_path.c_str(), path);
+  SharedMutex mutex = get_mutex(path);
+
+  return Red::MakeHandle<File>(mutex, p_path.c_str(), path);
 }
 
-Red::DynArray<Red::Handle<File>> FileSystemStorage::get_files() const {
+Red::DynArray<Red::Handle<File>> FileSystemStorage::get_files() {
   if (!rw_permission) {
     return {};
   }
@@ -82,7 +84,8 @@ Red::DynArray<Red::Handle<File>> FileSystemStorage::get_files() const {
     if (entry.is_regular_file()) {
       auto file_name = entry.path().filename();
       auto file_path = storage_path / file_name;
-      auto file = Red::MakeHandle<File>(file_name, file_path);
+      auto file_mutex = get_mutex(file_path);
+      auto file = Red::MakeHandle<File>(file_mutex, file_name, file_path);
 
       files.PushBack(file);
     }

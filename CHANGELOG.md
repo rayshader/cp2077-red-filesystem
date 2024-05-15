@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - migrate storages from `<game>/red4ext/plugins/RedFileSystem/storages/` to 
   `<game>/r6/storages/` at startup.
+- read/write operations with `File` are now thread safe.
 
 ------------------------
 

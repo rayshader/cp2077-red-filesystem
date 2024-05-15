@@ -37,8 +37,8 @@ class FileSystemStorage : public Red::IScriptable {
   [[nodiscard]] FileSystemStatus exists(const Red::CString& p_path) const;
   [[nodiscard]] FileSystemStatus is_file(const Red::CString& p_path) const;
 
-  [[nodiscard]] Red::Handle<File> get_file(const Red::CString& p_path) const;
-  [[nodiscard]] Red::DynArray<Red::Handle<File>> get_files() const;
+  [[nodiscard]] Red::Handle<File> get_file(const Red::CString& p_path);
+  [[nodiscard]] Red::DynArray<Red::Handle<File>> get_files();
 
   [[nodiscard]] Red::Handle<AsyncFile> get_async_file(
     const Red::CString& p_path);
