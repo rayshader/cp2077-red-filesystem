@@ -15,6 +15,8 @@ set(INC_FILES
 
         src/FileSystemStatus.h
         src/FileSystemWriteMode.h
+
+        src/Utils.h
 )
 
 set(SRC_FILES
