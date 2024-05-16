@@ -75,16 +75,16 @@ Red::Handle<FileSystemStorage> FileSystem::get_storage(
     logger->Error(handle, "See the documentation to fix this issue.");
     return {};
   }
-  if (storages.contains(name)) {
-    storages.at(name)->revoke_permission();
-    logger->ErrorF(handle, "Attempt to access storage \"%s\" several times.",
+  auto storage = find_storage(name);
+
+  if (storage) {
+    storage->revoke_permission();
+    logger->ErrorF(handle,
+                   "Attempt to access storage \"%s\" several times. "
+                   "Only one mod can access its own storage with "
+                   "RedFileSystem. Access to this storage has been permanently "
+                   "revoked for this session.",
                    name.c_str());
-    logger->Error(handle,
-                  "Only one mod can access its own storage with "
-                  "RedFileSystem.");
-    logger->Error(handle,
-                  "Access to this storage has been permanently revoked "
-                  "for this session.");
     return {};
   }
   auto path = storages_path / name;
@@ -94,8 +94,7 @@ Red::Handle<FileSystemStorage> FileSystem::get_storage(
     logger->ErrorF(handle, "Failed to create storage \"%s\".", name.c_str());
     return {};
   }
-  auto storage = Red::MakeHandle<FileSystemStorage>(name, path);
-
+  storage = Red::MakeHandle<FileSystemStorage>(name, path);
   storages[name] = storage;
   logger->InfoF(handle, "Access to storage \"%s\" has been granted.",
                 name.c_str());
@@ -108,10 +107,11 @@ Red::Handle<FileSystemStorage> FileSystem::get_shared_storage() {
     return {};
   }
   constexpr auto name = "shared";
+  auto storage = find_storage(name);
 
-  if (storages.contains(name)) {
+  if (storage) {
     logger->Info(handle, "Access to shared storage has been granted.");
-    return storages.at(name);
+    return storage;
   }
   auto path = storages_path / name;
   bool is_present = request_directory(path);
@@ -120,8 +120,7 @@ Red::Handle<FileSystemStorage> FileSystem::get_shared_storage() {
     logger->Error(handle, "Failed to create shared storage.");
     return {};
   }
-  auto storage = Red::MakeHandle<FileSystemStorage>(name, path);
-
+  storage = Red::MakeHandle<FileSystemStorage>(name, path);
   storages[name] = storage;
   logger->Info(handle, "Access to shared storage has been granted.");
   return storage;
@@ -168,6 +167,16 @@ bool FileSystem::migrate_directory(const std::filesystem::path& p_old_path,
   // NOTE: remove old path in unload() to be backward compatible with
   //       RED4ext v1.24.3
   return true;
+}
+
+Red::Handle<FileSystemStorage> FileSystem::find_storage(
+  const std::string& p_name) {
+  for (const auto& storage : storages) {
+    if (equals_insensitive(storage.first, p_name)) {
+      return storage.second;
+    }
+  }
+  return {};
 }
 
 }  // namespace RedFS

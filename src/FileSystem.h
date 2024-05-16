@@ -34,6 +34,8 @@ class FileSystem : public Red::IScriptable {
   static bool migrate_directory(const std::filesystem::path& p_old_path,
                                 const std::filesystem::path& p_new_path);
 
+  static Red::Handle<FileSystemStorage> find_storage(const std::string& p_name);
+
  public:
   static void load(RED4ext::PluginHandle p_handle, RED4ext::Logger* p_logger);
   static void unload();

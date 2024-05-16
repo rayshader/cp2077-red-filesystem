@@ -41,6 +41,9 @@ public class FileSystemTest extends BaseTest {
     let storage = FileSystem.GetStorage("TestGetStorage");
 
     this.ExpectBool("Second access to storage revoked", IsDefined(storage), false);
+    storage = FileSystem.GetStorage("testgetstorage");
+
+    this.ExpectBool("Third access to storage revoked with case-insensitive", IsDefined(storage), false);
     let status = this.m_storage.Exists("unknown.txt");
 
     this.ExpectString("First storage 'Exists' is revoked", s"\(status)", "Denied");

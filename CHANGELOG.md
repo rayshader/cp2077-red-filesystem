@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - the name `shared` when using `FileSystem.GetStorage()` is now reserved and 
   forbidden.
 
+### Fixed
+- storage is revoked when using case-insensitive names.
+
 ------------------------
 
 ## [0.7.1] - 2024-05-12
