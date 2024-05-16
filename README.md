@@ -61,10 +61,11 @@ let storage = FileSystem.GetStorage("Awesome");
 // ...
 ```
 
-`name` must complies with the following rules:
+`name` must comply with the following rules:
 - minimum of 3 characters
 - maximum of 24 characters
 - only `A-Z` and `a-z` characters
+- it must not be `shared`
 
 If you use a malformed name, `GetStorage` will return `null`.
 
@@ -81,6 +82,13 @@ storage will be denied.
 
 You can store the unique reference of your `FileSystemStorage` with 
 `ScriptableEnv` from [Codeware]. You can find an example in [examples/].
+
+#### GetSharedStorage
+> GetSharedStorage() -> ref&lt;FileSystemStorage&gt;
+
+You can use it to read/write in a common storage. It can be accessed without 
+restrictions if you need to share data with other mods. It is located in:
+> Cyberpunk 2077\r6\storages\shared\
 
 ### FileSystemStorage
 

@@ -8,11 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - asynchronous read/write operations with `AsyncFile`.
 - callback handling with `FilePromise` when operation passes/fails.
+- common storage in `<game>/r6/storages/shared/` to share files between mods.
+  It can be accessed with `FileSystem.GetSharedStorage()` without restrictions.
 
 ### Changed
 - migrate storages from `<game>/red4ext/plugins/RedFileSystem/storages/` to 
   `<game>/r6/storages/` at startup.
 - read/write operations with `File` are now thread safe.
+- the name `shared` when using `FileSystem.GetStorage()` is now reserved and 
+  forbidden.
 
 ------------------------
 

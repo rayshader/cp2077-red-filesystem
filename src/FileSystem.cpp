@@ -1,6 +1,8 @@
 #include "FileSystem.h"
 #include "FileSystemStorage.h"
 
+#include "Utils.h"
+
 namespace RedFS {
 
 RED4ext::PluginHandle FileSystem::handle = nullptr;
@@ -35,6 +37,7 @@ void FileSystem::load(RED4ext::PluginHandle p_handle,
     game_path / "red4ext" / "plugins" / "RedFileSystem" / "storages";
 
   if (!migrate_directory(old_path, storages_path)) {
+    has_error = true;
     logger->WarnF(handle, R"(Failed to migrate directory from "%s" to "%s".)",
                   old_path.string().c_str(), storages_path.string().c_str());
     logger->Warn(handle, "You need to manually move content yourself.");
@@ -57,7 +60,7 @@ void FileSystem::unload() {
   logger = nullptr;
 }
 
-inline Red::Handle<FileSystemStorage> FileSystem::get_storage(
+Red::Handle<FileSystemStorage> FileSystem::get_storage(
   const Red::CString& p_name) {
   if (has_error) {
     logger->Error(handle, "RedFileSystem is disabled for all mods.");
@@ -65,7 +68,8 @@ inline Red::Handle<FileSystemStorage> FileSystem::get_storage(
   }
   std::string name = p_name.c_str();
 
-  if (!regex_match(name, storage_name_rule)) {
+  if (!regex_match(name, storage_name_rule) ||
+      equals_insensitive(name, "shared")) {
     logger->ErrorF(handle, "Name of storage \"%s\" is not allowed.",
                    name.c_str());
     logger->Error(handle, "See the documentation to fix this issue.");
@@ -95,6 +99,31 @@ inline Red::Handle<FileSystemStorage> FileSystem::get_storage(
   storages[name] = storage;
   logger->InfoF(handle, "Access to storage \"%s\" has been granted.",
                 name.c_str());
+  return storage;
+}
+
+Red::Handle<FileSystemStorage> FileSystem::get_shared_storage() {
+  if (has_error) {
+    logger->Error(handle, "RedFileSystem is disabled.");
+    return {};
+  }
+  constexpr auto name = "shared";
+
+  if (storages.contains(name)) {
+    logger->Info(handle, "Access to shared storage has been granted.");
+    return storages.at(name);
+  }
+  auto path = storages_path / name;
+  bool is_present = request_directory(path);
+
+  if (!is_present) {
+    logger->Error(handle, "Failed to create shared storage.");
+    return {};
+  }
+  auto storage = Red::MakeHandle<FileSystemStorage>(name, path);
+
+  storages[name] = storage;
+  logger->Info(handle, "Access to shared storage has been granted.");
   return storage;
 }
 

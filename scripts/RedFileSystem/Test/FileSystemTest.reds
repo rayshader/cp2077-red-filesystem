@@ -23,6 +23,12 @@ public class FileSystemTest extends BaseTest {
     storage = FileSystem.GetStorage("LetsDoSomethingTooLongLikeForReal");
 
     this.ExpectBool("Invalid storage name: maximum 24 characters", IsDefined(storage), false);
+    storage = FileSystem.GetStorage("shared");
+
+    this.ExpectBool("Invalid storage name: \"shared\" is forbidden", IsDefined(storage), false);
+    storage = FileSystem.GetStorage("ShaRed");
+
+    this.ExpectBool("Invalid storage name: \"ShaRed\" is forbidden", IsDefined(storage), false);
   }
 
   private cb func Test_GetStorage_Granted() {
@@ -44,6 +50,15 @@ public class FileSystemTest extends BaseTest {
     let file = this.m_storage.GetFile("unknown.txt");
 
     this.ExpectBool("First storage 'GetFile' is revoked", IsDefined(file), false);
+  }
+
+  private cb func Test_GetSharedStorage_Granted() {
+    let storage = FileSystem.GetSharedStorage();
+
+    this.ExpectBool("Access to shared storage granted", IsDefined(storage), true);
+    storage = FileSystem.GetSharedStorage();
+
+    this.ExpectBool("Access to shared storage is not restricted", IsDefined(storage), true);
   }
 
 }

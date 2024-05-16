@@ -39,6 +39,7 @@ class FileSystem : public Red::IScriptable {
   static void unload();
 
   static Red::Handle<FileSystemStorage> get_storage(const Red::CString& p_name);
+  static Red::Handle<FileSystemStorage> get_shared_storage();
 
   RTTI_IMPL_TYPEINFO(RedFS::FileSystem);
   RTTI_IMPL_ALLOCATOR();
@@ -50,6 +51,7 @@ RTTI_DEFINE_CLASS(RedFS::FileSystem, {
   RTTI_ALIAS("RedFileSystem.FileSystem");
 
   RTTI_METHOD(get_storage, "GetStorage");
+  RTTI_METHOD(get_shared_storage, "GetSharedStorage");
 });
 
 #endif  //REDFS_FILESYSTEM_H
