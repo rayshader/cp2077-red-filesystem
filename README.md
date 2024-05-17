@@ -8,7 +8,7 @@ This header-only library provides an API wrapper for [RedFileSystem] plugin.
 # Getting started
 
 ## Compatibility
-- [RedFileSystem] v0.7.0
+- [RedFileSystem] v0.8.0
 
 ## Requirements
 - [RED4ext.SDK]
@@ -19,7 +19,7 @@ This header-only library provides an API wrapper for [RedFileSystem] plugin.
 
 1. Clone this branch as a submodule in your project:
 ```shell
-git clone submodule add -b api https://github.com/rayshader/cp2077-red-filesystem deps/RedFileSystem
+git submodule add -b api https://github.com/rayshader/cp2077-red-filesystem deps/RedFileSystem
 ```
 2. Add dependency in CMake:
 ```cmake

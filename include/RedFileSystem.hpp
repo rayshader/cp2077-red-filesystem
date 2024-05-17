@@ -3,6 +3,7 @@
 
 #include <RedLib.hpp>
 
+#include "src/AsyncFile.hpp"
 #include "src/File.hpp"
 #include "src/FileSystem.hpp"
 #include "src/FileSystemStorage.hpp"

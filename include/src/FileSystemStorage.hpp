@@ -7,6 +7,7 @@
 
 #include "Enums.hpp"
 #include "File.hpp"
+#include "AsyncFile.hpp"
 
 namespace RedFileSystem {
 
@@ -48,6 +49,25 @@ class FileSystemStorage {
 
     Red::CallVirtual(wrapper, "GetFiles", handles);
     std::vector<File> files;
+
+    for (const auto& handle : handles) {
+      files.emplace_back(handle);
+    }
+    return files;
+  }
+
+  inline AsyncFile GetAsyncFile(const Red::CString& path) const {
+    Red::Handle<Red::IScriptable> file;
+
+    Red::CallVirtual(wrapper, "GetAsyncFile", file, path);
+    return AsyncFile(file);
+  }
+
+  inline std::vector<AsyncFile> GetAsyncFiles() const {
+    Red::DynArray<Red::Handle<Red::IScriptable>> handles;
+
+    Red::CallVirtual(wrapper, "GetAsyncFiles", handles);
+    std::vector<AsyncFile> files;
 
     for (const auto& handle : handles) {
       files.emplace_back(handle);

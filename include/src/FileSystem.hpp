@@ -16,6 +16,13 @@ class FileSystem {
     Red::CallStatic("FileSystem", "GetStorage", storage, name);
     return FileSystemStorage(storage);
   }
+
+  inline static FileSystemStorage GetSharedStorage() {
+    Red::Handle<Red::IScriptable> storage;
+
+    Red::CallStatic("FileSystem", "GetSharedStorage", storage);
+    return FileSystemStorage(storage);
+  }
 };
 
 }  // namespace RedFileSystem
