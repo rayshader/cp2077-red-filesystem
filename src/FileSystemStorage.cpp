@@ -52,8 +52,7 @@ FileSystemStatus FileSystemStorage::is_file(const Red::CString& p_path) const {
   return (status) ? FileSystemStatus::True : FileSystemStatus::False;
 }
 
-Red::Handle<File> FileSystemStorage::get_file(
-  const Red::CString& p_path) {
+Red::Handle<File> FileSystemStorage::get_file(const Red::CString& p_path) {
   if (!rw_permission) {
     return {};
   }
