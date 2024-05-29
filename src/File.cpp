@@ -95,6 +95,9 @@ bool File::write_text(const Red::CString& p_text,
   std::ios_base::openmode mode = get_mode(p_mode.value);
   std::ofstream stream;
 
+  // create directories if they don't exist
+  std::filesystem::create_directories(absolute_path.parent_path());
+
   stream.open(absolute_path, mode);
   if (!stream.is_open()) {
     mutex->unlock();
@@ -111,6 +114,9 @@ bool File::write_lines(const Red::DynArray<Red::CString>& p_lines,
   mutex->lock();
   std::ios_base::openmode mode = get_mode(p_mode.value);
   std::ofstream stream;
+
+  // create directories if they don't exist
+  std::filesystem::create_directories(absolute_path.parent_path());
 
   stream.open(absolute_path, mode);
   if (!stream.is_open()) {

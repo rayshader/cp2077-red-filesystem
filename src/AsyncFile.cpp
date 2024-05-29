@@ -128,6 +128,9 @@ void AsyncFile::write_text(const FilePromise& p_promise,
     mutex->lock();
     std::ofstream stream;
 
+    // create directories if they don't exist
+    std::filesystem::create_directories(absolute_path.parent_path());
+
     stream.open(absolute_path, mode);
     if (!stream.is_open()) {
       mutex->unlock();
@@ -150,6 +153,9 @@ void AsyncFile::write_lines(const FilePromise& p_promise,
   job_queue.Dispatch([*this, p_promise, p_lines, mode]() -> void {
     mutex->lock();
     std::ofstream stream;
+
+    // create directories if they don't exist
+    std::filesystem::create_directories(absolute_path.parent_path());
 
     stream.open(absolute_path, mode);
     if (!stream.is_open()) {
