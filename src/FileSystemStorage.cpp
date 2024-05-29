@@ -4,13 +4,17 @@
 
 namespace RedFS {
 
-FileSystemStorage::FileSystemStorage() : rw_permission(false) {}
+FileSystemStorage::FileSystemStorage() : rw_permission(false) {
+  isLaunchedThroughMO2 = GetModuleHandle(TEXT("usvfs_x64.dll")) != nullptr;
+}
 
 FileSystemStorage::FileSystemStorage(std::string p_name,
                                      std::filesystem::path p_path)
     : name(std::move(p_name)),
       storage_path(std::move(p_path)),
-      rw_permission(true) {}
+      rw_permission(true) {
+  isLaunchedThroughMO2 = GetModuleHandle(TEXT("usvfs_x64.dll")) != nullptr;
+}
 
 void FileSystemStorage::revoke_permission() {
   rw_permission = false;
@@ -144,7 +148,13 @@ std::filesystem::path FileSystemStorage::restrict_path(
     return real_path;
   }
   if (real_path.string().find(storage_path.string() + "\\") != 0) {
-    p_error = std::make_error_code(std::errc::permission_denied);
+    // Do not check for sandbox escape if launched through MO2
+    if (this->isLaunchedThroughMO2) {
+      return real_path;
+    }
+    else {
+      p_error = std::make_error_code(std::errc::permission_denied);
+    }
   }
   return real_path;
 }

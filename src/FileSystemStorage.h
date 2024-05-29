@@ -23,6 +23,7 @@ class FileSystemStorage : public Red::IScriptable {
   std::unordered_map<std::filesystem::path, SharedMutex> mutexes;
 
   bool rw_permission;
+  bool isLaunchedThroughMO2;
 
   std::filesystem::path restrict_path(const std::string& p_path,
                                       std::error_code& p_error) const;
