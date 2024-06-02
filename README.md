@@ -182,6 +182,23 @@ for file in files {
 > It will only include regular files. Using `IsFile()` is redundant as it will 
 > return `FileSystemStatus.true` for each item.
 
+#### DeleteFile
+> DeleteFile(path: String) -> FileSystemStatus
+
+You can delete a file from storage:
+```swift
+// ...
+let status = storage.DeleteFile("to_remove.txt");
+
+if Equals(status, FileSystemStatus.Failure) {
+  LogChannel(n"Error", "Operation failed.");
+} else if Equals(status, FileSystemStatus.Denied) {
+  LogChannel(n"Error", "Operation denied.");
+} else if Equals(status, FileSystemStatus.True) {
+  LogChannel(n"Info", "File removed.");
+}
+```
+
 ### Read text
 > ReadAsText() -> String  
 > ReadAsLines() -> array&lt;String&gt;  

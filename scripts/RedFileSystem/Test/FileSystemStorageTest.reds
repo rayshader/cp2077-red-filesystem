@@ -53,7 +53,7 @@ public class FileSystemStorageTest extends BaseTest {
   private cb func Test_GetFiles() {
     let files = this.m_storage.GetFiles();
 
-    this.ExpectInt32("GetFiles() return 6 files", ArraySize(files), 6);
+    this.ExpectInt32("GetFiles() return 7 files", ArraySize(files), 7);
     let i = 0;
 
     while i < 4 {
@@ -66,6 +66,9 @@ public class FileSystemStorageTest extends BaseTest {
 
     this.ExpectString("files[5] == 'test.txt'", files[5].GetFilename(), "test.txt");
     this.ExpectString("files[5] == '<path>\\test.txt'", files[5].GetAbsolutePath(), s"\(this.STORAGE_PATH)test.txt");
+
+    this.ExpectString("files[6] == 'to_remove.txt'", files[6].GetFilename(), "to_remove.txt");
+    this.ExpectString("files[6] == '<path>\\to_remove.txt'", files[6].GetAbsolutePath(), s"\(this.STORAGE_PATH)to_remove.txt");
   }
 
   private cb func Test_GetAsyncFile() {
@@ -80,7 +83,7 @@ public class FileSystemStorageTest extends BaseTest {
   private cb func Test_GetAsyncFiles() {
     let files = this.m_storage.GetAsyncFiles();
 
-    this.ExpectInt32("GetAsyncFiles() return 6 files", ArraySize(files), 6);
+    this.ExpectInt32("GetAsyncFiles() return 7 files", ArraySize(files), 7);
     let i = 0;
 
     while i < 4 {
@@ -89,6 +92,26 @@ public class FileSystemStorageTest extends BaseTest {
     }
     this.ExpectString("files[4] == 'test.json'", files[4].GetFilename(), "test.json");
     this.ExpectString("files[5] == 'test.txt'", files[5].GetFilename(), "test.txt");
+    this.ExpectString("files[6] == 'to_remove.txt'", files[6].GetFilename(), "to_remove.txt");
+  }
+
+  // It must be after Get[Async]Files
+  private cb func Test_DeleteFile() {
+    let status = this.m_storage.DeleteFile("..\\..\\..\\..\\..\\..\\..\\steam.exe");
+
+    this.ExpectString("DeleteFile denied", s"\(status)", "Denied");
+    let status = this.m_storage.DeleteFile("test");
+
+    this.ExpectString("DeleteFile failure", s"\(status)", "Failure");
+    let status = this.m_storage.DeleteFile("to_remove_not_found.txt");
+
+    this.ExpectString("DeleteFile failure", s"\(status)", "Failure");
+    // NOTE: it should be false when file didn't exist. MS STL implementation 
+    //       is non-conforming?
+    //this.ExpectString("DeleteFile false", s"\(status)", "False");
+    let status = this.m_storage.DeleteFile("to_remove.txt");
+
+    this.ExpectString("DeleteFile true", s"\(status)", "True");
   }
 
 }

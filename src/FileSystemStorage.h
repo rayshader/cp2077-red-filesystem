@@ -40,6 +40,8 @@ class FileSystemStorage : public Red::IScriptable {
   [[nodiscard]] Red::Handle<File> get_file(const Red::CString& p_path);
   [[nodiscard]] Red::DynArray<Red::Handle<File>> get_files();
 
+  [[nodiscard]] FileSystemStatus delete_file(const Red::CString& p_path) const;
+
   [[nodiscard]] Red::Handle<AsyncFile> get_async_file(
     const Red::CString& p_path);
   [[nodiscard]] Red::DynArray<Red::Handle<AsyncFile>> get_async_files();
@@ -58,6 +60,8 @@ RTTI_DEFINE_CLASS(RedFS::FileSystemStorage, {
 
   RTTI_METHOD(get_file, "GetFile");
   RTTI_METHOD(get_files, "GetFiles");
+
+  RTTI_METHOD(delete_file, "DeleteFile");
 
   RTTI_METHOD(get_async_file, "GetAsyncFile");
   RTTI_METHOD(get_async_files, "GetAsyncFiles");

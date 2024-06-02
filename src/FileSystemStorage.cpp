@@ -93,6 +93,28 @@ Red::DynArray<Red::Handle<File>> FileSystemStorage::get_files() {
   return files;
 }
 
+FileSystemStatus FileSystemStorage::delete_file(
+  const Red::CString& p_path) const {
+  if (!rw_permission) {
+    return FileSystemStatus::Denied;
+  }
+  std::error_code error;
+  auto path = restrict_path(p_path.c_str(), error);
+
+  if (error) {
+    return FileSystemStatus::Denied;
+  }
+  if (!std::filesystem::is_regular_file(path, error)) {
+    return FileSystemStatus::Failure;
+  }
+  bool is_removed = std::filesystem::remove(path, error);
+
+  if (error) {
+    return FileSystemStatus::Failure;
+  }
+  return (is_removed) ? FileSystemStatus::True : FileSystemStatus::False;
+}
+
 Red::Handle<AsyncFile> FileSystemStorage::get_async_file(
   const Red::CString& p_path) {
   if (!rw_permission) {
