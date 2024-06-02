@@ -1,5 +1,6 @@
 # Red File System
 ![Cyberpunk 2077](https://img.shields.io/badge/Cyberpunk%202077-v2.12a-blue)
+[![MO2](https://img.shields.io/badge/MO2-compatible-green)](https://github.com/ModOrganizer2/modorganizer/)
 ![GitHub License](https://img.shields.io/github/license/rayshader/cp2077-red-filesystem)
 [![Donate](https://img.shields.io/badge/donate-buy%20me%20a%20coffee-yellow)](https://www.buymeacoffee.com/lpfreelance)
 
@@ -46,7 +47,7 @@ other authors cannot break game files nor the operating system of the player.
 All features are defined in module `RedFileSystem`. You need to import it with:
 ```swift
 import RedFileSystem.*
-``` 
+```
 
 ### FileSystem
 
