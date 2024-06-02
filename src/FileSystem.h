@@ -24,6 +24,7 @@ class FileSystem : public Red::IScriptable {
 
   static std::filesystem::path game_path;
   static std::filesystem::path storages_path;
+  static bool has_mo2;
 
   static std::regex storage_name_rule;
 
@@ -33,6 +34,7 @@ class FileSystem : public Red::IScriptable {
   static bool request_directory(const std::filesystem::path& p_path);
   static bool migrate_directory(const std::filesystem::path& p_old_path,
                                 const std::filesystem::path& p_new_path);
+  static void detect_mo2();
 
   static Red::Handle<FileSystemStorage> find_storage(const std::string& p_name);
 
@@ -42,6 +44,8 @@ class FileSystem : public Red::IScriptable {
 
   static Red::Handle<FileSystemStorage> get_storage(const Red::CString& p_name);
   static Red::Handle<FileSystemStorage> get_shared_storage();
+
+  static bool is_mo2_detected();
 
   RTTI_IMPL_TYPEINFO(RedFS::FileSystem);
   RTTI_IMPL_ALLOCATOR();

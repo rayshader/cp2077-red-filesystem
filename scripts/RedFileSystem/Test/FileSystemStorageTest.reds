@@ -33,7 +33,7 @@ public class FileSystemStorageTest extends BaseTest {
     let status = this.m_storage.Exists("..\\..\\..\\..\\..\\..\\..\\steam.exe");
 
     this.ExpectString("IsFile denied", s"\(status)", "Denied");
-    let status = this.m_storage.IsFile("test\\");
+    let status = this.m_storage.IsFile("test");
 
     this.ExpectString("IsFile false", s"\(status)", "False");
     let status = this.m_storage.IsFile("test.json");

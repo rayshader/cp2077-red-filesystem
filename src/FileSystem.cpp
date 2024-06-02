@@ -10,6 +10,7 @@ RED4ext::Logger* FileSystem::logger = nullptr;
 
 std::filesystem::path FileSystem::game_path;
 std::filesystem::path FileSystem::storages_path;
+bool FileSystem::has_mo2 = false;
 
 std::regex FileSystem::storage_name_rule("[A-Za-z]{3,24}");
 
@@ -20,6 +21,7 @@ void FileSystem::load(RED4ext::PluginHandle p_handle,
                       RED4ext::Logger* p_logger) {
   handle = p_handle;
   logger = p_logger;
+  detect_mo2();
   auto path = std::filesystem::absolute(".");
 
   game_path = path.parent_path().parent_path();
@@ -126,6 +128,10 @@ Red::Handle<FileSystemStorage> FileSystem::get_shared_storage() {
   return storage;
 }
 
+bool FileSystem::is_mo2_detected() {
+  return has_mo2;
+}
+
 bool FileSystem::request_directory(const std::filesystem::path& p_path) {
   std::error_code error;
   bool is_present = std::filesystem::exists(p_path, error);
@@ -137,10 +143,10 @@ bool FileSystem::request_directory(const std::filesystem::path& p_path) {
     return true;
   }
   is_present = std::filesystem::create_directory(p_path, error);
-  if (!is_present || error) {
+  if (error) {
     return false;
   }
-  return true;
+  return is_present;
 }
 
 bool FileSystem::migrate_directory(const std::filesystem::path& p_old_path,
@@ -167,6 +173,14 @@ bool FileSystem::migrate_directory(const std::filesystem::path& p_old_path,
   // NOTE: remove old path in unload() to be backward compatible with
   //       RED4ext v1.24.3
   return true;
+}
+
+void FileSystem::detect_mo2() {
+  has_mo2 = GetModuleHandle(TEXT("usvfs_x64.dll")) != nullptr;
+  if (!has_mo2) {
+    return;
+  }
+  logger->Info(handle, "RedFileSystem launched using MO2.");
 }
 
 Red::Handle<FileSystemStorage> FileSystem::find_storage(

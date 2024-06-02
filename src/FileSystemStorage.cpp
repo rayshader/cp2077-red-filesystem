@@ -1,4 +1,5 @@
 #include "FileSystemStorage.h"
+#include "FileSystem.h"
 
 #include <utility>
 
@@ -82,7 +83,7 @@ Red::DynArray<Red::Handle<File>> FileSystemStorage::get_files() {
   for (const auto& entry : entries) {
     if (entry.is_regular_file()) {
       auto file_name = entry.path().filename();
-      auto file_path = storage_path / file_name;
+      auto file_path = entry.path();
       auto file_mutex = get_mutex(file_path);
       auto file = Red::MakeHandle<File>(file_mutex, file_name, file_path);
 
@@ -123,7 +124,7 @@ Red::DynArray<Red::Handle<AsyncFile>> FileSystemStorage::get_async_files() {
   for (const auto& entry : entries) {
     if (entry.is_regular_file()) {
       auto file_name = entry.path().filename();
-      auto file_path = storage_path / file_name;
+      auto file_path = entry.path();
       auto file_mutex = get_mutex(file_path);
       auto file = Red::MakeHandle<AsyncFile>(file_mutex, file_name, file_path);
 
@@ -136,9 +137,19 @@ Red::DynArray<Red::Handle<AsyncFile>> FileSystemStorage::get_async_files() {
 std::filesystem::path FileSystemStorage::restrict_path(
   const std::string& p_path, std::error_code& p_error) const {
   std::filesystem::path path = storage_path / p_path;
-  std::filesystem::path real_path =
-    std::filesystem::weakly_canonical(path, p_error);
+  std::filesystem::path real_path;
 
+  // NOTE: See issue regarding usage of `std::weakly_canonical` with MO2:
+  //       https://github.com/ModOrganizer2/modorganizer/issues/2039
+  if (FileSystem::is_mo2_detected()) {
+    if (p_path.find('/') != std::string::npos ||
+        p_path.find('\\') != std::string::npos) {
+      p_error = std::make_error_code(std::errc::permission_denied);
+    }
+    return path;
+  } else {
+    real_path = std::filesystem::weakly_canonical(path, p_error);
+  }
   if (p_error) {
     return real_path;
   }
