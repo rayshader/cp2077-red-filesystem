@@ -56,6 +56,13 @@ class FileSystemStorage {
     return files;
   }
 
+  inline FileSystemStatus DeleteFile(const Red::CString& path) const {
+    FileSystemStatus status = FileSystemStatus::Failure;
+
+    Red::CallVirtual(wrapper, "DeleteFile", status, path);
+    return status;
+  }
+
   inline AsyncFile GetAsyncFile(const Red::CString& path) const {
     Red::Handle<Red::IScriptable> file;
 
