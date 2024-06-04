@@ -27,6 +27,11 @@ find a C++ API wrapper in [branch api].
 
 ## Usage
 
+All features are defined in module `RedFileSystem`. You need to import it with:
+```swift
+import RedFileSystem.*
+```
+
 ### Disclaimer
 All read/write operations are restricted within:
 > Cyberpunk 2077\r6\storages\
@@ -44,10 +49,12 @@ For example, if your mod is named `Awesome`, your storage will be located in:
 This is a security measure to prevent malicious access. This way, you and 
 other authors cannot break game files nor the operating system of the player.
 
-All features are defined in module `RedFileSystem`. You need to import it with:
-```swift
-import RedFileSystem.*
-```
+### Blacklist
+Prevent access to files managed by other processes. For example, Vortex 
+adds the file `__folder_managed_by_vortex` when installing a mod. This file 
+can be present in your storage. However, when using methods from 
+`FileSystemStorage`, this file will be invisible for you. It won't be listed 
+either when using `GetFiles()` or `GetAsyncFiles()`.
 
 ### FileSystem
 

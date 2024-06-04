@@ -27,6 +27,8 @@ class FileSystemStorage : public Red::IScriptable {
   std::filesystem::path restrict_path(const std::string& p_path,
                                       std::error_code& p_error) const;
   SharedMutex get_mutex(const std::filesystem::path& p_path);
+  template<class T>
+  inline Red::DynArray<Red::Handle<T>> _get_files();
 
  public:
   FileSystemStorage();

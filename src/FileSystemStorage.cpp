@@ -27,6 +27,9 @@ FileSystemStatus FileSystemStorage::exists(const Red::CString& p_path) const {
   if (error) {
     return FileSystemStatus::Denied;
   }
+  if (FileSystem::is_blacklisted(path)) {
+    return FileSystemStatus::Denied;
+  }
   bool status = std::filesystem::exists(path, error);
 
   if (error) {
@@ -43,6 +46,9 @@ FileSystemStatus FileSystemStorage::is_file(const Red::CString& p_path) const {
   auto path = restrict_path(p_path.c_str(), error);
 
   if (error) {
+    return FileSystemStatus::Denied;
+  }
+  if (FileSystem::is_blacklisted(path)) {
     return FileSystemStatus::Denied;
   }
   bool status = std::filesystem::is_regular_file(path, error);
@@ -63,34 +69,16 @@ Red::Handle<File> FileSystemStorage::get_file(const Red::CString& p_path) {
   if (error) {
     return {};
   }
+  if (FileSystem::is_blacklisted(path)) {
+    return {};
+  }
   SharedMutex mutex = get_mutex(path);
 
   return Red::MakeHandle<File>(mutex, p_path.c_str(), path);
 }
 
 Red::DynArray<Red::Handle<File>> FileSystemStorage::get_files() {
-  if (!rw_permission) {
-    return {};
-  }
-  std::error_code error;
-  auto entries = std::filesystem::directory_iterator(storage_path, error);
-
-  if (error) {
-    return {};
-  }
-  Red::DynArray<Red::Handle<File>> files;
-
-  for (const auto& entry : entries) {
-    if (entry.is_regular_file()) {
-      auto file_name = entry.path().filename();
-      auto file_path = entry.path();
-      auto file_mutex = get_mutex(file_path);
-      auto file = Red::MakeHandle<File>(file_mutex, file_name, file_path);
-
-      files.PushBack(file);
-    }
-  }
-  return files;
+  return _get_files<File>();
 }
 
 FileSystemStatus FileSystemStorage::delete_file(
@@ -102,6 +90,9 @@ FileSystemStatus FileSystemStorage::delete_file(
   auto path = restrict_path(p_path.c_str(), error);
 
   if (error) {
+    return FileSystemStatus::Denied;
+  }
+  if (FileSystem::is_blacklisted(path)) {
     return FileSystemStatus::Denied;
   }
   if (!std::filesystem::is_regular_file(path, error)) {
@@ -126,34 +117,16 @@ Red::Handle<AsyncFile> FileSystemStorage::get_async_file(
   if (error) {
     return {};
   }
+  if (FileSystem::is_blacklisted(path)) {
+    return {};
+  }
   SharedMutex mutex = get_mutex(path);
 
   return Red::MakeHandle<AsyncFile>(mutex, p_path.c_str(), path);
 }
 
 Red::DynArray<Red::Handle<AsyncFile>> FileSystemStorage::get_async_files() {
-  if (!rw_permission) {
-    return {};
-  }
-  std::error_code error;
-  auto entries = std::filesystem::directory_iterator(storage_path, error);
-
-  if (error) {
-    return {};
-  }
-  Red::DynArray<Red::Handle<AsyncFile>> files;
-
-  for (const auto& entry : entries) {
-    if (entry.is_regular_file()) {
-      auto file_name = entry.path().filename();
-      auto file_path = entry.path();
-      auto file_mutex = get_mutex(file_path);
-      auto file = Red::MakeHandle<AsyncFile>(file_mutex, file_name, file_path);
-
-      files.PushBack(file);
-    }
-  }
-  return files;
+  return _get_files<AsyncFile>();
 }
 
 std::filesystem::path FileSystemStorage::restrict_path(
@@ -189,6 +162,39 @@ SharedMutex FileSystemStorage::get_mutex(const std::filesystem::path& p_path) {
 
   mutexes[p_path] = mutex;
   return mutex;
+}
+
+template <class T>
+Red::DynArray<Red::Handle<T>> FileSystemStorage::_get_files() {
+  if (!rw_permission) {
+    return {};
+  }
+  std::error_code error;
+  auto entries = std::filesystem::directory_iterator(storage_path, error);
+
+  if (error) {
+    return {};
+  }
+  Red::DynArray<Red::Handle<T>> files;
+
+  std::for_each(
+    begin(entries), end(entries),
+    [&files, this](const std::filesystem::directory_entry& entry) -> void {
+      if (!entry.is_regular_file()) {
+        return;
+      }
+      auto file_path = entry.path();
+
+      if (FileSystem::is_blacklisted(file_path)) {
+        return;
+      }
+      auto file_name = file_path.filename();
+      auto file_mutex = get_mutex(file_path);
+      auto file = Red::MakeHandle<T>(file_mutex, file_name, file_path);
+
+      files.PushBack(file);
+    });
+  return files;
 }
 
 }  // namespace RedFS

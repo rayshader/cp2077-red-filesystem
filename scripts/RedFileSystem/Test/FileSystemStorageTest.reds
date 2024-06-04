@@ -21,6 +21,9 @@ public class FileSystemStorageTest extends BaseTest {
     let status = this.m_storage.Exists("..\\");
 
     this.ExpectString("Exists denied", s"\(status)", "Denied");
+    let status = this.m_storage.Exists("__folder_managed_by_vortex");
+
+    this.ExpectString("Exists denied", s"\(status)", "Denied");
     let status = this.m_storage.Exists("unknown.txt");
 
     this.ExpectString("Exists not found", s"\(status)", "False");
@@ -33,6 +36,9 @@ public class FileSystemStorageTest extends BaseTest {
     let status = this.m_storage.Exists("..\\..\\..\\..\\..\\..\\..\\steam.exe");
 
     this.ExpectString("IsFile denied", s"\(status)", "Denied");
+    let status = this.m_storage.Exists("__folder_managed_by_vortex");
+
+    this.ExpectString("IsFile denied", s"\(status)", "Denied");
     let status = this.m_storage.IsFile("test");
 
     this.ExpectString("IsFile false", s"\(status)", "False");
@@ -43,6 +49,9 @@ public class FileSystemStorageTest extends BaseTest {
 
   private cb func Test_GetFile() {
     let file = this.m_storage.GetFile("..\\..\\..\\steam.exe");
+
+    this.ExpectBool("GetFile denied", IsDefined(file), false);
+    let file = this.m_storage.GetFile("__folder_managed_by_vortex");
 
     this.ExpectBool("GetFile denied", IsDefined(file), false);
     let file = this.m_storage.GetFile("test.txt");
@@ -75,6 +84,9 @@ public class FileSystemStorageTest extends BaseTest {
     let file = this.m_storage.GetAsyncFile("..\\..\\..\\steam.exe");
 
     this.ExpectBool("GetAsyncFile denied", IsDefined(file), false);
+    let file = this.m_storage.GetAsyncFile("__folder_managed_by_vortex");
+
+    this.ExpectBool("GetFile denied", IsDefined(file), false);
     let file = this.m_storage.GetAsyncFile("test.txt");
 
     this.ExpectBool("GetAsyncFile valid", IsDefined(file), true);
@@ -98,6 +110,9 @@ public class FileSystemStorageTest extends BaseTest {
   // It must be after Get[Async]Files
   private cb func Test_DeleteFile() {
     let status = this.m_storage.DeleteFile("..\\..\\..\\..\\..\\..\\..\\steam.exe");
+
+    this.ExpectString("DeleteFile denied", s"\(status)", "Denied");
+    let status = this.m_storage.DeleteFile("__folder_managed_by_vortex");
 
     this.ExpectString("DeleteFile denied", s"\(status)", "Denied");
     let status = this.m_storage.DeleteFile("test");

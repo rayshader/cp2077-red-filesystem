@@ -11,6 +11,7 @@ RED4ext::Logger* FileSystem::logger = nullptr;
 std::filesystem::path FileSystem::game_path;
 std::filesystem::path FileSystem::storages_path;
 bool FileSystem::has_mo2 = false;
+std::vector<std::string> FileSystem::blacklist = {"__folder_managed_by_vortex"};
 
 std::regex FileSystem::storage_name_rule("[A-Za-z]{3,24}");
 
@@ -130,6 +131,17 @@ Red::Handle<FileSystemStorage> FileSystem::get_shared_storage() {
 
 bool FileSystem::is_mo2_detected() {
   return has_mo2;
+}
+
+bool FileSystem::is_blacklisted(const std::filesystem::path& p_path) {
+  const std::string filename = p_path.filename().string();
+
+  for (const auto& bl_filename : blacklist) {
+    if (equals_insensitive(filename, bl_filename)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 bool FileSystem::request_directory(const std::filesystem::path& p_path) {
