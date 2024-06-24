@@ -1,3 +1,5 @@
+module RedFileSystem
+
 public native class FileSystemStorage {
 
   public native func Exists(path: String) -> FileSystemStatus;

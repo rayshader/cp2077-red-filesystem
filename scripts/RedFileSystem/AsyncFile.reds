@@ -1,3 +1,7 @@
+module RedFileSystem
+
+import RedData.Json.*
+
 public native class AsyncFile {
 
   public native func GetPath() -> String;

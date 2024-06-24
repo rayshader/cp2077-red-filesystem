@@ -67,3 +67,14 @@ target_link_libraries(RedFileSystem PRIVATE
         RedLib
         RedData
 )
+
+## Debug mode: install scripts (+ tests) and plugin in game folder.
+## Release mode: create archive with bundled scripts and plugin.
+add_custom_command(
+        TARGET RedFileSystem
+        POST_BUILD
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+        COMMENT "$<$<CONFIG:Debug>:Install scripts with red-cli>" "$<$<CONFIG:Release>:Build archive with red-cli>"
+        COMMAND "$<$<CONFIG:Debug>:red-cli;install;--debug>" "$<$<CONFIG:Release>:red-cli;pack>"
+        COMMAND_EXPAND_LISTS
+)

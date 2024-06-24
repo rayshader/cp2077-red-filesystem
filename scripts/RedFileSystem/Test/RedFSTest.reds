@@ -1,3 +1,5 @@
+module RedFileSystem.Test
+
 import Codeware.*
 import RedFileSystem.*
 
@@ -27,5 +29,5 @@ public class RedFSTest extends ScriptableEnv {
 }
 
 public static func GetRedFSTest() -> ref<RedFSTest> {
-  return ScriptableEnv.Get(n"RedFSTest") as RedFSTest;
+  return ScriptableEnv.Get(n"RedFileSystem.Test.RedFSTest") as RedFSTest;
 }

@@ -1,3 +1,5 @@
+module RedFileSystem
+
 public native struct FilePromise {
 
   public native let target: wref<IScriptable>;

@@ -1,0 +1,15 @@
+{
+  "name": "RedFileSystem",
+  "version": "0.9.1",
+  "license": true,
+  "dist": "dist\\",
+  "scripts": {
+    "redscript": {
+      "src": "scripts\\RedFileSystem\\"
+    }
+  },
+  "plugin": {
+    "debug": "build\\Debug\\",
+    "release": "build\\Release\\"
+  }
+}

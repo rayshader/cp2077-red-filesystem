@@ -1,3 +1,5 @@
+module RedFileSystem.Test
+
 import RedFileSystem.*
 import RedData.Json.*
 

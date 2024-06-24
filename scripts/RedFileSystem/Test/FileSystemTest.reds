@@ -1,3 +1,5 @@
+module RedFileSystem.Test
+
 import RedFileSystem.*
 
 public class FileSystemTest extends BaseTest {

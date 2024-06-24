@@ -1,3 +1,5 @@
+module RedFileSystem
+
 enum FileSystemStatus {
   True    = 0,
   False   = 1,

@@ -446,8 +446,7 @@ Contributions are welcome, feel free to fill an issue or a PR.
 1. Install requirements:
   - CMake v3.27+
   - Visual Studio Community 2022+
-  - Node JS v20.11+
-    - run `npm install --save-dev archiver`
+  - [red-cli] v0.1.0+
 2. Configure project with:
 ```shell
 cmake -G "Visual Studio 17 2022" -A x64 -S . -B build
@@ -462,7 +461,7 @@ cmake --build build --target RedFileSystem --config Debug
 1. Install in your game directory:
 
 ```shell
-node install.mjs
+red-cli install --debug
 ```
  
 2. Run game.
@@ -479,7 +478,7 @@ cmake --build build --target RedFileSystem --config Release
 2. Bundle release:
 
 ```shell
-node bundle.mjs
+red-cli pack
 ```
 
 <!-- Table of links -->
@@ -491,3 +490,4 @@ node bundle.mjs
 [RedData]: https://github.com/rayshader/cp2077-red-data
 [examples/]: https://github.com/rayshader/cp2077-red-filesystem/tree/master/examples
 [branch api]: https://github.com/rayshader/cp2077-red-filesystem/tree/api
+[red-cli]: https://github.com/rayshader/cp2077-red-cli/releases/latest
