@@ -18,14 +18,32 @@ std::regex FileSystem::storage_name_rule("[A-Za-z]{3,24}");
 FileSystem::StorageMap FileSystem::storages{};
 bool FileSystem::has_error = true;
 
+// Credits to https://github.com/jackhumbert/cyberpunk2077-input-loader/blob/a6eed8eda9ae97e92ff97e60158c08b945e61036/src/Utils.cpp#L26
+std::filesystem::path get_game_path() {
+  constexpr auto path_length = MAX_PATH + 1;
+  std::string filename;
+
+  do {
+    filename.resize(filename.size() + path_length, '\0');
+    auto length = GetModuleFileName(nullptr, filename.data(),
+                                    static_cast<uint32_t>(filename.size()));
+
+    if (length > 0) {
+      filename.resize(length);
+    }
+  } while (GetLastError() == ERROR_INSUFFICIENT_BUFFER);
+  return std::filesystem::path(filename)
+    .parent_path()   // Resolve to "x64" directory.
+    .parent_path()   // Resolve to "bin" directory.
+    .parent_path();  // Resolve to game root directory.
+}
+
 void FileSystem::load(RED4ext::PluginHandle p_handle,
                       RED4ext::Logger* p_logger) {
   handle = p_handle;
   logger = p_logger;
   detect_mo2();
-  auto path = std::filesystem::absolute(".");
-
-  game_path = path.parent_path().parent_path();
+  game_path = get_game_path();
   storages_path = game_path / "r6" / "storages";
   bool is_present = request_directory(storages_path);
 
