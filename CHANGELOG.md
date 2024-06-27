@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+------------------------
+
+## [0.9.2] - 2024-06-28
 ### Fixed
 - support any path of execution when resolving game's directory (Vortex / MO2).
 
@@ -111,7 +115,8 @@ This version is not compatible with v0.2.0 and below, see the README and
 - read / write / stringify Json data.
 
 <!-- Table of releases -->
-[Unreleased]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.9.1...HEAD
+[Unreleased]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.9.2...HEAD
+[0.9.2]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.7.1...v0.8.0

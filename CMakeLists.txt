@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.27)
-project(RedFileSystem VERSION 0.9.1)
+project(RedFileSystem VERSION 0.9.2)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
