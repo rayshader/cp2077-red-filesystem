@@ -91,9 +91,10 @@ Red::Handle<FileSystemStorage> FileSystem::get_storage(
 
   if (!regex_match(name, storage_name_rule) ||
       equals_insensitive(name, "shared")) {
-    logger->ErrorF(handle, "Name of storage \"%s\" is not allowed.",
+    logger->ErrorF(handle,
+                   "Name of storage \"%s\" is not allowed. "
+                   "See the documentation to fix this issue.",
                    name.c_str());
-    logger->Error(handle, "See the documentation to fix this issue.");
     return {};
   }
   auto storage = find_storage(name);
