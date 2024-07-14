@@ -17,7 +17,7 @@ supports UTF8 text and Json formats. It can be used with Redscript and CET.
 ## Installation
 1. Install requirements:
   - [RED4ext] v1.25.0+
-  - [RedData] v0.4.0+
+  - [RedData] v0.4.0+ (only required for Json data)
 2. Extract the [latest archive] into the Cyberpunk 2077 directory.
 
 ## API wrapper

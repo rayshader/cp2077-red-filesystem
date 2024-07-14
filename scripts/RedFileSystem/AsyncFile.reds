@@ -1,5 +1,6 @@
 module RedFileSystem
 
+@if(ModuleExists("RedData.Json"))
 import RedData.Json.*
 
 public native class AsyncFile {
