@@ -41,8 +41,14 @@ target_include_directories(RedFileSystem PRIVATE src/)
 # Include configured files
 target_include_directories(RedFileSystem PUBLIC "${PROJECT_BINARY_DIR}/Config")
 
-# Exclude unused Windows headers
-add_compile_definitions(WIN32_LEAN_AND_MEAN)
+add_compile_definitions(
+        # Exclude unused Windows headers
+        WIN32_LEAN_AND_MEAN
+
+        # Use Unicode charset.
+        UNICODE
+        _UNICODE
+)
 
 ## Library RED4ext.SDK
 option(RED4EXT_HEADER_ONLY "" ON)

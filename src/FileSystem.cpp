@@ -19,9 +19,9 @@ FileSystem::StorageMap FileSystem::storages{};
 bool FileSystem::has_error = true;
 
 // Credits to https://github.com/jackhumbert/cyberpunk2077-input-loader/blob/a6eed8eda9ae97e92ff97e60158c08b945e61036/src/Utils.cpp#L26
-std::filesystem::path get_game_path() {
+std::filesystem::path FileSystem::get_game_path() {
   constexpr auto path_length = MAX_PATH + 1;
-  std::string filename;
+  std::wstring filename;
 
   do {
     filename.resize(filename.size() + path_length, '\0');

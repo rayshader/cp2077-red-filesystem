@@ -32,6 +32,8 @@ class FileSystem : public Red::IScriptable {
   static StorageMap storages;
   static bool has_error;
 
+  static std::filesystem::path get_game_path();
+
   static bool request_directory(const std::filesystem::path& p_path);
   static bool migrate_directory(const std::filesystem::path& p_old_path,
                                 const std::filesystem::path& p_new_path);
