@@ -446,7 +446,7 @@ Contributions are welcome, feel free to fill an issue or a PR.
 1. Install requirements:
   - CMake v3.27+
   - Visual Studio Community 2022+
-  - [red-cli] v0.1.0+
+  - [red-cli] v0.2.0+
 2. Configure project with:
 ```shell
 cmake -G "Visual Studio 17 2022" -A x64 -S . -B build
@@ -461,7 +461,7 @@ cmake --build build --target RedFileSystem --config Debug
 1. Install in your game directory:
 
 ```shell
-red-cli install --debug
+red-cli install
 ```
  
 2. Run game.
