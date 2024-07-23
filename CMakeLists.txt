@@ -81,6 +81,6 @@ add_custom_command(
         POST_BUILD
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         COMMENT "$<$<CONFIG:Debug>:Install scripts with red-cli>" "$<$<CONFIG:Release>:Build archive with red-cli>"
-        COMMAND "$<$<CONFIG:Debug>:red-cli;install;--debug>" "$<$<CONFIG:Release>:red-cli;pack>"
+        COMMAND "$<$<CONFIG:Debug>:red-cli;install>" "$<$<CONFIG:Release>:red-cli;pack>"
         COMMAND_EXPAND_LISTS
 )

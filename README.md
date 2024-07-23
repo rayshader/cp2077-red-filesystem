@@ -457,16 +457,12 @@ cmake -G "Visual Studio 17 2022" -A x64 -S . -B build
 cmake --build build --target RedFileSystem --config Debug
 ```
 
-## Tests
-1. Install in your game directory:
+It will execute `red-cli install` for you using a CMake custom command.
 
-```shell
-red-cli install
-```
- 
-2. Run game.
-3. Open CET, show Game Log popup.
-4. Output should show tests result.
+## Tests
+1. Run game.
+2. Open CET, show Game Log popup.
+3. Output should show tests result.
 
 ## Release
 1. Build in release mode:
@@ -475,11 +471,9 @@ red-cli install
 cmake --build build --target RedFileSystem --config Release
 ```
 
-2. Bundle release:
-
-```shell
-red-cli pack
-```
+It will execute `red-cli pack` for you using a CMake custom command. You should
+find an archive `RedFileSystem-vX.Y.Z.zip` in the root directory, ready to 
+release.
 
 <!-- Table of links -->
 [RED4ext]: https://github.com/WopsS/RED4ext
