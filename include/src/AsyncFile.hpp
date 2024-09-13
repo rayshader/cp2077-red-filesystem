@@ -9,6 +9,7 @@
 #endif
 
 #include "Enums.hpp"
+#include "FilePromise.hpp"
 
 namespace RedFileSystem {
 
@@ -75,13 +76,13 @@ class AsyncFile {
 
   inline void WriteText(
     const FilePromise& promise, const Red::CString& text,
-    AsyncFileSystemWriteMode mode = AsyncFileSystemWriteMode::Truncate) {
+    FileSystemWriteMode mode = FileSystemWriteMode::Truncate) {
     Red::CallVirtual(wrapper, "WriteText", promise, text, mode);
   }
 
   inline void WriteLines(
     const FilePromise& promise, const Red::DynArray<Red::CString>& lines,
-    AsyncFileSystemWriteMode mode = AsyncFileSystemWriteMode::Truncate) {
+    FileSystemWriteMode mode = FileSystemWriteMode::Truncate) {
     Red::CallVirtual(wrapper, "WriteLines", promise, lines, mode);
   }
 
