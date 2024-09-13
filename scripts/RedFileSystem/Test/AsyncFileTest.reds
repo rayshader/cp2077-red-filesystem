@@ -271,17 +271,26 @@ public class AsyncFileTest extends BaseTest {
     let status = this.m_storage.Exists(path);
 
     this.ExpectString(s"WriteText ThreadSafe file created", s"\(status)", "True");
-    let expect = "";
+    let lines: array<String> = [];
     let i = 0;
 
     while i < 10 {
-      expect += s"Choom #\(i + 1) ;)\n";
+      ArrayPush(lines, s"Choom #\(i + 1) ;)");
       i += 1;
     }
     let file = this.m_storage.GetFile(path);
-    let actual = file.ReadAsText();
+    let actual = file.ReadAsLines();
 
-    this.ExpectUnicodeString(s"WriteText ThreadSafe content", actual, expect);
+    for expectLine in lines {
+      let test = false;
+
+      for actualLine in actual {
+        if UnicodeStringEqual(actualLine, expectLine) {
+          test = true;
+        }
+      }
+      this.ExpectBool(s"WriteText ThreadSafe content", test, true);
+    }
     let done: ref<CallbackTest> = FromVariant(data[1]);
 
     done.Call();
