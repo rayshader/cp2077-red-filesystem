@@ -1,0 +1,2 @@
+# Declare reds files to use the Swift highlighter
+*.reds linguist-language=Swift
