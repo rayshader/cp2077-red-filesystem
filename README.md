@@ -1,5 +1,5 @@
 # Red File System
-![Cyberpunk 2077](https://img.shields.io/badge/Cyberpunk%202077-v2.13-blue)
+![Cyberpunk 2077](https://img.shields.io/badge/Cyberpunk%202077-v2.2-blue)
 [![MO2](https://img.shields.io/badge/MO2-compatible-green)](https://github.com/ModOrganizer2/modorganizer/)
 ![GitHub License](https://img.shields.io/github/license/rayshader/cp2077-red-filesystem)
 [![Donate](https://img.shields.io/badge/donate-buy%20me%20a%20coffee-yellow)](https://www.buymeacoffee.com/lpfreelance)
@@ -10,14 +10,14 @@ supports UTF8 text and Json formats. It can be used with Redscript and CET.
 # Getting started
 
 ## Compatibility
-- Cyberpunk 2077 v2.13
+- Cyberpunk 2077 v2.2
 - [Redscript] v0.5.27+
-- [Cyber Engine Tweaks] v1.33.0+
+- [Cyber Engine Tweaks] v1.34.0+
 
 ## Installation
 1. Install requirements:
-  - [RED4ext] v1.25.1+
-  - [RedData] v0.5.0+ (only required for Json data)
+  - [RED4ext] v1.26.0+
+  - [RedData] v0.6.0+ (only required for Json data)
 2. Extract the [latest archive] into the Cyberpunk 2077 directory.
 
 ## API wrapper
@@ -472,7 +472,7 @@ cmake --build build --target RedFileSystem --config Release
 ```
 
 It will execute `red-cli pack` for you using a CMake custom command. You should
-find an archive `RedFileSystem-vX.Y.Z.zip` in the root directory, ready to 
+find an archive `RedFileSystem-X.Y.Z.zip` in the root directory, ready to 
 release.
 
 <!-- Table of links -->
