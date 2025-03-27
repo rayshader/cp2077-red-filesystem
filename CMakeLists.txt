@@ -17,6 +17,7 @@ set(INC_FILES
         src/FileSystemWriteMode.h
 
         src/Utils.h
+        src/Base64.h
 )
 
 set(SRC_FILES
