@@ -12,6 +12,7 @@ public native class AsyncFile {
   public native func GetSize() -> Uint64;
 
   public native func ReadAsText(promise: FilePromise) -> Void;
+  public native func ReadAsBase64(promise: FilePromise) -> Void;
   public native func ReadAsLines(promise: FilePromise) -> Void;
   @if(ModuleExists("RedData.Json"))
   public native func ReadAsJson(promise: FilePromise) -> Void;

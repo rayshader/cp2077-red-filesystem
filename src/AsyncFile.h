@@ -31,6 +31,7 @@ class AsyncFile : public Red::IScriptable {
   [[nodiscard]] uint64_t get_size() const;
 
   void read_as_text(const FilePromise& p_promise);
+  void read_as_base64(const FilePromise& p_promise);
   void read_as_lines(const FilePromise& p_promise);
   void read_as_json(const FilePromise& p_promise);
 
@@ -59,6 +60,7 @@ RTTI_DEFINE_CLASS(RedFS::AsyncFile, {
   RTTI_METHOD(get_size, "GetSize");
 
   RTTI_METHOD(read_as_text, "ReadAsText");
+  RTTI_METHOD(read_as_base64, "ReadAsBase64");
   RTTI_METHOD(read_as_lines, "ReadAsLines");
   RTTI_METHOD(read_as_json, "ReadAsJson");
 

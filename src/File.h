@@ -33,6 +33,7 @@ class File : public Red::IScriptable {
   [[nodiscard]] uint64_t get_size() const;
 
   Red::CString read_as_text();
+  Red::CString read_as_base64();
   Red::DynArray<Red::CString> read_as_lines();
   Red::Handle<Red::IScriptable> read_as_json();
 
@@ -59,6 +60,7 @@ RTTI_DEFINE_CLASS(RedFS::File, {
   RTTI_METHOD(get_size, "GetSize");
 
   RTTI_METHOD(read_as_text, "ReadAsText");
+  RTTI_METHOD(read_as_base64, "ReadAsBase64");
   RTTI_METHOD(read_as_lines, "ReadAsLines");
   RTTI_METHOD(read_as_json, "ReadAsJson");
 

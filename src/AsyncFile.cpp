@@ -5,6 +5,8 @@
 #include <fstream>
 #include <utility>
 
+#include "Base64.h"
+
 namespace RedFS {
 AsyncFile::AsyncFile(SharedMutex p_mutex, std::filesystem::path p_path,
                      std::filesystem::path p_absolute_path)
@@ -55,6 +57,21 @@ void AsyncFile::read_as_text(const FilePromise& p_promise) {
     Red::CString text = data.str();
 
     p_promise.resolve(text);
+  });
+}
+
+void AsyncFile::read_as_base64(const FilePromise& p_promise) {
+  Red::JobQueue job_queue;
+
+  job_queue.Dispatch([*this, p_promise]() -> void {
+    mutex->lock();
+    std::ifstream stream(absolute_path, std::ios::binary);
+    const std::string buffer(std::istreambuf_iterator(stream), {});
+
+    mutex->unlock();
+    const Red::CString data = base64::to_base64(buffer);
+
+    p_promise.resolve(data);
   });
 }
 

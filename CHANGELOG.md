@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- read binary file encoded to Base64 using `ReadAsBase64()`, in both `File` and
+  `AsyncFile`. This is mainly intended to read PNG files (with a screenshot 
+  feature).
 
 ------------------------
 

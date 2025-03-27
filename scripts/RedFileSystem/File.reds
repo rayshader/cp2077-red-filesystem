@@ -12,6 +12,7 @@ public native class File {
   public native func GetSize() -> Uint64;
 
   public native func ReadAsText() -> String;
+  public native func ReadAsBase64() -> String;
   public native func ReadAsLines() -> array<String>;
   @if(ModuleExists("RedData.Json"))
   public native func ReadAsJson() -> ref<JsonVariant>;

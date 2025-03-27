@@ -7,6 +7,8 @@
 #include <RedData.hpp>
 #include <RedLib.hpp>
 
+#include "Base64.h"
+
 namespace RedFS {
 
 File::File(SharedMutex p_mutex, std::filesystem::path p_path,
@@ -52,6 +54,16 @@ Red::CString File::read_as_text() {
   stream.close();
   mutex->unlock();
   return data.str();
+}
+
+Red::CString File::read_as_base64() {
+  mutex->lock();
+  std::ifstream stream(absolute_path, std::ios::binary);
+  const std::string buffer(std::istreambuf_iterator(stream), {});
+
+  mutex->unlock();
+  Red::CString data = base64::to_base64(buffer);
+  return data;
 }
 
 Red::DynArray<Red::CString> File::read_as_lines() {
