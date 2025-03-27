@@ -8,7 +8,7 @@ public class AwesomeSystem extends ScriptableSystem {
   /// Lifecycle ///
 
   private func OnAttach() {
-    this.m_storage = GetAwesomeEnv().GetStorage();
+    this.m_storage = GetAwesomeService().GetStorage();
     this.m_callbackSystem = GameInstance.GetCallbackSystem();
     this.m_callbackSystem.RegisterCallback(n"Session/Ready", this, n"OnSessionReady");
   }
@@ -27,27 +27,27 @@ public class AwesomeSystem extends ScriptableSystem {
     if !isPreGame {
       return;
     }
-    LogChannel(n"Info", s"== RedFS - Examples ==");
+    FTLog(s"== RedFS - Examples ==");
     this.Example_Text();
     this.Example_Json();
-    LogChannel(n"Info", s"== RedFS - Examples ==");
+    FTLog(s"== RedFS - Examples ==");
   }
 
   /// Examples ///
 
   public func Example_Text() {
-    LogChannel(n"Info", "");
-    LogChannel(n"Info", "== Text ==");
+    FTLog("");
+    FTLog("== Text ==");
     let file = this.m_storage.GetFile("test.txt");
 
     if !IsDefined(file) {
-      LogChannel(n"Error", "Access to file denied.");
+      FTLogError("Access to file denied.");
       return;
     }
     let status = file.WriteText("Welcome to Night City!\n");
 
     if !status {
-      LogChannel(n"Error", "Failed to write in file.");
+      FTLogError("Failed to write in file.");
       return;
     }
     let lines = [
@@ -58,24 +58,24 @@ public class AwesomeSystem extends ScriptableSystem {
 
     status = file.WriteLines(lines, FileSystemWriteMode.Append);
     if !status {
-      LogChannel(n"Error", "Failed to write in file.");
+      FTLogError("Failed to write in file.");
       return;
     }
     let lines = file.ReadAsLines();
 
-    LogChannel(n"Info", s"File '\(file.GetFilename())' contains:");
+    FTLog(s"File '\(file.GetFilename())' contains:");
     for line in lines {
-      LogChannel(n"Info", line);
+      FTLog(line);
     }
   }
 
   public func Example_Json() {
-    LogChannel(n"Info", "");
-    LogChannel(n"Info", "== Json ==");
+    FTLog("");
+    FTLog("== Json ==");
     let file = this.m_storage.GetFile("test.json");
 
     if !IsDefined(file) {
-      LogChannel(n"Error", "Access to JSON file denied.");
+      FTLogError("Access to JSON file denied.");
       return;
     }
     let json = new JsonObject();
@@ -87,16 +87,16 @@ public class AwesomeSystem extends ScriptableSystem {
     let status = file.WriteJson(json);
 
     if !status {
-      LogChannel(n"Error", "Failed to write in JSON file.");
+      FTLogError("Failed to write in JSON file.");
       return;
     }
     json = file.ReadAsJson() as JsonObject;
     if !IsDefined(json) {
-      LogChannel(n"Error", "Cannot parse JSON file.");
+      FTLogError("Cannot parse JSON file.");
       return;
     }
-    LogChannel(n"Info", s"File '\(file.GetFilename())' contains:");
-    LogChannel(n"Info", json.ToString());
+    FTLog(s"File '\(file.GetFilename())' contains:");
+    FTLog(json.ToString());
   }
 
 }

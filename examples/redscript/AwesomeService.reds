@@ -3,7 +3,7 @@ import Codeware.*
 
 // See https://github.com/psiberx/cp2077-codeware/wiki#lifecycle
 
-public class AwesomeEnv extends ScriptableEnv {
+public class AwesomeService extends ScriptableService {
   private let m_storage: ref<FileSystemStorage>;
 
   public func GetStorage() -> ref<FileSystemStorage> {
@@ -15,6 +15,6 @@ public class AwesomeEnv extends ScriptableEnv {
   }
 }
 
-public static func GetAwesomeEnv() -> ref<AwesomeEnv> {
-  return ScriptableEnv.Get(n"AwesomeEnv") as AwesomeEnv;
+public static func GetAwesomeService() -> ref<AwesomeService> {
+  return GameInstance.GetScriptableServiceContainer().GetService(n"AwesomeService") as AwesomeService;
 }
