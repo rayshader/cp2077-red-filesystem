@@ -331,6 +331,25 @@ After running the two code snippets above, file should contain:
 > 
 > Beware of flatlines...
 
+### Read raw data
+```swift
+// File
+public func ReadAsBase64() -> String;
+
+// AsyncFile
+public func ReadAsBase64(promise: FilePromise) -> Void;
+```
+
+You can read binary data (e.g. PNG file) as an encoded Base64 string.
+```swift
+let file = FileSystem.GetSharedStorage().GetFile("screenshot.png");
+let data = file.ReadAsBase64();
+```
+
+> [!NOTE]
+> This feature was introduced in `v0.13.0`. This version was not released on
+> NexusMod on purpose. It might be published later with a future update.
+
 ### Read Json
 ```swift
 // File
