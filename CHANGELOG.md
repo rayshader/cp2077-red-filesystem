@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ------------------------
 
+## [0.14.0] - 2025-07-18
+### Changed
+- support patch 2.3
+
+------------------------
+
 ## [0.13.0] - 2025-03-31
 ### Added
 - read binary file encoded to Base64 using `ReadAsBase64()`, in both `File` and
