@@ -1,5 +1,5 @@
 # Red File System
-![Cyberpunk 2077](https://img.shields.io/badge/Cyberpunk%202077-v2.21-blue)
+![Cyberpunk 2077](https://img.shields.io/badge/Cyberpunk%202077-v2.3-blue)
 [![MO2](https://img.shields.io/badge/MO2-compatible-green)](https://github.com/ModOrganizer2/modorganizer/)
 ![GitHub License](https://img.shields.io/github/license/rayshader/cp2077-red-filesystem)
 [![Donate](https://img.shields.io/badge/donate-buy%20me%20a%20coffee-yellow)](https://www.buymeacoffee.com/lpfreelance)
@@ -10,14 +10,14 @@ supports UTF8 text and Json formats. It can be used with Redscript and CET.
 # Getting started
 
 ## Compatibility
-- Cyberpunk 2077 v2.21
+- Cyberpunk 2077 v2.3
 - [Redscript] v0.5.27+
-- [Cyber Engine Tweaks] v1.35.0+
+- [Cyber Engine Tweaks] v1.36.0+
 
 ## Installation
 1. Install requirements:
-  - [RED4ext] v1.27.0+
-  - [RedData] v0.7.0+ (only required for Json data)
+  - [RED4ext] v1.28.0+
+  - [RedData] v0.8.0+ (only required for Json data)
 2. Extract the [latest archive] into the Cyberpunk 2077 directory.
 
 ## API wrapper
