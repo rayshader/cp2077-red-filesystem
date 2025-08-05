@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+------------------------
+
+## [0.14.1] - 2025-08-05
 ### Changed
 - explicitly set `public` visibility for `FileSystemWriteMode` and 
   `FileSystemStatus` enums. Ready for upcoming release of redscript v1.
@@ -168,7 +172,8 @@ This version is not compatible with v0.2.0 and below, see the README and
 - read / write / stringify Json data.
 
 <!-- Table of releases -->
-[Unreleased]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.14.0...HEAD
+[Unreleased]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.14.1...HEAD
+[0.14.1]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.14.0...v0.14.1
 [0.14.0]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.11.0...v0.12.0
