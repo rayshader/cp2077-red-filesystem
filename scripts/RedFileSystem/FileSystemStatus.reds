@@ -1,6 +1,6 @@
 module RedFileSystem
 
-enum FileSystemStatus {
+public enum FileSystemStatus {
   True    = 0,
   False   = 1,
   Failure = 2,
