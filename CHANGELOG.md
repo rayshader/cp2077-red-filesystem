@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ------------------------
 
+## [0.15.0] - 2025-09-11
+### Changed
+- support patch 2.31
+
+------------------------
+
 ## [0.14.1] - 2025-08-05
 ### Changed
 - explicitly set `public` visibility for `FileSystemWriteMode` and 
@@ -172,7 +178,8 @@ This version is not compatible with v0.2.0 and below, see the README and
 - read / write / stringify Json data.
 
 <!-- Table of releases -->
-[Unreleased]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.14.1...HEAD
+[Unreleased]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.15.0...HEAD
+[0.15.0]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.14.1...v0.15.0
 [0.14.1]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.14.0...v0.14.1
 [0.14.0]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/rayshader/cp2077-red-filesystem/compare/v0.12.0...v0.13.0
