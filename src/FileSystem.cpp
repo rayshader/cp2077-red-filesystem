@@ -224,4 +224,11 @@ Red::Handle<FileSystemStorage> FileSystem::find_storage(
   return {};
 }
 
+std::string FileSystem::get_error_message(const int p_errno) {
+  char buffer[1024];
+  std::fill_n(buffer, 1024, '\0');
+  strerror_s(buffer, p_errno);
+  return buffer;
+}
+
 }  // namespace RedFS

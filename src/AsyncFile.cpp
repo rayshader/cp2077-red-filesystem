@@ -6,6 +6,7 @@
 #include <utility>
 
 #include "Base64.h"
+#include "FileSystem.h"
 
 namespace RedFS {
 AsyncFile::AsyncFile(SharedMutex p_mutex, std::filesystem::path p_path,
@@ -41,21 +42,25 @@ void AsyncFile::read_as_text(const FilePromise& p_promise) {
 
   job_queue.Dispatch([*this, p_promise]() -> void {
     mutex->lock();
-    std::ifstream stream;
 
-    stream.open(absolute_path);
-    if (!stream.is_open()) {
+    std::ifstream stream(absolute_path);
+    if (!stream) {
       mutex->unlock();
+
+      const std::string error = FileSystem::get_error_message(errno);
+      FileSystem::debug("Failed to asynchronously read text from \"{}\": {}", path.string().c_str(), error.c_str());
+
       p_promise.reject();
       return;
     }
-    std::stringstream data;
 
+    std::stringstream data;
     data << stream.rdbuf();
     stream.close();
-    mutex->unlock();
-    Red::CString text = data.str();
 
+    mutex->unlock();
+
+    const Red::CString text = data.str();
     p_promise.resolve(text);
   });
 }
@@ -65,12 +70,18 @@ void AsyncFile::read_as_base64(const FilePromise& p_promise) {
 
   job_queue.Dispatch([*this, p_promise]() -> void {
     mutex->lock();
+
     std::ifstream stream(absolute_path, std::ios::binary);
+    if (!stream) {
+      const std::string error = FileSystem::get_error_message(errno);
+      FileSystem::debug("Failed to asynchronously read as base64 from \"{}\": {}", path.string().c_str(), error.c_str());
+      p_promise.reject();
+    }
+
     const std::string buffer(std::istreambuf_iterator(stream), {});
-
     mutex->unlock();
-    const Red::CString data = base64::to_base64(buffer);
 
+    const Red::CString data = base64::to_base64(buffer);
     p_promise.resolve(data);
   });
 }
@@ -80,28 +91,34 @@ void AsyncFile::read_as_lines(const FilePromise& p_promise) {
 
   job_queue.Dispatch([*this, p_promise]() -> void {
     mutex->lock();
-    std::ifstream stream;
 
-    stream.open(absolute_path);
-    if (!stream.is_open()) {
+    std::ifstream stream(absolute_path);
+    if (!stream) {
       mutex->unlock();
+
+      const std::string error = FileSystem::get_error_message(errno);
+      FileSystem::debug("Failed to asynchronously read lines from \"{}\": {}", path.string().c_str(), error.c_str());
+
       p_promise.reject();
       return;
     }
+
     Red::DynArray<Red::CString> lines;
     std::string line;
-
     while (std::getline(stream, line)) {
-      if (stream.fail() || stream.bad()) {
+      if (!stream) {
         stream.close();
         mutex->unlock();
+
         p_promise.reject();
         return;
       }
       lines.EmplaceBack(line);
     }
     stream.close();
+
     mutex->unlock();
+
     p_promise.resolve(lines);
   });
 }
@@ -111,26 +128,30 @@ void AsyncFile::read_as_json(const FilePromise& p_promise) {
     p_promise.reject();
     return;
   }
-  Red::JobQueue job_queue;
 
+  Red::JobQueue job_queue;
   job_queue.Dispatch([*this, p_promise]() -> void {
     mutex->lock();
-    std::ifstream stream;
 
-    stream.open(absolute_path);
-    if (!stream.is_open()) {
+    std::ifstream stream(absolute_path);
+    if (!stream) {
       mutex->unlock();
+
+      const std::string error = FileSystem::get_error_message(errno);
+      FileSystem::debug("Failed to asynchronously read as JSON from \"{}\": {}", path.string().c_str(), error.c_str());
+
       p_promise.reject();
       return;
     }
-    std::stringstream data;
 
+    std::stringstream data;
     data << stream.rdbuf();
     stream.close();
-    mutex->unlock();
-    Red::CString text = data.str();
-    RedData::Json::JsonVariant json = RedData::Json::ParseJson(text);
 
+    mutex->unlock();
+
+    const Red::CString text = data.str();
+    const RedData::Json::JsonVariant json = RedData::Json::ParseJson(text);
     p_promise.resolve(json.GetHandle());
   });
 }
@@ -143,17 +164,22 @@ void AsyncFile::write_text(const FilePromise& p_promise,
 
   job_queue.Dispatch([*this, p_promise, p_text, mode]() -> void {
     mutex->lock();
-    std::ofstream stream;
 
-    stream.open(absolute_path, mode);
-    if (!stream.is_open()) {
+    std::ofstream stream(absolute_path, mode);
+    if (!stream) {
       mutex->unlock();
+
+      const std::string error = FileSystem::get_error_message(errno);
+      FileSystem::debug("Failed to asynchronously write text in \"{}\": {}", path.string().c_str(), error.c_str());
       p_promise.reject();
       return;
     }
+
     stream << p_text.c_str();
     stream.close();
+
     mutex->unlock();
+
     p_promise.resolve();
   });
 }
@@ -166,14 +192,17 @@ void AsyncFile::write_lines(const FilePromise& p_promise,
 
   job_queue.Dispatch([*this, p_promise, p_lines, mode]() -> void {
     mutex->lock();
-    std::ofstream stream;
 
-    stream.open(absolute_path, mode);
-    if (!stream.is_open()) {
+    std::ofstream stream(absolute_path, mode);
+    if (!stream) {
       mutex->unlock();
+
+      const std::string error = FileSystem::get_error_message(errno);
+      FileSystem::debug("Failed to asynchronously write lines in \"{}\": {}", path.string().c_str(), error.c_str());
       p_promise.reject();
       return;
     }
+
     for (uint32_t i = 0; i < p_lines.size; i++) {
       stream << p_lines[i].c_str();
       if (i + 1 < p_lines.size) {
@@ -181,7 +210,9 @@ void AsyncFile::write_lines(const FilePromise& p_promise,
       }
     }
     stream.close();
+
     mutex->unlock();
+
     p_promise.resolve();
   });
 }
@@ -193,11 +224,12 @@ void AsyncFile::write_json(const FilePromise& p_promise,
     p_promise.reject();
     return;
   }
-  RedData::Json::JsonVariant json = RedData::Json::JsonVariant(p_json);
-  Red::CString text = json.ToString(p_indent.value);
-  Red::Optional<FileSystemWriteMode> mode;
 
+  const RedData::Json::JsonVariant json = RedData::Json::JsonVariant(p_json);
+  const Red::CString text = json.ToString(p_indent.value);
+  Red::Optional<FileSystemWriteMode> mode;
   mode.value = FileSystemWriteMode::Truncate;
+
   write_text(p_promise, text, mode);
 }
 

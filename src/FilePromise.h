@@ -7,7 +7,6 @@
 namespace RedFS {
 
 struct FilePromise {
- public:
   Red::WeakHandle<Red::IScriptable> target;
   Red::CName fn_resolve;
   Red::CName fn_reject;

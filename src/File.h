@@ -12,7 +12,6 @@
 namespace RedFS {
 
 class File : public Red::IScriptable {
- private:
   const std::filesystem::path path;
   const std::filesystem::path absolute_path;
 
@@ -21,7 +20,6 @@ class File : public Red::IScriptable {
  public:
   static std::ios_base::openmode get_mode(FileSystemWriteMode p_mode);
 
- public:
   File() = default;
   explicit File(SharedMutex p_mutex, std::filesystem::path p_path,
                 std::filesystem::path p_absolute_path);

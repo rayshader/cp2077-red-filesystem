@@ -16,7 +16,6 @@
 namespace RedFS {
 
 class FileSystemStorage : public Red::IScriptable {
- private:
   const std::string name;
   const std::filesystem::path storage_path;
 
@@ -28,7 +27,7 @@ class FileSystemStorage : public Red::IScriptable {
                                       std::error_code& p_error) const;
   SharedMutex get_mutex(const std::filesystem::path& p_path);
   template<class T>
-  inline Red::DynArray<Red::Handle<T>> _get_files();
+  Red::DynArray<Red::Handle<T>> _get_files();
 
  public:
   FileSystemStorage();

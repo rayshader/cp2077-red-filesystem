@@ -13,7 +13,6 @@
 namespace RedFS {
 
 class AsyncFile : public Red::IScriptable {
- private:
   const std::filesystem::path path;
   const std::filesystem::path absolute_path;
 

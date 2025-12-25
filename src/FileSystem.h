@@ -15,7 +15,6 @@
 namespace RedFS {
 
 class FileSystem : public Red::IScriptable {
- private:
   using StorageMap =
     std::unordered_map<std::string, Red::Handle<FileSystemStorage>>;
 
@@ -50,6 +49,14 @@ class FileSystem : public Red::IScriptable {
 
   static bool is_mo2_detected();
   static bool is_blacklisted(const std::filesystem::path& p_path);
+
+  template<class... Args>
+  static void debug(const std::format_string<Args...>& p_fmt, Args&&... p_args) {
+    const auto message = std::format(p_fmt, std::forward<Args>(p_args)...);
+    logger->Debug(handle, message.c_str());
+  }
+
+  static std::string get_error_message(int p_errno);
 
   RTTI_IMPL_TYPEINFO(RedFS::FileSystem);
   RTTI_IMPL_ALLOCATOR();
