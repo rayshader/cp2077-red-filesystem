@@ -178,6 +178,8 @@ std::filesystem::path FileSystemStorage::restrict_path(
   }
 
   if (real_path.string().find(storage_path.string() + "\\") != 0) {
+    FileSystem::debug("Accessing: \"{}\"", p_path.c_str());
+    FileSystem::debug("Resolving: \"{}\"", real_path.string().c_str());
     p_error = std::make_error_code(std::errc::permission_denied);
   }
   return real_path;

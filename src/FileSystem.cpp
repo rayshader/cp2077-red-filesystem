@@ -120,6 +120,7 @@ Red::Handle<FileSystemStorage> FileSystem::get_storage(
   storages[name] = storage;
   logger->InfoF(handle, "Access to storage \"%s\" has been granted.",
                 name.c_str());
+  logger->DebugF(handle, "Storage path: \"%s\".", path.string().c_str());
   return storage;
 }
 
