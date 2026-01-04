@@ -217,9 +217,9 @@ void FileSystem::detect_mo2() {
 
 Red::Handle<FileSystemStorage> FileSystem::find_storage(
   const std::string& p_name) {
-  for (const auto& storage : storages) {
-    if (equals_insensitive(storage.first, p_name)) {
-      return storage.second;
+  for (const auto& [path, handles] : storages) {
+    if (equals_insensitive(path, p_name)) {
+      return handles;
     }
   }
   return {};
