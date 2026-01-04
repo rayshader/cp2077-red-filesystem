@@ -159,30 +159,32 @@ Red::DynArray<Red::Handle<AsyncFile>> FileSystemStorage::get_async_files() {
 
 std::filesystem::path FileSystemStorage::restrict_path(
   const std::string& p_path, std::error_code& p_error) const {
-  std::filesystem::path path = storage_path / p_path;
+  std::filesystem::path file_path = storage_path / p_path;
 
   // NOTE: See issue regarding usage of `std::weakly_canonical` with MO2:
   //       https://github.com/ModOrganizer2/modorganizer/issues/2039
   if (FileSystem::is_mo2_detected()) {
     if (p_path.find('/') != std::string::npos ||
         p_path.find('\\') != std::string::npos) {
+      FileSystem::debug("Unsafe path detected: \"{}\"", file_path.string().c_str());
       p_error = std::make_error_code(std::errc::permission_denied);
     }
-    return path;
+    return file_path;
   }
 
-  const std::filesystem::path real_path = std::filesystem::weakly_canonical(path, p_error);
+  const std::filesystem::path absolute_path = std::filesystem::weakly_canonical(file_path, p_error);
   if (p_error) {
     FileSystem::debug("Failed to get canonical path for \"{}\": {}", p_path.c_str(), p_error.message().c_str());
-    return real_path;
+    return absolute_path;
   }
 
-  if (real_path.string().find(storage_path.string() + "\\") != 0) {
-    FileSystem::debug("Accessing: \"{}\"", p_path.c_str());
-    FileSystem::debug("Resolving: \"{}\"", real_path.string().c_str());
+  const auto path = to_lower(absolute_path.string());
+  const auto root_path = to_lower(storage_path.string());
+  if (path.find(root_path + "\\") != 0 && path.find(root_path + '/') != 0) {
+    FileSystem::debug("Unsafe path detected: \"{}\"", absolute_path.string().c_str());
     p_error = std::make_error_code(std::errc::permission_denied);
   }
-  return real_path;
+  return absolute_path;
 }
 
 SharedMutex FileSystemStorage::get_mutex(const std::filesystem::path& p_path) {
