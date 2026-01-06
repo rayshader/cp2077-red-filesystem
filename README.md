@@ -5,19 +5,19 @@
 [![Donate](https://img.shields.io/badge/donate-buy%20me%20a%20coffee-yellow)](https://www.buymeacoffee.com/lpfreelance)
 
 This plugin provides access to the file system using read/write operations. It 
-supports UTF8 text and Json formats. It can be used with Redscript and CET.
+supports UTF8 text and JSON formats. It can be used with Redscript and CET.
 
 # Getting started
 
 ## Compatibility
 - Cyberpunk 2077 v2.31
-- [Redscript] v0.5.27+
-- [Cyber Engine Tweaks] v1.36.0+
+- [Redscript] v0.5.31+
+- [Cyber Engine Tweaks] v1.37.0+
 
 ## Installation
 1. Install requirements:
   - [RED4ext] v1.29.0+
-  - [RedData] v0.9.0+ (only required for Json data)
+  - [RedData] v0.9.0+ (only required for JSON data)
 2. Extract the [latest archive] into the Cyberpunk 2077 directory.
 
 ## API wrapper
@@ -86,7 +86,7 @@ this storage.
 For example, if an evil mod tries to hack into your storage, it will also call 
 `GetStorage("Awesome")`. In this case, two mods are trying to get the storage 
 `Awesome`, you and the evil mod. Because there is no way to detect if the call 
-is legitimate (your mod) or not (evil mod), all further attempt to use the 
+is legitimate (your mod) or not (evil mod), all further attempts to use the 
 storage will be denied.
 
 You can store the unique reference of your `FileSystemStorage` with 
@@ -350,7 +350,7 @@ let data = file.ReadAsBase64();
 > This feature was introduced in `v0.13.0`. This version was not released on
 > NexusMod on purpose. It might be published later with a future update.
 
-### Read Json
+### Read JSON
 ```swift
 // File
 public func ReadAsJson() -> ref<JsonVariant>;
@@ -359,7 +359,7 @@ public func ReadAsJson() -> ref<JsonVariant>;
 public func ReadAsJson(promise: FilePromise) -> Void;
 ```
 
-e.g. with Json file:
+e.g. with JSON file:
 ```json
 {
   "name": "RedFileSystem",
@@ -374,24 +374,24 @@ e.g. with Json file:
 }
 ```
 
-You can read all Json content of a `File` like this:
+You can read all JSON content of a `File` like this:
 ```swift
 // ...
 let file = storage.GetFile("config.json");
 let json = file.ReadAsJson();
 
 if !IsDefined(json) {
-  FTLogError(s"Failed to parse Json of file '\(file.GetFilename())'.");
+  FTLogError(s"Failed to parse JSON of file '\(file.GetFilename())'.");
   return;
 }
 if !json.IsObject() {
-  FTLogError(s"Expect root of Json document to be an object.");
+  FTLogError(s"Expect root of JSON document to be an object.");
   return;
 }
 // ...
 ```
 
-### Write Json
+### Write JSON
 ```swift
 // File
 public func WriteJson(json: ref<JsonVariant>, opt indent: String) -> Bool;
@@ -402,9 +402,9 @@ public func WriteJson(promise: FilePromise,
                       opt indent: String) -> Void;
 ```
 
-You can write Json in a `File` which already exists or create the file in the
-same time. You can output pretty Json using `indent` argument, default is 
-minified. When writing Json, the file is always truncated:
+You can write JSON in a `File` which already exists or create the file in the
+same time. You can output pretty JSON using `indent` argument, default is 
+minified. When writing JSON, the file is always truncated:
 
 ```swift
 // ...
@@ -421,12 +421,12 @@ let status = file.WriteJson(json);
 if !status {
   FTLogError(s"Failed to write in file '\(file.GetFilename())'.");
 } else {
-  FTLog(s"Wrote Json in file '\(file.GetFilename())'.");
+  FTLog(s"Wrote JSON in file '\(file.GetFilename())'.");
 }
 ```
 
 > [!TIP]  
-> See [RedData] to learn more about Json data.
+> See [RedData] to learn more about JSON data.
 
 ### Asynchronous mode
 ```swift
@@ -439,7 +439,7 @@ public struct FilePromise {
 ```
 
 You can run read/write operations in asynchronous mode. This allows you to 
-delegate heavy operations in background. It prevents the game from freezing 
+delegate heavy operations in the background. It prevents the game from freezing 
 while data is being read/written. It is recommended when operating with big 
 chunks of data. It should be used when running into performance issues 
 otherwise.
@@ -509,7 +509,7 @@ Contributions are welcome, feel free to fill an issue or a PR.
   - CMake v3.27+
   - Visual Studio Community 2022+
   - [red-cli] v0.4.0+
-2. Configure project with:
+2. Configure this project with:
 ```shell
 cmake -G "Visual Studio 17 2022" -A x64 -S . -B build
 ```
@@ -523,8 +523,8 @@ It will execute `red-cli install` for you using a CMake custom command.
 
 ## Tests
 1. Run game.
-2. Open CET, show Game Log popup.
-3. Output should show tests result.
+2. Open CET, show the Game Log popup.
+3. Output should show test results.
 
 ## Release
 1. Build in release mode:
