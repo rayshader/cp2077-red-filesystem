@@ -29,19 +29,19 @@ class AsyncFile : public Red::IScriptable {
   [[nodiscard]] Red::CString get_extension() const;
   [[nodiscard]] uint64_t get_size() const;
 
-  void read_as_text(const FilePromise& p_promise);
-  void read_as_base64(const FilePromise& p_promise);
-  void read_as_lines(const FilePromise& p_promise);
-  void read_as_json(const FilePromise& p_promise);
+  void read_as_text(const FilePromise& p_promise) const;
+  void read_as_base64(const FilePromise& p_promise) const;
+  void read_as_lines(const FilePromise& p_promise) const;
+  void read_as_json(const FilePromise& p_promise) const;
 
   void write_text(const FilePromise& p_promise, const Red::CString& p_text,
-                  const Red::Optional<FileSystemWriteMode>& p_mode);
+                  const Red::Optional<FileSystemWriteMode>& p_mode) const;
   void write_lines(const FilePromise& p_promise,
                    const Red::DynArray<Red::CString>& p_lines,
-                   const Red::Optional<FileSystemWriteMode>& p_mode);
+                   const Red::Optional<FileSystemWriteMode>& p_mode) const;
   void write_json(const FilePromise& p_promise,
                   const Red::Handle<Red::IScriptable>& p_json,
-                  const Red::Optional<Red::CString>& p_indent);
+                  const Red::Optional<Red::CString>& p_indent) const;
 
   RTTI_IMPL_TYPEINFO(RedFS::AsyncFile);
   RTTI_IMPL_ALLOCATOR();

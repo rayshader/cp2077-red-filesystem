@@ -14,9 +14,9 @@ namespace RedFS {
 
 File::File(SharedMutex p_mutex, std::filesystem::path p_path,
            std::filesystem::path p_absolute_path)
-    : mutex(std::move(p_mutex)),
-      path(std::move(p_path)),
-      absolute_path(std::move(p_absolute_path)) {}
+    : path(std::move(p_path)),
+      absolute_path(std::move(p_absolute_path)),
+      mutex(std::move(p_mutex)) {}
 
 Red::CString File::get_path() const {
   return path.string();
@@ -40,7 +40,7 @@ uint64_t File::get_size() const {
   return std::filesystem::file_size(absolute_path, error);
 }
 
-Red::CString File::read_as_text() {
+Red::CString File::read_as_text() const {
   mutex->lock();
 
   std::ifstream stream(absolute_path);
@@ -61,7 +61,7 @@ Red::CString File::read_as_text() {
   return data.str();
 }
 
-Red::CString File::read_as_base64() {
+Red::CString File::read_as_base64() const {
   mutex->lock();
 
   std::ifstream stream(absolute_path, std::ios::binary);
@@ -80,7 +80,7 @@ Red::CString File::read_as_base64() {
   return base64::to_base64(buffer);
 }
 
-Red::DynArray<Red::CString> File::read_as_lines() {
+Red::DynArray<Red::CString> File::read_as_lines() const {
   mutex->lock();
 
   std::ifstream stream(absolute_path);
@@ -107,7 +107,7 @@ Red::DynArray<Red::CString> File::read_as_lines() {
   return lines;
 }
 
-Red::Handle<Red::IScriptable> File::read_as_json() {
+Red::Handle<Red::IScriptable> File::read_as_json() const {
   if (!RedData::IsDetected()) {
     return {};
   }
@@ -118,7 +118,7 @@ Red::Handle<Red::IScriptable> File::read_as_json() {
 }
 
 bool File::write_text(const Red::CString& p_text,
-                      const Red::Optional<FileSystemWriteMode>& p_mode) {
+                      const Red::Optional<FileSystemWriteMode>& p_mode) const {
   mutex->lock();
 
   const std::ios_base::openmode mode = get_mode(p_mode.value);
@@ -140,7 +140,7 @@ bool File::write_text(const Red::CString& p_text,
 }
 
 bool File::write_lines(const Red::DynArray<Red::CString>& p_lines,
-                       const Red::Optional<FileSystemWriteMode>& p_mode) {
+                       const Red::Optional<FileSystemWriteMode>& p_mode) const {
   mutex->lock();
 
   const std::ios_base::openmode mode = get_mode(p_mode.value);
@@ -153,9 +153,9 @@ bool File::write_lines(const Red::DynArray<Red::CString>& p_lines,
     return false;
   }
 
-  for (uint32_t i = 0; i < p_lines.size; i++) {
+  for (uint32_t i = 0; i < p_lines.Size(); i++) {
     stream << p_lines[i].c_str();
-    if (i + 1 < p_lines.size) {
+    if (i + 1 < p_lines.Size()) {
       stream << '\n';
     }
   }
@@ -167,7 +167,7 @@ bool File::write_lines(const Red::DynArray<Red::CString>& p_lines,
 }
 
 bool File::write_json(const Red::Handle<Red::IScriptable>& p_json,
-                      const Red::Optional<Red::CString>& p_indent) {
+                      const Red::Optional<Red::CString>& p_indent) const {
   if (!RedData::IsDetected()) {
     return false;
   }

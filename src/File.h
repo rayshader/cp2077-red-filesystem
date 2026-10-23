@@ -30,17 +30,17 @@ class File : public Red::IScriptable {
   [[nodiscard]] Red::CString get_extension() const;
   [[nodiscard]] uint64_t get_size() const;
 
-  Red::CString read_as_text();
-  Red::CString read_as_base64();
-  Red::DynArray<Red::CString> read_as_lines();
-  Red::Handle<Red::IScriptable> read_as_json();
+  [[nodiscard]] Red::CString read_as_text() const;
+  [[nodiscard]] Red::CString read_as_base64() const;
+  [[nodiscard]] Red::DynArray<Red::CString> read_as_lines() const;
+  Red::Handle<Red::IScriptable> read_as_json() const;
 
-  bool write_text(const Red::CString& p_text,
-                  const Red::Optional<FileSystemWriteMode>& p_mode);
-  bool write_lines(const Red::DynArray<Red::CString>& p_lines,
-                   const Red::Optional<FileSystemWriteMode>& p_mode);
+  [[nodiscard]] bool write_text(const Red::CString& p_text,
+                  const Red::Optional<FileSystemWriteMode>& p_mode) const;
+  [[nodiscard]] bool write_lines(const Red::DynArray<Red::CString>& p_lines,
+                   const Red::Optional<FileSystemWriteMode>& p_mode) const;
   bool write_json(const Red::Handle<Red::IScriptable>& p_json,
-                  const Red::Optional<Red::CString>& p_indent);
+                  const Red::Optional<Red::CString>& p_indent) const;
 
   RTTI_IMPL_TYPEINFO(RedFS::File);
   RTTI_IMPL_ALLOCATOR();

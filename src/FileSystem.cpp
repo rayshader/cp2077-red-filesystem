@@ -5,8 +5,8 @@
 
 namespace RedFS {
 
-RED4ext::PluginHandle FileSystem::handle = nullptr;
-RED4ext::Logger* FileSystem::logger = nullptr;
+RED4ext::v1::PluginHandle FileSystem::handle = nullptr;
+RED4ext::v1::Logger* FileSystem::logger = nullptr;
 
 std::filesystem::path FileSystem::game_path;
 std::filesystem::path FileSystem::storages_path;
@@ -38,8 +38,8 @@ std::filesystem::path FileSystem::get_game_path() {
     .parent_path();  // Resolve to game root directory.
 }
 
-void FileSystem::load(RED4ext::PluginHandle p_handle,
-                      RED4ext::Logger* p_logger) {
+void FileSystem::load(RED4ext::v1::PluginHandle p_handle,
+                      RED4ext::v1::Logger* p_logger) {
   handle = p_handle;
   logger = p_logger;
   detect_mo2();

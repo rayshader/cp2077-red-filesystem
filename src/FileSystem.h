@@ -18,8 +18,8 @@ class FileSystem : public Red::IScriptable {
   using StorageMap =
     std::unordered_map<std::string, Red::Handle<FileSystemStorage>>;
 
-  static RED4ext::PluginHandle handle;
-  static RED4ext::Logger* logger;
+  static RED4ext::v1::PluginHandle handle;
+  static RED4ext::v1::Logger* logger;
 
   static std::filesystem::path game_path;
   static std::filesystem::path storages_path;
@@ -41,7 +41,7 @@ class FileSystem : public Red::IScriptable {
   static Red::Handle<FileSystemStorage> find_storage(const std::string& p_name);
 
  public:
-  static void load(RED4ext::PluginHandle p_handle, RED4ext::Logger* p_logger);
+  static void load(RED4ext::v1::PluginHandle p_handle, RED4ext::v1::Logger* p_logger);
   static void unload();
 
   static Red::Handle<FileSystemStorage> get_storage(const Red::CString& p_name);
