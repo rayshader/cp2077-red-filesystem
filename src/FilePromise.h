@@ -17,7 +17,7 @@ struct FilePromise {
     if (target.Expired()) {
       return;
     }
-    if (data.size == 0) {
+    if (data.IsEmpty()) {
       Red::CallVirtual(target.Lock(), fn_resolve, p_buffer);
     } else {
       Red::CallVirtual(target.Lock(), fn_resolve, p_buffer, data);
@@ -28,7 +28,7 @@ struct FilePromise {
     if (target.Expired()) {
       return;
     }
-    if (data.size == 0) {
+    if (data.IsEmpty()) {
       Red::CallVirtual(target.Lock(), fn_resolve);
     } else {
       Red::CallVirtual(target.Lock(), fn_resolve, data);
@@ -39,7 +39,7 @@ struct FilePromise {
     if (target.Expired() || fn_reject.IsNone()) {
       return;
     }
-    if (data.size == 0) {
+    if (data.IsEmpty()) {
       Red::CallVirtual(target.Lock(), fn_reject);
     } else {
       Red::CallVirtual(target.Lock(), fn_reject, data);

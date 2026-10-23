@@ -11,9 +11,9 @@
 namespace RedFS {
 AsyncFile::AsyncFile(SharedMutex p_mutex, std::filesystem::path p_path,
                      std::filesystem::path p_absolute_path)
-    : mutex(std::move(p_mutex)),
-      path(std::move(p_path)),
-      absolute_path(std::move(p_absolute_path)) {}
+    : path(std::move(p_path)),
+      absolute_path(std::move(p_absolute_path)),
+      mutex(std::move(p_mutex)) {}
 
 Red::CString AsyncFile::get_path() const {
   return path.string();
@@ -37,7 +37,7 @@ uint64_t AsyncFile::get_size() const {
   return std::filesystem::file_size(absolute_path, error);
 }
 
-void AsyncFile::read_as_text(const FilePromise& p_promise) {
+void AsyncFile::read_as_text(const FilePromise& p_promise) const {
   Red::JobQueue job_queue;
 
   job_queue.Dispatch([*this, p_promise]() -> void {
@@ -65,7 +65,7 @@ void AsyncFile::read_as_text(const FilePromise& p_promise) {
   });
 }
 
-void AsyncFile::read_as_base64(const FilePromise& p_promise) {
+void AsyncFile::read_as_base64(const FilePromise& p_promise) const {
   Red::JobQueue job_queue;
 
   job_queue.Dispatch([*this, p_promise]() -> void {
@@ -86,7 +86,7 @@ void AsyncFile::read_as_base64(const FilePromise& p_promise) {
   });
 }
 
-void AsyncFile::read_as_lines(const FilePromise& p_promise) {
+void AsyncFile::read_as_lines(const FilePromise& p_promise) const {
   Red::JobQueue job_queue;
 
   job_queue.Dispatch([*this, p_promise]() -> void {
@@ -123,7 +123,7 @@ void AsyncFile::read_as_lines(const FilePromise& p_promise) {
   });
 }
 
-void AsyncFile::read_as_json(const FilePromise& p_promise) {
+void AsyncFile::read_as_json(const FilePromise& p_promise) const {
   if (!RedData::IsDetected()) {
     p_promise.reject();
     return;
@@ -158,7 +158,7 @@ void AsyncFile::read_as_json(const FilePromise& p_promise) {
 
 void AsyncFile::write_text(const FilePromise& p_promise,
                            const Red::CString& p_text,
-                           const Red::Optional<FileSystemWriteMode>& p_mode) {
+                           const Red::Optional<FileSystemWriteMode>& p_mode) const {
   std::ios_base::openmode mode = File::get_mode(p_mode.value);
   Red::JobQueue job_queue;
 
@@ -186,7 +186,7 @@ void AsyncFile::write_text(const FilePromise& p_promise,
 
 void AsyncFile::write_lines(const FilePromise& p_promise,
                             const Red::DynArray<Red::CString>& p_lines,
-                            const Red::Optional<FileSystemWriteMode>& p_mode) {
+                            const Red::Optional<FileSystemWriteMode>& p_mode) const {
   std::ios_base::openmode mode = File::get_mode(p_mode.value);
   Red::JobQueue job_queue;
 
@@ -203,9 +203,9 @@ void AsyncFile::write_lines(const FilePromise& p_promise,
       return;
     }
 
-    for (uint32_t i = 0; i < p_lines.size; i++) {
+    for (uint32_t i = 0; i < p_lines.Size(); i++) {
       stream << p_lines[i].c_str();
-      if (i + 1 < p_lines.size) {
+      if (i + 1 < p_lines.Size()) {
         stream << '\n';
       }
     }
@@ -219,13 +219,13 @@ void AsyncFile::write_lines(const FilePromise& p_promise,
 
 void AsyncFile::write_json(const FilePromise& p_promise,
                            const Red::Handle<Red::IScriptable>& p_json,
-                           const Red::Optional<Red::CString>& p_indent) {
+                           const Red::Optional<Red::CString>& p_indent) const {
   if (!RedData::IsDetected()) {
     p_promise.reject();
     return;
   }
 
-  const RedData::Json::JsonVariant json = RedData::Json::JsonVariant(p_json);
+  const auto json = RedData::Json::JsonVariant(p_json);
   const Red::CString text = json.ToString(p_indent.value);
   Red::Optional<FileSystemWriteMode> mode;
   mode.value = FileSystemWriteMode::Truncate;
